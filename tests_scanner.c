@@ -4,6 +4,6 @@
 
 int main() {
     printf("--- [SCANNER TESTS] ---\n");
-    some_function();
+    //some_function();
     return 0;
 }
