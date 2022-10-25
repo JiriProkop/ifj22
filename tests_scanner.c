@@ -4,6 +4,11 @@
 
 int main() {
     printf("--- [SCANNER TESTS] ---\n");
-    //some_function();
+
+    token_t tok = get_token();
+    printf("Tok type1 je %d'\n'", tok.type);
+    tok = get_token();
+    printf("Tok type2 je %d'\n'", tok.type);
+
     return 0;
 }
