@@ -7,8 +7,8 @@ all: $(PARTS)
 test: tests_scanner
 	./tests_scanner
 
-tests_scanner: tests_scanner.o scanner.o
-	$(CC) $(CFLAGS) tests_scanner.o scanner.o -o tests_scanner
+tests_scanner: tests_scanner.o scanner.o error.o
+	$(CC) $(CFLAGS) tests_scanner.o scanner.o error.o -o tests_scanner
 
 # compile object files
 %.o: %.c
