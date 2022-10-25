@@ -9,23 +9,34 @@
 #ifndef _SCANNER_H
 #define _SCANNER_H
 
+/**
+ * @enum
+ */
+typedef enum {
+    token_none,
+    token_division,
+    // TODO
+}
+token_type;
 
-typedef struct token
-{
-    // token_type
-    int token_id;
+/**
+ * @struct token struct.
+ */
+typedef struct token {
+    token_type type;
+    int id; // id zalezi na implementaci bin. stromu
 } token_t;
 
 /**
  * @enum scanner states
  */
-typedef enum{
+typedef enum {
+    begin_s,
     start_s,
     division_s,
     line_cmnt_s,
     block_cmnt_start_s,
     block_cmnt_inside_s,
-    block_cmnt_end_s,
     string_start_s,
     string_escape_s,
     string_hex1_s,
@@ -53,13 +64,12 @@ typedef enum{
     neg_type_comp1_s,
     neg_type_comp2_s,
     neg_type_comp3_s,
-    } state;
+} state;
 
 /**
  * @enum IFJ22's keywords
  */
-typedef enum
-{
+typedef enum {
     keyword_else,
     keyword_float,
     keyword_function,
@@ -71,7 +81,14 @@ typedef enum
     keyword_void,
     keyword_while,
     keyword_bool,
-    keyword_nil,
-} keywords; //TODO build-in funkce
+} keywords;
+// TODO build-in funkce - mozna, zalezi jak bude fungovat kotrola func. redefinition
+
+/**
+ * Finds next token in STDIN.
+ * 
+ * @return Returns token_t that was found. If none was(EOF) then token.type = toke_none
+ */
+token_t get_token();
 
 #endif //_SCANNER_H
