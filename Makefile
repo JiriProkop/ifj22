@@ -8,7 +8,7 @@ test: tests_scanner
 	./tests_scanner
 
 tests_scanner: tests_scanner.o scanner.o
-	$(CC) $(CFLAGS) tests.o scanner.o -o tests_scanner
+	$(CC) $(CFLAGS) tests_scanner.o scanner.o -o tests_scanner
 
 # compile object files
 %.o: %.c
