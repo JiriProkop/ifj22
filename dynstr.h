@@ -55,6 +55,17 @@ void dynstr_delete(dynstr_t *string);
 int dynstr_add_char(dynstr_t *string, char character);
 
 /**
+ * Add a whole string to the dynstr.
+ * 
+ * @brief Adds a whole string to the dynstr. It calls the function dynstr_add_char.
+ * 
+ * @param string Pointer to dynamic string with the dynstr_t type.
+ * @param chars A string to add.
+ * @return Returns 1, if the string was added succesfully.
+*/
+int dynstr_add_string(dynstr_t *string, char *chars);
+
+/**
  * Compares dynamic string content with given string.
  * 
  * @param string Pointer to dynamic string with the dynstr_t type.
