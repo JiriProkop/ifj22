@@ -1,22 +1,31 @@
 CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -O2
-PARTS = tests_scanner tests_dynstr
+
+TESTDIR = tests/
+CASES = tests_dynstr tests_scanner
+TESTS = $(addprefix $(TESTDIR), $(CASES))
+
+PARTS = $(TESTS)
+
 
 all: $(PARTS)
 
-test: tests_dynstr tests_scanner
-	./tests_dynstr
-	./tests_scanner
+# A BLOCK FOR TESTS --------------------------------
+test: $(TESTS)
+# dynstr tests
+	$(TESTDIR)tests_dynstr > $(TESTDIR)tests_dynstr.output
+	diff -su $(TESTDIR)tests_dynstr.output $(TESTDIR)correct_out/tests_dynstr.output
 
-tests_dynstr: tests_dynstr.o dynstr.o
-	$(CC) $(CFLAGS) tests_dynstr.o dynstr.o -o tests_dynstr
-
-tests_scanner: tests_scanner.o scanner.o error.o
-	$(CC) $(CFLAGS) tests_scanner.o scanner.o error.o -o tests_scanner
+# $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
+$(TESTDIR)tests_dynstr: dynstr.o
+	$(CC) $(CFLAGS) $^ $@.c -o $@
+$(TESTDIR)tests_scanner: scanner.o error.o
+	$(CC) $(CFLAGS) $^ $@.c -o $@
+# --------------------------------------------------
 
 # compile object files
 %.o: %.c
 	$(CC) $(CFLAGS) -c $^
 
 clean:
-	rm -f *.o $(PARTS)
+	rm -f *.o $(PARTS) $(TESTS) $(TESTDIR)*.output

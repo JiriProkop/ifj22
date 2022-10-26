@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "dynstr.h"
+#include "../dynstr.h"
 
 int main() {
     printf("--- [DYNSTR TESTS] ---\n");
@@ -59,6 +59,19 @@ int main() {
     // test clear
     printf("\n[dynstr clear test]\n");
     dynstr_clear(string);
+    printf("String: '%s'\n", string->array);
+    printf("Length: %lu\n", string->length);
+    printf("Allocated: %lu\n", string->allocated);
+
+    // test add string
+    printf("\n[dynstr add string test]\n");
+    printf("Insert short string:\n");
+    dynstr_add_string(string, "some_string");
+    printf("String: '%s'\n", string->array);
+    printf("Length: %lu\n", string->length);
+    printf("Allocated: %lu\n", string->allocated);
+    printf("Insert another string:\n");
+    dynstr_add_string(string, "_some_another_longer_string");
     printf("String: '%s'\n", string->array);
     printf("Length: %lu\n", string->length);
     printf("Allocated: %lu\n", string->allocated);

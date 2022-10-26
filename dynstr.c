@@ -44,6 +44,17 @@ int dynstr_add_char(dynstr_t *string, char character) {
     return 1;
 }
 
+int dynstr_add_string(dynstr_t *string, char *chars) {
+    unsigned long i = 0;
+    while(chars[i] != '\0') {
+        if(dynstr_add_char(string, chars[i]) == 0) {
+            return 0;
+        }
+        i++;
+    }
+    return 1;
+}
+
 int dynstr_compare(dynstr_t *string, char *compare_str) {
     for(unsigned long i = 0; i <= string->length; i++) {
         if(string->array[i] != compare_str[i]) {
