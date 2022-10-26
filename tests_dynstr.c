@@ -5,6 +5,7 @@
 int main() {
     printf("--- [DYNSTR TESTS] ---\n");
 
+    // allocate the dynstr_t struct before using
     dynstr_t *string = malloc(sizeof(dynstr_t));
     if(string == NULL) {
         printf("Malloc failed.\n");
@@ -74,6 +75,7 @@ int main() {
     printf("Length: %lu\n", string->length);
     printf("Allocated: %lu\n", string->allocated);
 
+    // free the dynstr_t structure
     free(string);
 
     return 0;
