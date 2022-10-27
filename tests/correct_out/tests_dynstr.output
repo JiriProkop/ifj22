@@ -1,0 +1,52 @@
+--- [DYNSTR TESTS] ---
+
+[dynstr init test]
+String: ''
+Length: 0
+Allocated: 15
+Returned: 1
+
+[dynstr add char test]
+Adding some characters:
+String: 'hello'
+Length: 5
+Allocated: 15
+
+Filling the free space before reallocation:
+String: 'helloXXXXXXXXXX'
+Length: 15
+Allocated: 15
+
+Adding one more character:
+String: 'helloXXXXXXXXXX+'
+Length: 16
+Allocated: 31
+Returned: 1
+
+[dynstr compare test]
+Compare with different string
+Returned: 0
+Compare with same string
+Returned: 1
+
+[dynstr clear test]
+String: ''
+Length: 0
+Allocated: 31
+
+[dynstr add string test]
+Insert short string:
+String: 'some_string'
+Length: 11
+Allocated: 31
+Insert another string:
+String: 'some_string_some_another_longer_string'
+Length: 38
+Allocated: 47
+
+[dynstr clear test]
+First adding some characters
+String: 'some_string_some_another_longer_string12'
+And deleting the dynstr
+Length: 0
+Allocated: 0
