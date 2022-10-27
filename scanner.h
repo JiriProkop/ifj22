@@ -9,6 +9,7 @@
 #ifndef _SCANNER_H
 #define _SCANNER_H
 
+#include "dynstr.h"
 #include <stdbool.h>
 
 /**
@@ -92,7 +93,7 @@ typedef union {
     int integer; // ma by na 64 bit
     double doub; // taky na 64 bit
     keywords keyword;
-    // TODO  string
+    dynstr_t *string;
 } token_att;
 
 /**
