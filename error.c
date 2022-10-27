@@ -5,10 +5,8 @@
 extern int ret; // to be returned by main
 
 void error_handle(unsigned line, unsigned error_type) {
-    if (ret == 0) // just 1st error is returned by compilator
-        ret = error_type;
+    ret = error_type;
 
-    // but each error is printed
     switch (error_type) {
         case lex_analysis_err:
             fprintf(stderr, "Lexical analysis error on line: %u\n", line); // FIXME better error text
