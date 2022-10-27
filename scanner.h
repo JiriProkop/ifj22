@@ -9,22 +9,24 @@
 #ifndef _SCANNER_H
 #define _SCANNER_H
 
+#include <stdbool.h>
+
 /**
  * @enum
  */
 typedef enum {
     token_none,
     token_division,
+    token_identifier,
     // TODO
-}
-token_type;
+} token_type;
 
 /**
  * @struct token struct.
  */
 typedef struct token {
     token_type type;
-    int id; // id zalezi na implementaci bin. stromu
+    unsigned line;
 } token_t;
 
 /**
@@ -36,7 +38,7 @@ typedef enum {
     division_s,
     line_cmnt_s,
     block_cmnt_start_s,
-    block_cmnt_inside_s,
+    block_cmnt_inside_s, // odtud
     string_start_s,
     string_escape_s,
     string_hex1_s,
@@ -82,13 +84,23 @@ typedef enum {
     keyword_while,
     keyword_bool,
 } keywords;
-// TODO build-in funkce - mozna, zalezi jak bude fungovat kotrola func. redefinition
 
 /**
- * Finds next token in STDIN.
- * 
- * @return Returns token_t that was found. If none was(EOF) then token.type = toke_none
+ * @union token attribute
  */
-token_t get_token();
+typedef union {
+    int integer; // ma by na 64 bit
+    double doub; // taky na 64 bit
+    keywords keyword;
+    // TODO  string
+} token_att;
+
+/**
+ * Finds next token in STDIN. If EOF was encountered token_type is set to token_none
+ *
+ * @param tok pointer to allocated token
+ * @return Returns false if error was encountered, true otherwise
+ */
+bool get_token(token_t *tok);
 
 #endif //_SCANNER_H

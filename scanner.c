@@ -1,63 +1,116 @@
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "error.h"
 #include "scanner.h"
 
-int ret = 0; // put this to main
 FILE *input;
 
-token_t get_token() {
+bool get_token(token_t *tok) {
     input = stdin;
     int c;
     static unsigned state = begin_s;
     static unsigned line_c = 1;
-    token_t tok = {.type = token_none};
+    tok->type = token_none;
+    tok->line = 0; // jen pro kontrolu u testu
 
     while (1) {
         c = getc(input);
+        if (c == EOF)
+            return true;
+
         switch (state) {
-            case begin_s:
-                if (c != '<') {
-                    error_handle(line_c, syntax_error);
-                    state = start_s;
-                    break;
+            case begin_s: {
+                char prolog1[] = "<?php";
+                char prolog2[] = "declare(strict_types=1);";
+                bool white_space = false;
+                for (unsigned i = 0; i < (unsigned)strlen(prolog1); i++) {
+                    if (c != prolog1[i]) {
+                        error_handle(line_c, syntax_error);
+                        return false;
+                    }
+                    c = getc(input);
                 }
-                c = getc(input);
-                if (c != '?') {
-                    error_handle(line_c, syntax_error);
-                    state = start_s;
-                    break;
+                while (isspace(c) || c == '/') {
+                    if (c == '\n')
+                        line_c++;
+                    white_space = true;
+
+                    if (c == '/') // line comment counts as 1 whitespace
+                    {
+                        if ((c = getc(input)) == '/') {
+                            while (1) {
+                                c = getc(input);
+                                if (c == '\n') {
+                                    line_c++;
+                                    break;
+                                } else if (c == EOF) {
+                                    error_handle(line_c, syntax_error);
+                                    return false;
+                                }
+                            }
+                            c = getc(input);
+                            break;
+                        } else if (c == '*') {
+                            while (1) {
+                                c = getc(input);
+                                if (c == EOF) {
+                                    error_handle(line_c, syntax_error);
+                                    return false;
+                                } else if (c == '*') {
+                                    c = getc(input);
+                                    if (c == '/') {
+                                        break;
+                                    }
+                                }
+								if (c == '\n') {
+									line_c++;
+								}
+                            }
+                        } else {
+                            error_handle(line_c, syntax_error);
+                            return false;
+                        }
+                    }
+                    c = getc(input);
                 }
-                c = getc(input);
-                if (c != 'p') {
+                if (!white_space) {
                     error_handle(line_c, syntax_error);
-                    state = start_s;
-                    break;
+                    return false;
                 }
-                c = getc(input);
-                if (c != 'h') {
-                    error_handle(line_c, syntax_error);
-                    state = start_s;
-                    break;
+                for (unsigned i = 0; i < (unsigned)strlen(prolog2); i++) {
+                    if (c != prolog2[i]) {
+                        error_handle(line_c, syntax_error);
+                        return false;
+                    }
+                    c = getc(input);
                 }
-                c = getc(input);
-                if (c != 'p') {
-                    error_handle(line_c, syntax_error);
-                    state = start_s;
-                    break;
-                }
+                ungetc(c, input);
                 state = start_s;
                 break;
+            }
             case start_s:
                 if (c == '\n') {
                     line_c++;
+                    printf("line count: %u'\n", line_c);
                 } else if (isspace(c)) {
                     break;
-                } else if (c == '/') {
+                } else if (c == '$') {
+                    state = identifier_s;
+                    tok->type = token_identifier;
+                    tok->line = line_c;
+                    // get_string(); // TODO
+                }
+                //  else if (isdigit(c)) {
+                //     state = integer_s;
+                //     continue;
+                // }
+                else if (c == '/') {
                     state = division_s;
                 } else if (c == EOF) {
-                    return tok;
+                    return true;
                 } else if (c == '"') {
                     state = string_start_s;
                 }
@@ -70,9 +123,9 @@ token_t get_token() {
                 } else {
                     state = start_s;
                     ungetc(c, input); // c can be another token ex. 1/5
-                    tok.type = token_division;
-                    return tok;
-                    // TODO vlozit do BS a do tokenu ulozit id
+                    tok->type = token_division;
+                    tok->line = line_c;
+                    return true;
                 }
                 break;
             }
@@ -83,7 +136,7 @@ token_t get_token() {
                         state = start_s;
                         break;
                     } else if (c == EOF) {
-                        return tok;
+                        return true;
                     }
                     c = getc(input);
                 }
@@ -94,7 +147,7 @@ token_t get_token() {
                     if (c == '\n') {
                         line_c++;
                     } else if (c == EOF) {
-                        return tok;
+                        return true;
                     } else if (c == '*') {
                         state = block_cmnt_inside_s;
                         break;
@@ -114,7 +167,7 @@ token_t get_token() {
                 // '/' done
         } // end of switch
     }
-    return tok;
+    return true;
 }
 
 // int main() {
