@@ -18,11 +18,14 @@
 typedef enum {
     token_none,
     token_division,
+    token_string,
+    token_varieble,
     token_identifier,
-	token_string,
+    token_identifier_w_null,
+	token_integer,
     // TODO
-} token_type;
-
+}
+token_type;
 
 /**
  * @enum scanner states
@@ -33,18 +36,15 @@ typedef enum {
     division_s,
     line_cmnt_s,
     block_cmnt_start_s,
-    block_cmnt_inside_s, // odtud
+    block_cmnt_inside_s,
     string_start_s,
     string_escape_s,
     string_hex1_s,
     string_hex2_s,
     string_oct1_s,
     string_oct2_s,
-    string_end_s,
-    variable_s,
+    variable_s,	// odtud
     identifier_s,
-    identifier_w_null_s,
-    php_end_s,
     integer_s,
     float_s,
     expo_start_s,
@@ -54,13 +54,13 @@ typedef enum {
     greater_equal_s,
     lower_s,
     lower_equal_s,
-    php_start_s,
     assign_s,
     assign_to_comp_s,
     comp_types_s,
     neg_type_comp1_s,
     neg_type_comp2_s,
     neg_type_comp3_s,
+	exit_s,
 } state;
 
 /**
@@ -77,15 +77,14 @@ typedef enum {
     keyword_string,
     keyword_void,
     keyword_while,
-    keyword_bool,
 } keywords;
 
 /**
  * @union token attribute
  */
 typedef union {
-    long long integer; // minimum size of 64 bits
-    long double doub; // 64 bits should always be ok
+    int integer; // minimum size of 64 bits
+    double doub; // 64 bits should always be ok
     keywords keyword;
     dynstr_t *str;
 } token_att;
