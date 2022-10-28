@@ -19,16 +19,10 @@ typedef enum {
     token_none,
     token_division,
     token_identifier,
+	token_string,
     // TODO
 } token_type;
 
-/**
- * @struct token struct.
- */
-typedef struct token {
-    token_type type;
-    unsigned line;
-} token_t;
 
 /**
  * @enum scanner states
@@ -90,11 +84,20 @@ typedef enum {
  * @union token attribute
  */
 typedef union {
-    int integer; // ma by na 64 bit
-    double doub; // taky na 64 bit
+    long long integer; // minimum size of 64 bits
+    long double doub; // 64 bits should always be ok
     keywords keyword;
-    dynstr_t *string;
+    dynstr_t *str;
 } token_att;
+
+/**
+ * @struct token struct.
+ */
+typedef struct token {
+    token_type type;
+    unsigned line;
+    token_att attr;
+} token_t;
 
 /**
  * Finds next token in STDIN. If EOF was encountered token_type is set to token_none
