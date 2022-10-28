@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c11 -Wall -Wextra -O2
+CFLAGS = -std=c11 -Wall -Wextra -g #-O2 na debug to vypnu, also pribylo -g
 
 TESTDIR = tests/
 CASES = tests_dynstr tests_scanner
@@ -19,7 +19,7 @@ test: $(TESTS)
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
 $(TESTDIR)tests_dynstr: dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
-$(TESTDIR)tests_scanner: scanner.o error.o
+$(TESTDIR)tests_scanner: scanner.o error.o dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 # --------------------------------------------------
 
