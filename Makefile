@@ -1,5 +1,6 @@
 CC = gcc
-CFLAGS = -std=c11 -Wall -Wextra -g #-O2 na debug to vypnu, also pribylo -g
+CFLAGS = -std=c11 -Wall -Wextra -g #-O2 na debug vypnu, also pribylo -g
+LDLIBS = -lm
 
 TESTDIR = tests/
 CASES = tests_dynstr tests_scanner
@@ -20,7 +21,7 @@ test: $(TESTS)
 $(TESTDIR)tests_dynstr: dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 $(TESTDIR)tests_scanner: scanner.o error.o dynstr.o
-	$(CC) $(CFLAGS) $^ $@.c -o $@
+	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 # --------------------------------------------------
 
 # compile object files
