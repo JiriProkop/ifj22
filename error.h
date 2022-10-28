@@ -14,7 +14,7 @@
  * @enum
  */
 typedef enum {
-    lex_analysis_err = 1, // chybna struktura aktualniho lexemu //FIXME
+    lex_analysis_err = 1, // chybna struktura aktualniho lexemu
     syntax_error,
     func_def_error,        // undefined function or redefinition of one
     func_arr_or_ret_error, // wrong argument type or argument count, wrong return type

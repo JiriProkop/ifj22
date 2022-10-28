@@ -23,6 +23,7 @@ typedef enum {
     token_identifier,
     token_identifier_w_null,
 	token_integer,
+	token_float,
     // TODO
 }
 token_type;
@@ -43,13 +44,12 @@ typedef enum {
     string_hex2_s,
     string_oct1_s,
     string_oct2_s,
-    variable_s,	// odtud
+    variable_s,
     identifier_s,
     integer_s,
     float_s,
     expo_start_s,
-    expo_signed_s,
-    expo_end_s,
+    expo_end_s, // odtud
     greater_s,
     greater_equal_s,
     lower_s,
@@ -84,7 +84,7 @@ typedef enum {
  */
 typedef union {
     int integer; // minimum size of 64 bits
-    double doub; // 64 bits should always be ok
+    long double doub; // 64 bits should always be ok
     keywords keyword;
     dynstr_t *str;
 } token_att;
