@@ -1,5 +1,6 @@
 #include <ctype.h>
 #include <limits.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,6 +9,8 @@
 #include "dynstr.h"
 #include "error.h"
 #include "scanner.h"
+
+#define ACCURACY (0.00005)
 
 dynstr_t *string_innit() {
     dynstr_t *str = malloc(sizeof(dynstr_t));
@@ -18,16 +21,32 @@ dynstr_t *string_innit() {
     return str;
 }
 
+void string_free(dynstr_t *attr) {
+    dynstr_delete(attr);
+    free(attr);
+}
+
+bool str_to_num(const char str[], int *ptr) {
+    *ptr = atoi(str);
+    if (*ptr == 0) {
+        for (int i = 0; str[i] != '\0'; i++) {
+            if (str[i] != '0') {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 FILE *input;
 
 bool get_token(token_t *tok) {
     input = stdin;
     int c;
-    unsigned tmp = 0; // for hex to dec and octal to dec conversions
+    int tmp = 0;
     static unsigned state = begin_s;
     static unsigned line_c = 1;
     tok->type = token_none;
-    tok->line = 0; // jen pro kontrolu u testu
 
     while (1) {
         c = getc(input);
@@ -135,8 +154,8 @@ bool get_token(token_t *tok) {
                             error_handle(line_c, compiler_error);
                             return false;
                         }
-                    } else if (c == '>') { // za timto uz nesmi byt zadne bile znaky, jen 1 '\n'
-                        state = exit_s;    // TODO
+                    } else if (c == '>') {
+                        state = exit_s;
                     } else {
                         error_handle(line_c, compiler_error);
                         return false;
@@ -145,12 +164,18 @@ bool get_token(token_t *tok) {
                     ungetc(c, input);
                 } else if (c == '/') {
                     state = division_s;
-                } else if (c == EOF) {
-                    return true;
                 } else if (c == '"') {
                     state = string_start_s;
                     tok->type = token_string;
                     tok->line = line_c;
+                    if ((tok->attr.str = string_innit()) == NULL) {
+                        error_handle(line_c, compiler_error);
+                        return false;
+                    }
+                } else if (isdigit(c)) {
+                    state = integer_s;
+                    tok->line = line_c;
+                    ungetc(c, input);
                     if ((tok->attr.str = string_innit()) == NULL) {
                         error_handle(line_c, compiler_error);
                         return false;
@@ -221,6 +246,7 @@ bool get_token(token_t *tok) {
                 break;
             }
             case string_escape_s: {
+                tmp = 0;
                 if (c == 'x') {
                     state = string_hex1_s;
                 } else if (c >= '0' && c <= '7') {
@@ -325,44 +351,34 @@ bool get_token(token_t *tok) {
                 state = start_s;
                 // check if identifier is not a keyword
                 if (!strcmp(tok->attr.str->array, "else")) {
-                    dynstr_delete(tok->attr.str);
-                    free(tok->attr.str);
+                    string_free(tok->attr.str);
                     tok->attr.keyword = keyword_else;
                 } else if (!strcmp(tok->attr.str->array, "float")) {
-                    dynstr_delete(tok->attr.str);
-                    free(tok->attr.str);
+                    string_free(tok->attr.str);
                     tok->attr.keyword = keyword_float;
                 } else if (!strcmp(tok->attr.str->array, "function")) {
-                    dynstr_delete(tok->attr.str);
-                    free(tok->attr.str);
+                    string_free(tok->attr.str);
                     tok->attr.keyword = keyword_function;
                 } else if (!strcmp(tok->attr.str->array, "if")) {
-                    dynstr_delete(tok->attr.str);
-                    free(tok->attr.str);
+                    string_free(tok->attr.str);
                     tok->attr.keyword = keyword_if;
                 } else if (!strcmp(tok->attr.str->array, "int")) {
-                    dynstr_delete(tok->attr.str);
-                    free(tok->attr.str);
+                    string_free(tok->attr.str);
                     tok->attr.keyword = keyword_int;
                 } else if (!strcmp(tok->attr.str->array, "null")) {
-                    dynstr_delete(tok->attr.str);
-                    free(tok->attr.str);
+                    string_free(tok->attr.str);
                     tok->attr.keyword = keyword_null;
                 } else if (!strcmp(tok->attr.str->array, "return")) {
-                    dynstr_delete(tok->attr.str);
-                    free(tok->attr.str);
+                    string_free(tok->attr.str);
                     tok->attr.keyword = keyword_return;
                 } else if (!strcmp(tok->attr.str->array, "string")) {
-                    dynstr_delete(tok->attr.str);
-                    free(tok->attr.str);
+                    string_free(tok->attr.str);
                     tok->attr.keyword = keyword_string;
                 } else if (!strcmp(tok->attr.str->array, "void")) {
-                    dynstr_delete(tok->attr.str);
-                    free(tok->attr.str);
+                    string_free(tok->attr.str);
                     tok->attr.keyword = keyword_void;
                 } else if (!strcmp(tok->attr.str->array, "while")) {
-                    dynstr_delete(tok->attr.str);
-                    free(tok->attr.str);
+                    string_free(tok->attr.str);
                     tok->attr.keyword = keyword_while;
                 }
                 // some keyword cannot have ? before them
@@ -380,9 +396,125 @@ bool get_token(token_t *tok) {
                 }
                 return true;
             }
+            case exit_s: {
+                if (c != '\n' || (c = getc(input)) != EOF) {
+                    error_handle(line_c, syntax_error);
+                    return false;
+                }
+                return true;
+            }
+            case integer_s: {
+                tmp = 0;
+                while (isdigit(c)) {
+                    dynstr_add_char(tok->attr.str, c);
+                    c = getc(input);
+                }
+                if (!str_to_num(tok->attr.str->array, &tmp)) {
+                    error_handle(line_c, syntax_error);
+                    string_free(tok->attr.str);
+                    return false;
+                }
+                if (c == '.') {
+                    string_free(tok->attr.str);
+                    tok->type = token_float;
+                    tok->attr.doub = tmp;
+                    state = float_s;
+                    tok->attr.integer = tmp;
+                } else if (tolower(c) == 'e') {
+                    string_free(tok->attr.str);
+                    tok->type = token_integer;
+                    tok->attr.integer = tmp;
+                    state = expo_start_s;
+                } else {
+                    ungetc(c, input);
+                    tok->type = token_integer;
+                    string_free(tok->attr.str);
+                    tok->attr.integer = tmp;
+                    state = start_s;
+                    return true;
+                }
+                break;
+            }
+            case float_s: {
+                unsigned counter = 1;
+                while (isdigit(c)) {
+                    tok->attr.doub += (c - '0') / pow(10, counter++);
+                    c = getc(input);
+                }
+                if (tolower(c) == 'e') {
+                    state = expo_start_s;
+                } else {
+                    ungetc(c, input);
+                    state = start_s;
+                }
+                break;
+            }
+            case expo_start_s: {
+                tmp = 1;
+                if (c == '-') {
+                    tmp = -1;
+                } else if (isdigit(c)) {
+                    ungetc(c, input);
+                } else if (c != '+') {
+                    error_handle(line_c, syntax_error);
+                    return false;
+                }
+                state = expo_end_s;
+                break;
+            }
+            case expo_end_s: {
+                char s[128]; // should be more than enought
+                unsigned counter = 0;
+                while (isdigit(c)) {
+                    s[counter++] = c;
+                    c = getc(input);
+                }
+                ungetc(c, input);
+                s[counter] = '\0';
+                int exp;
+                if (!str_to_num(s, &exp)) {
+                    error_handle(line_c, syntax_error);
+                    return false;
+                }
+                double holder;
+                if (tok->type == token_integer) {
+                    if (tmp == 1) {
+                        tok->attr.integer *= pow(10, exp);
+                    } else if (tmp == -1) {
+                        holder = tok->attr.integer;
+                        holder /= pow(10, exp);
+                        if (holder == round(holder)) {
+                            tok->type = token_integer;
+                            tok->attr.integer /= pow(10, exp);
+                        } else {
+                            tok->type = token_float;
+                            tok->attr.doub /= pow(10, exp);
+                        }
+                    }
+                    state = start_s;
+                    return true;
+                } else {
+                    if (tmp == 1) {
+                        tok->attr.doub *= pow(10, exp);
+                    } else if (tmp == -1) {
+                        tok->attr.doub /= pow(10, exp);
+                    }
+                    if (tok->attr.doub -round(tok->attr.doub) < ACCURACY) {
+                        tmp = round(tok->attr.doub);
+                        tok->attr.integer = tmp;
+                        tok->type = token_integer;
+                    } else {
+                        tok->type = token_float;
+                    }
+                    state = start_s;
+                    return true;
+                }
+                break;
+            }
         } // end of switch
     }
     return true;
 }
 
-// TODO kontrola jestli je v kazdem ifu v start_c line_c++
+// TODO kontrola jestli je v kazdem ifu v start_c line_c++ a kazdy state return nebo break
+// TODO stejne tak je potreba v konecnych stavech nastavovat stav na start
