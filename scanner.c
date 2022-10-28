@@ -1,16 +1,29 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
+#include "dynstr.h"
 #include "error.h"
 #include "scanner.h"
+
+dynstr_t *string_innit() {
+    dynstr_t *str = malloc(sizeof(dynstr_t));
+    if (str == NULL || !dynstr_init(str)) {
+        free(str);
+        return NULL;
+    }
+    return str;
+}
 
 FILE *input;
 
 bool get_token(token_t *tok) {
     input = stdin;
     int c;
+    unsigned tmp = 0; // for hex to dec and octal to dec conversions
     static unsigned state = begin_s;
     static unsigned line_c = 1;
     tok->type = token_none;
@@ -65,9 +78,9 @@ bool get_token(token_t *tok) {
                                         break;
                                     }
                                 }
-								if (c == '\n') {
-									line_c++;
-								}
+                                if (c == '\n') {
+                                    line_c++;
+                                }
                             }
                         } else {
                             error_handle(line_c, syntax_error);
@@ -94,7 +107,6 @@ bool get_token(token_t *tok) {
             case start_s:
                 if (c == '\n') {
                     line_c++;
-                    printf("line count: %u'\n", line_c);
                 } else if (isspace(c)) {
                     break;
                 } else if (c == '$') {
@@ -113,6 +125,12 @@ bool get_token(token_t *tok) {
                     return true;
                 } else if (c == '"') {
                     state = string_start_s;
+                    tok->type = token_string;
+                    tok->line = line_c;
+                    if ((tok->attr.str = string_innit()) == NULL) {
+                        error_handle(line_c, compiler_error);
+                        return false;
+                    }
                 }
                 break;
             case division_s: {
@@ -164,7 +182,107 @@ bool get_token(token_t *tok) {
                 }
                 break;
             }
-                // '/' done
+            case string_start_s: {
+
+                if (c == '"') {
+                    state = start_s;
+                    return true;
+                } else if (c == '\n') {
+                    line_c++;
+                } else if (c == '\\') {
+                    state = string_escape_s;
+                } else if (c > 31) {
+                    dynstr_add_char(tok->attr.str, c);
+                }
+                break;
+            }
+            case string_escape_s: {
+                if (c == 'x') {
+                    state = string_hex1_s;
+                } else if (c >= '0' && c <= '7') {
+                    tmp += 8 * 8 * (c - '0');
+                    state = string_oct1_s;
+                } else if (c == 'n') {
+                    dynstr_add_char(tok->attr.str, '\n');
+                    state = string_start_s;
+                } else if (c == '"') {
+                    dynstr_add_char(tok->attr.str, '"');
+                    state = string_start_s;
+                } else if (c == 't') {
+                    dynstr_add_char(tok->attr.str, '\t');
+                    state = string_start_s;
+                } else if (c == '\\') {
+                    dynstr_add_char(tok->attr.str, '\\');
+                    state = string_start_s;
+                } else if (c == '$') {
+                    dynstr_add_char(tok->attr.str, '$');
+                    state = string_start_s;
+                } else {
+                    dynstr_add_char(tok->attr.str, '\\');
+                    ungetc(c, input);
+                    state = string_start_s;
+                }
+                break;
+            }
+            case string_hex1_s: {
+                if (c >= '0' && c <= '9') {
+                    tmp += (c - '0') * 16;
+                } else if (c >= 'A' && c <= 'F') {
+                    tmp += (c - 'A' + 10) * 16;
+                } else if (c >= 'a' && c <= 'f') {
+                    tmp += (c - 'a' + 10) * 16;
+                } else {
+                    error_handle(line_c, other_semantic_error);
+                    return false;
+                }
+                state = string_hex2_s;
+                break;
+            }
+            case string_hex2_s: {
+                if (c >= '0' && c <= '9') {
+                    tmp += c - '0';
+                } else if (c >= 'A' && c <= 'F') {
+                    tmp += c - 'A' + 10;
+                } else if (c >= 'a' && c <= 'f') {
+                    tmp += c - 'a' + 10;
+                } else {
+                    error_handle(line_c, other_semantic_error);
+                    return false;
+                }
+				if(tmp > CHAR_MAX) {
+					error_handle(line_c, other_semantic_error);
+                    return false;
+				}
+
+                dynstr_add_char(tok->attr.str, tmp);
+                state = string_start_s;
+                break;
+            }
+            case string_oct1_s: {
+                if (c >= '0' && c <= '7') {
+                    tmp += 8 * (c - '0');
+                    state = string_oct2_s;
+                } else {
+                    error_handle(line_c, other_semantic_error);
+                    return false;
+                }
+                break;
+            }
+            case string_oct2_s: {
+                if (c >= '0' && c <= '7') {
+                    tmp += c - '0';
+                    state = string_start_s;
+                } else {
+                    error_handle(line_c, other_semantic_error);
+                    return false;
+                }
+				if(tmp > CHAR_MAX) {
+					error_handle(line_c, other_semantic_error);
+                    return false;
+				}
+                dynstr_add_char(tok->attr.str, tmp);
+                break;
+            }
         } // end of switch
     }
     return true;
