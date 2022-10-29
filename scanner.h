@@ -22,9 +22,25 @@ typedef enum {
     token_varieble,
     token_identifier,
     token_identifier_w_null,
-	token_integer,
-	token_float,
-    // TODO
+    token_integer,
+    token_float,
+    token_greater,
+    token_greater_equal,
+    token_lower,
+    token_lower_equal,
+    token_assign,
+    token_compare,
+    token_compare_neg,
+    token_semicol,
+    token_dot,
+    token_colon,
+    token_curly_left,
+    token_curly_right,
+    token_parentheses_left,
+    token_parentheses_right,
+    token_multiply,
+	token_plus,
+	token_minus,
 }
 token_type;
 
@@ -49,19 +65,14 @@ typedef enum {
     integer_s,
     float_s,
     expo_start_s,
-    expo_end_s, // odtud
+    expo_end_s,
     greater_s,
-    greater_equal_s,
     lower_s,
-    lower_equal_s,
     assign_s,
-    assign_to_comp_s,
-    comp_types_s,
-    neg_type_comp1_s,
-    neg_type_comp2_s,
-    neg_type_comp3_s,
-	exit_s,
-} state;
+    compare_neg_s,
+    exit_s,
+}
+state;
 
 /**
  * @enum IFJ22's keywords

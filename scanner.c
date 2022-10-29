@@ -124,6 +124,7 @@ bool get_token(token_t *tok) {
                 break;
             }
             case start_s:
+                tok->line = line_c;
                 if (c == '\n') {
                     line_c++;
                 } else if (isspace(c)) {
@@ -131,14 +132,12 @@ bool get_token(token_t *tok) {
                 } else if (c == '$') {
                     state = variable_s;
                     tok->type = token_varieble;
-                    tok->line = line_c;
                     if ((tok->attr.str = string_innit()) == NULL) {
                         error_handle(line_c, compiler_error);
                         return false;
                     }
                 } else if (isalpha(c) || c == '_') {
                     state = identifier_s;
-                    tok->line = line_c;
                     tok->type = token_identifier;
                     if ((tok->attr.str = string_innit()) == NULL) {
                         error_handle(line_c, compiler_error);
@@ -154,32 +153,71 @@ bool get_token(token_t *tok) {
                             error_handle(line_c, compiler_error);
                             return false;
                         }
+                        ungetc(c, input);
                     } else if (c == '>') {
                         state = exit_s;
                     } else {
                         error_handle(line_c, compiler_error);
                         return false;
                     }
-                    tok->line = line_c;
-                    ungetc(c, input);
                 } else if (c == '/') {
                     state = division_s;
                 } else if (c == '"') {
                     state = string_start_s;
                     tok->type = token_string;
-                    tok->line = line_c;
                     if ((tok->attr.str = string_innit()) == NULL) {
                         error_handle(line_c, compiler_error);
                         return false;
                     }
                 } else if (isdigit(c)) {
                     state = integer_s;
-                    tok->line = line_c;
                     ungetc(c, input);
                     if ((tok->attr.str = string_innit()) == NULL) {
                         error_handle(line_c, compiler_error);
                         return false;
                     }
+                } else if (c == '>') {
+                    state = greater_s;
+                    return true;
+                } else if (c == '<') {
+                    state = lower_s;
+                    return true;
+                } else if (c == '=') {
+                    state = assign_s;
+                    return true;
+                } else if (c == '!') {
+                    state = compare_neg_s;
+                    return true;
+                } else if (c == ';') {
+                    tok->type = token_semicol;
+                    return true;
+                } else if (c == '.') {
+                    tok->type = token_dot;
+                    return true;
+                } else if (c == ':') {
+                    tok->type = token_colon;
+                    return true;
+                } else if (c == '{') {
+                    tok->type = token_curly_left;
+                    return true;
+                } else if (c == '}') {
+                    tok->type = token_curly_right;
+                    return true;
+                } else if (c == '(') {
+                    tok->type = token_parentheses_left;
+                    return true;
+                } else if (c == ')') {
+                    tok->type = token_parentheses_right;
+                    return true;
+                } else if (c == '*') {
+                    tok->type = token_multiply;
+                    return true;
+                } else if (c == '+') {
+                    tok->type = token_plus;
+                    return true;
+                } else if (c == '-') {
+                    tok->type = token_minus;
+                    return true;
                 }
                 break;
             case division_s: {
@@ -191,7 +229,6 @@ bool get_token(token_t *tok) {
                     state = start_s;
                     ungetc(c, input); // c can be another token ex. 1/5
                     tok->type = token_division;
-                    tok->line = line_c;
                     return true;
                 }
                 break;
@@ -340,6 +377,7 @@ bool get_token(token_t *tok) {
                 }
                 ungetc(c, input);
                 state = start_s;
+                return true;
                 break;
             }
             case identifier_s: {
@@ -381,7 +419,7 @@ bool get_token(token_t *tok) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_while;
                 }
-                // some keyword cannot have ? before them
+                // some keyword cannot have '?' before them
                 if (tok->type == token_identifier_w_null) {
                     if ((tok->attr.keyword == keyword_else) ||
                         (tok->attr.keyword == keyword_function) ||
@@ -446,6 +484,7 @@ bool get_token(token_t *tok) {
                 } else {
                     ungetc(c, input);
                     state = start_s;
+                    return true;
                 }
                 break;
             }
@@ -463,16 +502,16 @@ bool get_token(token_t *tok) {
                 break;
             }
             case expo_end_s: {
-                char s[128]; // should be more than enought
+                char buffer[128]; // should be more than enought
                 unsigned counter = 0;
                 while (isdigit(c)) {
-                    s[counter++] = c;
+                    buffer[counter++] = c;
                     c = getc(input);
                 }
                 ungetc(c, input);
-                s[counter] = '\0';
+                buffer[counter] = '\0';
                 int exp;
-                if (!str_to_num(s, &exp)) {
+                if (!str_to_num(buffer, &exp)) {
                     error_handle(line_c, syntax_error);
                     return false;
                 }
@@ -499,7 +538,7 @@ bool get_token(token_t *tok) {
                     } else if (tmp == -1) {
                         tok->attr.doub /= pow(10, exp);
                     }
-                    if (tok->attr.doub -round(tok->attr.doub) < ACCURACY) {
+                    if (tok->attr.doub - round(tok->attr.doub) < ACCURACY) {
                         tmp = round(tok->attr.doub);
                         tok->attr.integer = tmp;
                         tok->type = token_integer;
@@ -511,10 +550,54 @@ bool get_token(token_t *tok) {
                 }
                 break;
             }
+            case greater_s: {
+                if (c == '=') {
+                    tok->type = token_greater_equal;
+                } else {
+                    ungetc(c, input);
+                    tok->type = token_greater;
+                }
+                state = start_s;
+                return true;
+                break;
+            }
+            case lower_s: {
+                if (c == '=') {
+                    tok->type = token_lower_equal;
+                } else {
+                    ungetc(c, input);
+                    tok->type = token_lower;
+                }
+                state = start_s;
+                return true;
+                break;
+            }
+            case assign_s: {
+                state = start_s;
+                if (c != '=') {
+                    ungetc(c, input);
+                    tok->type = token_assign;
+                } else if ((c = getc(input)) != '=') {
+                    error_handle(line_c, syntax_error);
+                    return false;
+                } else {
+                    tok->type = token_compare;
+                }
+                return true;
+                break;
+            }
+            case compare_neg_s: {
+                state = start_s;
+                if (c != '=' && (c = getc(input)) != '=') {
+                    error_handle(line_c, syntax_error);
+                    return false;
+                } else {
+                    tok->type = token_compare_neg;
+                    return true;
+                }
+                break;
+            }
         } // end of switch
     }
     return true;
 }
-
-// TODO kontrola jestli je v kazdem ifu v start_c line_c++ a kazdy state return nebo break
-// TODO stejne tak je potreba v konecnych stavech nastavovat stav na start
