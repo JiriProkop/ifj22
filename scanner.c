@@ -10,8 +10,13 @@
 #include "error.h"
 #include "scanner.h"
 
-#define ACCURACY (0.00005)
+#define ACCURACY (0.00005) //TODO doxy comment
 
+/**
+ * allocates and initialises struct dynstr_t
+ *
+ * @return Returns NULL if error occured, pointer to dynstr_t otherwise
+ */
 dynstr_t *string_innit() {
     dynstr_t *str = malloc(sizeof(dynstr_t));
     if (str == NULL || !dynstr_init(str)) {
@@ -21,11 +26,23 @@ dynstr_t *string_innit() {
     return str;
 }
 
+/**
+ * frees dynstr_t struct
+ *
+ * @param attr pointer to allocated dynstr_t
+ */
 void string_free(dynstr_t *attr) {
     dynstr_delete(attr);
     free(attr);
 }
 
+/**
+ * Converts integer writen as char to integer. ex. '6' -> 6
+ *
+ * @param str pointer to char array of numbers ending with '\0'
+ * @param ptr pointer to int, where the converted integer is returned
+ * @return Returns false if error occured, true otherwise
+ */
 bool str_to_num(const char str[], int *ptr) {
     *ptr = atoi(str);
     if (*ptr == 0) {
