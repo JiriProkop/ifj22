@@ -28,8 +28,8 @@ char *types[] = {
     "token_parentheses_left",
     "token_parentheses_right",
     "token_multiply",
-	"token_plus",
-	"token_minus"
+    "token_plus",
+    "token_minus"
 };
 
 int ret = 0;

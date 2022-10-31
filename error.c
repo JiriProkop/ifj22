@@ -5,8 +5,8 @@
 extern int ret; // to be returned by main
 
 void error_handle(unsigned line, unsigned error_type) {
-    int ret = error_type; // added int
-    ret = ret + 0; // to silence the error
+    ret = error_type;
+
 
     switch (error_type) {
         case lex_analysis_err:
