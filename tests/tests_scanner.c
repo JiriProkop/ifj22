@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../scanner.h"
+#include "../error.h"
 #include "../dynstr.h"
 
 char *types[] = {
@@ -31,6 +32,7 @@ char *types[] = {
 	"token_minus"
 };
 
+int ret = 0;
 int main() {
     printf("--- [SCANNER TESTS] ---\n");
 
@@ -69,5 +71,5 @@ int main() {
 
     free(tkn); // free the token
 
-    return 0;
+    return ret;
 }
