@@ -16,6 +16,9 @@ test: $(TESTS)
 # dynstr tests
 	$(TESTDIR)tests_dynstr > $(TESTDIR)tests_dynstr.output
 	diff -su $(TESTDIR)tests_dynstr.output $(TESTDIR)correct_out/tests_dynstr.output
+# scanner tests
+	$(TESTDIR)tests_scanner < $(TESTDIR)tests_scanner.input > $(TESTDIR)tests_scanner.output
+#	diff -su $(TESTDIR)tests_scanner_1.output $(TESTDIR)correct_out/tests_scanner_1.output
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
 $(TESTDIR)tests_dynstr: dynstr.o
