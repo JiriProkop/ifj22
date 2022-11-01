@@ -74,4 +74,18 @@ int dynstr_add_string(dynstr_t *string, char *chars);
  */
 int dynstr_compare(dynstr_t *string, char *compare_str);
 
+/**
+ * allocates and initialises struct dynstr_t
+ *
+ * @return Returns NULL if error occured, pointer to dynstr_t otherwise
+ */
+dynstr_t *string_innit();
+
+/**
+ * frees dynstr_t struct
+ *
+ * @param attr pointer to allocated dynstr_t
+ */
+void string_free(dynstr_t *attr);
+
 #endif

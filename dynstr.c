@@ -4,7 +4,7 @@
 
 int dynstr_init(dynstr_t *string) {
     string->array = malloc(sizeof(char) * STR_DEFAULT_LENGTH);
-    if(string->array == NULL) {
+    if (string->array == NULL) {
         return 0;
     }
     string->array[0] = '\0';
@@ -25,13 +25,13 @@ void dynstr_delete(dynstr_t *string) {
 }
 
 int dynstr_add_char(dynstr_t *string, char character) {
-    if(string->length < string->allocated) {
+    if (string->length < string->allocated) {
         string->array[string->length] = character;
         string->array[string->length + 1] = '\0';
     } else {
         // add more space
         string->array = realloc(string->array, sizeof(char) * (string->length + STR_DEFAULT_LENGTH));
-        if(string->array == NULL) {
+        if (string->array == NULL) {
             return 0;
         }
         string->allocated = string->allocated + STR_DEFAULT_LENGTH;
@@ -46,8 +46,8 @@ int dynstr_add_char(dynstr_t *string, char character) {
 
 int dynstr_add_string(dynstr_t *string, char *chars) {
     unsigned long i = 0;
-    while(chars[i] != '\0') {
-        if(dynstr_add_char(string, chars[i]) == 0) {
+    while (chars[i] != '\0') {
+        if (dynstr_add_char(string, chars[i]) == 0) {
             return 0;
         }
         i++;
@@ -56,10 +56,24 @@ int dynstr_add_string(dynstr_t *string, char *chars) {
 }
 
 int dynstr_compare(dynstr_t *string, char *compare_str) {
-    for(unsigned long i = 0; i <= string->length; i++) {
-        if(string->array[i] != compare_str[i]) {
+    for (unsigned long i = 0; i <= string->length; i++) {
+        if (string->array[i] != compare_str[i]) {
             return 0;
         }
     }
     return 1;
+}
+
+dynstr_t *string_innit() {
+    dynstr_t *str = malloc(sizeof(dynstr_t));
+    if (str == NULL || !dynstr_init(str)) {
+        free(str);
+        return NULL;
+    }
+    return str;
+}
+
+void string_free(dynstr_t *attr) {
+    dynstr_delete(attr);
+    free(attr);
 }
