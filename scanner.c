@@ -10,31 +10,37 @@
 #include "error.h"
 #include "scanner.h"
 
-#define ACCURACY (0.00005) //TODO doxy comment
+#define ACCURACY (0.00005)
 
 /**
- * allocates and initialises struct dynstr_t
- *
- * @return Returns NULL if error occured, pointer to dynstr_t otherwise
+ * @enum scanner states
  */
-dynstr_t *string_innit() {
-    dynstr_t *str = malloc(sizeof(dynstr_t));
-    if (str == NULL || !dynstr_init(str)) {
-        free(str);
-        return NULL;
-    }
-    return str;
+typedef enum {
+    begin_s,
+    start_s,
+    division_s,
+    line_cmnt_s,
+    block_cmnt_start_s,
+    block_cmnt_inside_s,
+    string_start_s,
+    string_escape_s,
+    string_hex1_s,
+    string_hex2_s,
+    string_oct1_s,
+    string_oct2_s,
+    variable_s,
+    identifier_s,
+    integer_s,
+    float_s,
+    expo_start_s,
+    expo_end_s,
+    greater_s,
+    lower_s,
+    assign_s,
+    compare_neg_s,
+    exit_s,
 }
-
-/**
- * frees dynstr_t struct
- *
- * @param attr pointer to allocated dynstr_t
- */
-void string_free(dynstr_t *attr) {
-    dynstr_delete(attr);
-    free(attr);
-}
+state;
 
 /**
  * Converts integer writen as char to integer. ex. '6' -> 6
@@ -408,33 +414,43 @@ bool get_token(token_t *tok) {
                 if (!strcmp(tok->attr.str->array, "else")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_else;
+                    tok->type = token_keyword;
                 } else if (!strcmp(tok->attr.str->array, "float")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_float;
+					tok->type = token_keyword;
                 } else if (!strcmp(tok->attr.str->array, "function")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_function;
+					tok->type = token_keyword;
                 } else if (!strcmp(tok->attr.str->array, "if")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_if;
+					tok->type = token_keyword;
                 } else if (!strcmp(tok->attr.str->array, "int")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_int;
+					tok->type = token_keyword;
                 } else if (!strcmp(tok->attr.str->array, "null")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_null;
+					tok->type = token_keyword;
                 } else if (!strcmp(tok->attr.str->array, "return")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_return;
+					tok->type = token_keyword;
                 } else if (!strcmp(tok->attr.str->array, "string")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_string;
+					tok->type = token_keyword;
                 } else if (!strcmp(tok->attr.str->array, "void")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_void;
+					tok->type = token_keyword;
                 } else if (!strcmp(tok->attr.str->array, "while")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_while;
+					tok->type = token_keyword;
                 }
                 // some keyword cannot have '?' before them
                 if (tok->type == token_identifier_w_null) {
@@ -532,7 +548,7 @@ bool get_token(token_t *tok) {
                     error_handle(line_c, syntax_error);
                     return false;
                 }
-                double holder;
+                long double holder;
                 if (tok->type == token_integer) {
                     if (tmp == 1) {
                         tok->attr.integer *= pow(10, exp);
@@ -544,7 +560,7 @@ bool get_token(token_t *tok) {
                             tok->attr.integer /= pow(10, exp);
                         } else {
                             tok->type = token_float;
-                            tok->attr.doub /= pow(10, exp);
+                            tok->attr.doub = holder;
                         }
                     }
                     state = start_s;

@@ -41,38 +41,9 @@ typedef enum {
     token_multiply,
 	token_plus,
 	token_minus,
+	token_keyword,
 }
 token_type;
-
-/**
- * @enum scanner states
- */
-typedef enum {
-    begin_s,
-    start_s,
-    division_s,
-    line_cmnt_s,
-    block_cmnt_start_s,
-    block_cmnt_inside_s,
-    string_start_s,
-    string_escape_s,
-    string_hex1_s,
-    string_hex2_s,
-    string_oct1_s,
-    string_oct2_s,
-    variable_s,
-    identifier_s,
-    integer_s,
-    float_s,
-    expo_start_s,
-    expo_end_s,
-    greater_s,
-    lower_s,
-    assign_s,
-    compare_neg_s,
-    exit_s,
-}
-state;
 
 /**
  * @enum IFJ22's keywords
