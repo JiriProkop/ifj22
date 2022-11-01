@@ -39,7 +39,8 @@ int main() {
     // allocate the token_t structure before using
     token_t *tkn = malloc(sizeof(token_t));
     if(tkn == NULL) {
-        printf("Malloc failed.\n");
+        printf("Malloc failed.\n"); // Na to tu kdyztak je error_handle(0, compiler error), vrati to i spravnou hodnotu,
+									// ta 0 je cislo radku, kde se stala chyba, ale to se u tohoto erroru nevypisuje
         return 1;
     }
 
@@ -63,7 +64,8 @@ int main() {
             printf("Token double attribute: %Lf\n", tkn->attr.doub);
         } else if(type == token_string || type == token_identifier || type == token_identifier_w_null) {
             printf("String attribute: '%s'\n", tkn->attr.str->array);
-            dynstr_delete(tkn->attr.str);
+            //dynstr_delete(tkn->attr.str); delete nestaci, jeste je potreba uvolnit samotny dynstr_t struct
+            string_free(tkn->attr.str);
         }
 
         i++;
