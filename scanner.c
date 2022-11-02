@@ -201,13 +201,13 @@ bool get_token(token_t *tok) {
                     }
                 } else if (c == '>') {
                     state = greater_s;
-                    return true;
+                    //return true; // it cannot return
                 } else if (c == '<') {
                     state = lower_s;
-                    return true;
+                    //return true;
                 } else if (c == '=') {
                     state = assign_s;
-                    return true;
+                    //return true;
                 } else if (c == '!') {
                     state = compare_neg_s;
                     return true;

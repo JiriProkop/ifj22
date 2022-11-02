@@ -67,7 +67,6 @@ int main() {
         if(skipped == 0 && type != 0) {
             skipped = 1;
         } else if(type == 0) {
-            printf("Type of token: %s\n", types[type]);
             break;
         }
         printf("\n[token number %d]\n", i);

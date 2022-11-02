@@ -2,6 +2,7 @@
 declare(strict_types=1);
 / * - +
 "afASFDASFD";
+afsdf afafd;
 324
 2345234.2345234
 RandomFunction();
@@ -9,7 +10,7 @@ RandomFunction();
 "asdfas";
 452e5
 
-if(234 = 11) {
+if(234 === 11) {
 
 }
 i = 32;
