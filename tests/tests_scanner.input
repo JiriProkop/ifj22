@@ -7,7 +7,9 @@ declare(strict_types=1);
 RandomFunction();
 -253452345
 "asdfas";
-452e345
-    
+452e5
 
-if
+if(234 = 11) {
+
+}
+i = 32;

@@ -29,7 +29,21 @@ char *types[] = {
     "token_parentheses_right",
     "token_multiply",
     "token_plus",
-    "token_minus"
+    "token_minus",
+    "token_keyword"
+};
+
+char *keywords_str[] = {
+    "keyword_else",
+    "keyword_float",
+    "keyword_function",
+    "keyword_if",
+    "keyword_int",
+    "keyword_null",
+    "keyword_return",
+    "keyword_string",
+    "keyword_void",
+    "keyword_while",
 };
 
 int ret = 0;
@@ -53,6 +67,7 @@ int main() {
         if(skipped == 0 && type != 0) {
             skipped = 1;
         } else if(type == 0) {
+            printf("Type of token: %s\n", types[type]);
             break;
         }
         printf("\n[token number %d]\n", i);
@@ -63,9 +78,11 @@ int main() {
         } else if(type == token_float) {
             printf("Token double attribute: %Lf\n", tkn->attr.doub);
         } else if(type == token_string || type == token_identifier || type == token_identifier_w_null) {
-            printf("String attribute: '%s'\n", tkn->attr.str->array);
+            printf("Token string attribute: '%s'\n", tkn->attr.str->array);
             //dynstr_delete(tkn->attr.str); delete nestaci, jeste je potreba uvolnit samotny dynstr_t struct
             string_free(tkn->attr.str);
+        } else if(type == token_keyword) {
+            printf("Token keyword attribute: %s\n", keywords_str[tkn->attr.keyword]);
         }
 
         i++;
