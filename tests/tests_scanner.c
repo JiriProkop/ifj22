@@ -10,7 +10,7 @@ char *types[] = {
     "token_string",
     "token_varieble",
     "token_identifier",
-    "token_identifier_w_null",
+    "token_keyword_w_null",
     "token_integer",
     "token_float",
     "token_greater",
@@ -76,11 +76,11 @@ int main() {
             printf("Token integer attribute: %d\n", tkn->attr.integer);
         } else if(type == token_float) {
             printf("Token double attribute: %Lf\n", tkn->attr.doub);
-        } else if(type == token_string || type == token_identifier || type == token_identifier_w_null) {
+        } else if(type == token_string || type == token_identifier || type == token_varieble) {
             printf("Token string attribute: '%s'\n", tkn->attr.str->array);
             //dynstr_delete(tkn->attr.str); delete nestaci, jeste je potreba uvolnit samotny dynstr_t struct
             string_free(tkn->attr.str);
-        } else if(type == token_keyword) {
+        } else if(type == token_keyword || type == token_keyword_w_null) {
             printf("Token keyword attribute: %s\n", keywords_str[tkn->attr.keyword]);
         }
 

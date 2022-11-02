@@ -39,8 +39,7 @@ typedef enum {
     assign_s,
     compare_neg_s,
     exit_s,
-}
-state;
+} state;
 
 /**
  * Converts integer writen as char to integer. ex. '6' -> 6
@@ -170,7 +169,7 @@ bool get_token(token_t *tok) {
                 } else if (c == '?') {
                     c = getc(input);
                     if (isalpha(c) || c == '_') {
-                        tok->type = token_identifier_w_null;
+                        tok->type = token_keyword_w_null;
                         state = identifier_s;
                         if ((tok->attr.str = string_innit()) == NULL) {
                             error_handle(line_c, compiler_error);
@@ -201,16 +200,16 @@ bool get_token(token_t *tok) {
                     }
                 } else if (c == '>') {
                     state = greater_s;
-                    //return true; // it cannot return
+                    // return true; // it cannot return
                 } else if (c == '<') {
                     state = lower_s;
-                    //return true;
+                    // return true;
                 } else if (c == '=') {
                     state = assign_s;
-                    //return true;
+                    // return true;
                 } else if (c == '!') {
                     state = compare_neg_s;
-                    //return true;
+                    // return true;
                 } else if (c == ';') {
                     tok->type = token_semicol;
                     return true;
@@ -288,6 +287,9 @@ bool get_token(token_t *tok) {
                     state = start_s;
                 } else {
                     state = block_cmnt_start_s;
+                }
+                if (c == '\n') {
+                    line_c++;
                 }
                 break;
             }
@@ -414,46 +416,66 @@ bool get_token(token_t *tok) {
                 if (!strcmp(tok->attr.str->array, "else")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_else;
-                    tok->type = token_keyword;
+                    if (tok->type != token_keyword_w_null) {
+                        tok->type = token_keyword;
+                    }
                 } else if (!strcmp(tok->attr.str->array, "float")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_float;
-					tok->type = token_keyword;
+                    if (tok->type != token_keyword_w_null) {
+                        tok->type = token_keyword;
+                    }
                 } else if (!strcmp(tok->attr.str->array, "function")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_function;
-					tok->type = token_keyword;
+                    if (tok->type != token_keyword_w_null) {
+                        tok->type = token_keyword;
+                    }
                 } else if (!strcmp(tok->attr.str->array, "if")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_if;
-					tok->type = token_keyword;
+                    if (tok->type != token_keyword_w_null) {
+                        tok->type = token_keyword;
+                    }
                 } else if (!strcmp(tok->attr.str->array, "int")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_int;
-					tok->type = token_keyword;
+                    if (tok->type != token_keyword_w_null) {
+                        tok->type = token_keyword;
+                    }
                 } else if (!strcmp(tok->attr.str->array, "null")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_null;
-					tok->type = token_keyword;
+                    if (tok->type != token_keyword_w_null) {
+                        tok->type = token_keyword;
+                    }
                 } else if (!strcmp(tok->attr.str->array, "return")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_return;
-					tok->type = token_keyword;
+                    if (tok->type != token_keyword_w_null) {
+                        tok->type = token_keyword;
+                    }
                 } else if (!strcmp(tok->attr.str->array, "string")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_string;
-					tok->type = token_keyword;
+                    if (tok->type != token_keyword_w_null) {
+                        tok->type = token_keyword;
+                    }
                 } else if (!strcmp(tok->attr.str->array, "void")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_void;
-					tok->type = token_keyword;
+                    if (tok->type != token_keyword_w_null) {
+                        tok->type = token_keyword;
+                    }
                 } else if (!strcmp(tok->attr.str->array, "while")) {
                     string_free(tok->attr.str);
                     tok->attr.keyword = keyword_while;
-					tok->type = token_keyword;
+                    if (tok->type != token_keyword_w_null) {
+                        tok->type = token_keyword;
+                    }
                 }
                 // some keyword cannot have '?' before them
-                if (tok->type == token_identifier_w_null) {
+                if (tok->type == token_keyword_w_null) {
                     if ((tok->attr.keyword == keyword_else) ||
                         (tok->attr.keyword == keyword_function) ||
                         (tok->attr.keyword == keyword_if) ||
@@ -461,6 +483,11 @@ bool get_token(token_t *tok) {
                         (tok->attr.keyword == keyword_return) ||
                         (tok->attr.keyword == keyword_void) ||
                         (tok->attr.keyword == keyword_while)) {
+                        error_handle(line_c, expr_type_error);
+                        return false;
+                    } else if (tok->attr.keyword != keyword_float &&
+                               tok->attr.keyword != keyword_int &&
+                               tok->attr.keyword != keyword_string) {
                         error_handle(line_c, expr_type_error);
                         return false;
                     }
@@ -621,8 +648,8 @@ bool get_token(token_t *tok) {
             }
             case compare_neg_s: {
                 state = start_s;
-                if ((c = getc(input)) != '=' && c != '=') { // switched those two conditions
-                    error_handle(line_c, syntax_error);     // because it wouldn't get to the getc()
+                if (c != '=' || (c = getc(input)) != '=' ) {
+                    error_handle(line_c, syntax_error);
                     return false;
                 } else {
                     tok->type = token_compare_neg;

@@ -21,7 +21,7 @@ typedef enum {
     token_string,
     token_varieble,
     token_identifier,
-    token_identifier_w_null,
+    token_keyword_w_null,
     token_integer,
     token_float,
     token_greater,
