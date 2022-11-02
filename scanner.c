@@ -210,7 +210,7 @@ bool get_token(token_t *tok) {
                     //return true;
                 } else if (c == '!') {
                     state = compare_neg_s;
-                    return true;
+                    //return true;
                 } else if (c == ';') {
                     tok->type = token_semicol;
                     return true;
@@ -621,8 +621,8 @@ bool get_token(token_t *tok) {
             }
             case compare_neg_s: {
                 state = start_s;
-                if (c != '=' && (c = getc(input)) != '=') {
-                    error_handle(line_c, syntax_error);
+                if ((c = getc(input)) != '=' && c != '=') { // switched those two conditions
+                    error_handle(line_c, syntax_error);     // because it wouldn't get to the getc()
                     return false;
                 } else {
                     tok->type = token_compare_neg;

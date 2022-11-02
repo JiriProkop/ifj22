@@ -1,16 +1,64 @@
 <?php
 declare(strict_types=1);
-/ * - +
-"afASFDASFD";
-afsdf afafd;
-324
-2345234.2345234
-RandomFunction();
--253452345
-"asdfas";
-452e5
 
-if(234 === 11) {
+// test keywords
+else float function if int null return string void while
 
+// test identifiers
+asdfasdfASDF
+ASDFasdf_12345
+_1234adsfASDF
+
+// variable identifier
+$asdfasdf
+$_ASDF1234
+$_1234
+
+// type identifiers with ?
+?int ?float ?string
+
+// integer
+12345
+-12345
+
+// float
+1234.12341234
+
+// exponent
+1234.1234e3
+0.1E3
+0.2e+5
+0.5e-2
+
+// string
+"normal string"
+"some escape sequences: \" \t \\ \$ \n"
+"characters with octan sequence \072\051"
+"characters with hex sequence \x3B\x2d\x29"
+
+/* 
+ *
+ * block comment test
+ *
+ */
+
+// function declaration example
+function foo(string $param) : int {
+    return 0;
 }
-i = 32;
+foo("ahoj");
+
+// variable declaration
+$variable = 2;
+
+// if statement
+if(1 === 1) {
+    if(2 !== 1) {
+        $x = $x . $y;
+    }
+}
+
+// operators
+* / + - . < > <= >= === !==
+
+?>
