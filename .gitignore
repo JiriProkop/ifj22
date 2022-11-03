@@ -53,3 +53,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# tests binaries and output files
+tests/tests_dynstr
+tests/tests_scanner
+tests/*.output
