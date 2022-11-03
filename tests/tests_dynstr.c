@@ -1,5 +1,13 @@
-#include <stdlib.h>
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @brief Dynamic string tests.
+ *
+ * @author Patrik Čerbák xcerba00 <xcerba00@stud.fit.vutbr.cz>
+ */
+
 #include <stdio.h>
+#include <stdlib.h>
 #include "../dynstr.h"
 #include "../error.h"
 

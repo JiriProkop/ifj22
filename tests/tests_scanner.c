@@ -1,9 +1,18 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "../scanner.h"
-#include "../error.h"
-#include "../dynstr.h"
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @brief Basic scanner tests.
+ *
+ * @author Patrik Čerbák xcerba00 <xcerba00@stud.fit.vutbr.cz>
+ */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include "../scanner.h"
+#include "../dynstr.h"
+#include "../error.h"
+
+// define the types, so I can print them later
 char *types[] = {
     "token_none",
     "token_division",
@@ -33,6 +42,7 @@ char *types[] = {
     "token_keyword"
 };
 
+// define the keywords
 char *keywords_str[] = {
     "keyword_else",
     "keyword_float",
