@@ -29,8 +29,8 @@ int dynstr_add_char(dynstr_t *string, char character) {
         string->array[string->length] = character;
         string->array[string->length + 1] = '\0';
     } else {
-        // add more space
-        string->array = realloc(string->array, sizeof(char) * (string->length + STR_DEFAULT_LENGTH));
+        // add more space (the +1 is fot the \0 symbol)
+        string->array = realloc(string->array, sizeof(char) * (string->allocated + STR_DEFAULT_LENGTH + 1));
         if (string->array == NULL) {
             return 0;
         }
