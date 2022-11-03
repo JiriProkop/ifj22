@@ -18,7 +18,12 @@ test: $(TESTS)
 	diff -su $(TESTDIR)tests_dynstr.output $(TESTDIR)correct_out/tests_dynstr.output
 # scanner tests
 	$(TESTDIR)tests_scanner < $(TESTDIR)tests_scanner.input > $(TESTDIR)tests_scanner.output
-#	diff -su $(TESTDIR)tests_scanner_1.output $(TESTDIR)correct_out/tests_scanner_1.output
+	diff -su $(TESTDIR)tests_scanner.output $(TESTDIR)correct_out/tests_scanner.output
+
+# check the tests with valgrind
+valgrind: $(TESTS)
+	valgrind $(TESTDIR)tests_dynst
+	valgrind $(TESTDIR)tests_scanner < $(TESTDIR)tests_scanner.input
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
 $(TESTDIR)tests_dynstr: dynstr.o
@@ -26,6 +31,7 @@ $(TESTDIR)tests_dynstr: dynstr.o
 $(TESTDIR)tests_scanner: scanner.o error.o dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 # --------------------------------------------------
+
 
 # compile object files
 %.o: %.c

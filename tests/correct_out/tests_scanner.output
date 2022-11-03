@@ -1,0 +1,387 @@
+--- [SCANNER TESTS] ---
+
+[token number 0]
+Type of token: token_keyword
+Token line: 5
+Token keyword attribute: keyword_else
+
+[token number 1]
+Type of token: token_keyword
+Token line: 5
+Token keyword attribute: keyword_float
+
+[token number 2]
+Type of token: token_keyword
+Token line: 5
+Token keyword attribute: keyword_function
+
+[token number 3]
+Type of token: token_keyword
+Token line: 5
+Token keyword attribute: keyword_if
+
+[token number 4]
+Type of token: token_keyword
+Token line: 5
+Token keyword attribute: keyword_int
+
+[token number 5]
+Type of token: token_keyword
+Token line: 5
+Token keyword attribute: keyword_null
+
+[token number 6]
+Type of token: token_keyword
+Token line: 5
+Token keyword attribute: keyword_return
+
+[token number 7]
+Type of token: token_keyword
+Token line: 5
+Token keyword attribute: keyword_string
+
+[token number 8]
+Type of token: token_keyword
+Token line: 5
+Token keyword attribute: keyword_void
+
+[token number 9]
+Type of token: token_keyword
+Token line: 5
+Token keyword attribute: keyword_while
+
+[token number 10]
+Type of token: token_identifier
+Token line: 8
+Token string attribute: 'asdfasdfASDF'
+
+[token number 11]
+Type of token: token_identifier
+Token line: 9
+Token string attribute: 'ASDFasdf_12345'
+
+[token number 12]
+Type of token: token_identifier
+Token line: 10
+Token string attribute: '_1234adsfASDF'
+
+[token number 13]
+Type of token: token_varieble
+Token line: 13
+Token string attribute: 'asdfasdf'
+
+[token number 14]
+Type of token: token_varieble
+Token line: 14
+Token string attribute: '_ASDF1234'
+
+[token number 15]
+Type of token: token_varieble
+Token line: 15
+Token string attribute: '_1234'
+
+[token number 16]
+Type of token: token_keyword_w_null
+Token line: 18
+Token keyword attribute: keyword_int
+
+[token number 17]
+Type of token: token_keyword_w_null
+Token line: 18
+Token keyword attribute: keyword_float
+
+[token number 18]
+Type of token: token_keyword_w_null
+Token line: 18
+Token keyword attribute: keyword_string
+
+[token number 19]
+Type of token: token_integer
+Token line: 21
+Token integer attribute: 12345
+
+[token number 20]
+Type of token: token_float
+Token line: 24
+Token double attribute: 1234.123412
+
+[token number 21]
+Type of token: token_float
+Token line: 27
+Token double attribute: 1234123.400000
+
+[token number 22]
+Type of token: token_integer
+Token line: 28
+Token integer attribute: 100
+
+[token number 23]
+Type of token: token_integer
+Token line: 29
+Token integer attribute: 20000
+
+[token number 24]
+Type of token: token_float
+Token line: 30
+Token double attribute: 0.005000
+
+[token number 25]
+Type of token: token_string
+Token line: 33
+Token string attribute: 'normal string'
+
+[token number 26]
+Type of token: token_string
+Token line: 34
+Token string attribute: 'some escape sequences: " 	 \ $ 
+'
+
+[token number 27]
+Type of token: token_string
+Token line: 35
+Token string attribute: 'characters with octan sequence :)'
+
+[token number 28]
+Type of token: token_string
+Token line: 36
+Token string attribute: 'characters with hex sequence ;-)'
+
+[token number 29]
+Type of token: token_keyword
+Token line: 45
+Token keyword attribute: keyword_function
+
+[token number 30]
+Type of token: token_identifier
+Token line: 45
+Token string attribute: 'foo'
+
+[token number 31]
+Type of token: token_parentheses_left
+Token line: 45
+
+[token number 32]
+Type of token: token_keyword
+Token line: 45
+Token keyword attribute: keyword_string
+
+[token number 33]
+Type of token: token_varieble
+Token line: 45
+Token string attribute: 'param'
+
+[token number 34]
+Type of token: token_parentheses_right
+Token line: 45
+
+[token number 35]
+Type of token: token_colon
+Token line: 45
+
+[token number 36]
+Type of token: token_keyword
+Token line: 45
+Token keyword attribute: keyword_int
+
+[token number 37]
+Type of token: token_curly_left
+Token line: 45
+
+[token number 38]
+Type of token: token_keyword
+Token line: 46
+Token keyword attribute: keyword_return
+
+[token number 39]
+Type of token: token_integer
+Token line: 46
+Token integer attribute: 0
+
+[token number 40]
+Type of token: token_semicol
+Token line: 46
+
+[token number 41]
+Type of token: token_curly_right
+Token line: 47
+
+[token number 42]
+Type of token: token_identifier
+Token line: 48
+Token string attribute: 'foo'
+
+[token number 43]
+Type of token: token_parentheses_left
+Token line: 48
+
+[token number 44]
+Type of token: token_string
+Token line: 48
+Token string attribute: 'ahoj'
+
+[token number 45]
+Type of token: token_parentheses_right
+Token line: 48
+
+[token number 46]
+Type of token: token_semicol
+Token line: 48
+
+[token number 47]
+Type of token: token_varieble
+Token line: 51
+Token string attribute: 'variable'
+
+[token number 48]
+Type of token: token_assign
+Token line: 51
+
+[token number 49]
+Type of token: token_integer
+Token line: 51
+Token integer attribute: 2
+
+[token number 50]
+Type of token: token_semicol
+Token line: 51
+
+[token number 51]
+Type of token: token_keyword
+Token line: 54
+Token keyword attribute: keyword_if
+
+[token number 52]
+Type of token: token_parentheses_left
+Token line: 54
+
+[token number 53]
+Type of token: token_integer
+Token line: 54
+Token integer attribute: 1
+
+[token number 54]
+Type of token: token_compare
+Token line: 54
+
+[token number 55]
+Type of token: token_integer
+Token line: 54
+Token integer attribute: 1
+
+[token number 56]
+Type of token: token_parentheses_right
+Token line: 54
+
+[token number 57]
+Type of token: token_curly_left
+Token line: 54
+
+[token number 58]
+Type of token: token_keyword
+Token line: 55
+Token keyword attribute: keyword_if
+
+[token number 59]
+Type of token: token_parentheses_left
+Token line: 55
+
+[token number 60]
+Type of token: token_integer
+Token line: 55
+Token integer attribute: 2
+
+[token number 61]
+Type of token: token_compare_neg
+Token line: 55
+
+[token number 62]
+Type of token: token_integer
+Token line: 55
+Token integer attribute: 1
+
+[token number 63]
+Type of token: token_parentheses_right
+Token line: 55
+
+[token number 64]
+Type of token: token_curly_left
+Token line: 55
+
+[token number 65]
+Type of token: token_varieble
+Token line: 56
+Token string attribute: 'x'
+
+[token number 66]
+Type of token: token_assign
+Token line: 56
+
+[token number 67]
+Type of token: token_varieble
+Token line: 56
+Token string attribute: 'x'
+
+[token number 68]
+Type of token: token_dot
+Token line: 56
+
+[token number 69]
+Type of token: token_varieble
+Token line: 56
+Token string attribute: 'y'
+
+[token number 70]
+Type of token: token_semicol
+Token line: 56
+
+[token number 71]
+Type of token: token_curly_right
+Token line: 57
+
+[token number 72]
+Type of token: token_curly_right
+Token line: 58
+
+[token number 73]
+Type of token: token_multiply
+Token line: 61
+
+[token number 74]
+Type of token: token_division
+Token line: 61
+
+[token number 75]
+Type of token: token_plus
+Token line: 61
+
+[token number 76]
+Type of token: token_minus
+Token line: 61
+
+[token number 77]
+Type of token: token_dot
+Token line: 61
+
+[token number 78]
+Type of token: token_lower
+Token line: 61
+
+[token number 79]
+Type of token: token_greater
+Token line: 61
+
+[token number 80]
+Type of token: token_lower_equal
+Token line: 61
+
+[token number 81]
+Type of token: token_greater_equal
+Token line: 61
+
+[token number 82]
+Type of token: token_compare
+Token line: 61
+
+[token number 83]
+Type of token: token_compare_neg
+Token line: 61
