@@ -22,7 +22,7 @@ test: $(TESTS)
 
 # check the tests with valgrind
 valgrind: $(TESTS)
-	valgrind $(TESTDIR)tests_dynst
+	valgrind $(TESTDIR)tests_dynstr
 	valgrind $(TESTDIR)tests_scanner < $(TESTDIR)tests_scanner.input
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
