@@ -1,5 +1,4 @@
 #include <stdlib.h>
-
 #include "dynstr.h"
 
 int dynstr_init(dynstr_t *string) {

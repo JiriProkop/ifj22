@@ -53,9 +53,7 @@ int main() {
     // allocate the token_t structure before using
     token_t *tkn = malloc(sizeof(token_t));
     if(tkn == NULL) {
-        printf("Malloc failed.\n"); // Na to tu kdyztak je error_handle(0, compiler error), vrati to i spravnou hodnotu,
-									// ta 0 je cislo radku, kde se stala chyba, ale to se u tohoto erroru nevypisuje
-        return 1;
+        error_handle(0, compiler_error);
     }
 
     int skipped = 0;

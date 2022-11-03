@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../dynstr.h"
+#include "../error.h"
 
 int main() {
     printf("--- [DYNSTR TESTS] ---\n");
@@ -8,8 +9,7 @@ int main() {
     // allocate the dynstr_t struct before using
     dynstr_t *string = malloc(sizeof(dynstr_t));
     if(string == NULL) {
-        printf("Malloc failed.\n");
-        return 1;
+        error_handle(0, compiler_error);
     }
 
     // test initialization
