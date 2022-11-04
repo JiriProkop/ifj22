@@ -11,6 +11,7 @@
 #include "../dynstr.h"
 #include "../error.h"
 
+int ret = 0;
 int main() {
     printf("--- [DYNSTR TESTS] ---\n");
 
@@ -99,5 +100,5 @@ int main() {
     // free the dynstr_t structure
     free(string);
 
-    return 0;
+    return ret;
 }

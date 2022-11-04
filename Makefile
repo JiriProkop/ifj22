@@ -26,7 +26,7 @@ valgrind: $(TESTS)
 	valgrind $(TESTDIR)tests_scanner < $(TESTDIR)tests_scanner.input
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
-$(TESTDIR)tests_dynstr: dynstr.o
+$(TESTDIR)tests_dynstr: dynstr.o error.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 $(TESTDIR)tests_scanner: scanner.o error.o dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
