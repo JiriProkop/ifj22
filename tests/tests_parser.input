@@ -1,0 +1,7 @@
+<?php
+declare(strict_types=1);
+
+function testfunc(int $testvar) : void {
+    $testvar = 3 + 3;
+    return  $testvar;
+}
