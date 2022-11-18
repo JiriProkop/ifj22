@@ -21,6 +21,15 @@ typedef struct stack {
 void stack_init(stack_node_t **stack);
 
 /**
+ * @brief returns 1 if stack is empty 0 if it is not 
+ * 
+ * @param stack 
+ * @return true 
+ * @return false 
+ */
+bool stack_is_empty(stack_node_t **stack);
+
+/**
  * @brief adds/pushes token on stack 
  * 
  * @param stack the stack on which the token is to be pushed
