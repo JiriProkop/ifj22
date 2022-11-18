@@ -1,3 +1,11 @@
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @brief scanner implementation.
+ *
+ * @author Štěpán Czajkowski xczajk01 <xczajk01@stud.fit.vutbr.cz>
+ */
+
 #include <stdio.h>
 
 #include "scanner.h"
@@ -6,6 +14,10 @@
 
 void stack_init(stack_node_t **stack){
     *stack = NULL;
+}
+
+bool stack_is_empty(stack_node_t **stack){
+    return *stack == NULL;
 }
 
 int stack_push(stack_node_t **stack, token_t *token){
@@ -59,6 +71,8 @@ void stack_dispose_all(stack_node_t **stack){
         tmp1 = *stack;
         *stack = (*stack)->next;
         free(tmp);
+        tmp = NULL;
         free(tmp1);
+        tmp1 = NULL;
     }
 }
