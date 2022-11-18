@@ -7,6 +7,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "scanner.h"
 #include "stack.h"
@@ -34,16 +35,19 @@ int stack_push(stack_node_t **stack, token_t *token){
     *stack = tmp;
 }
 
-void stack_pop(stack_node_t **stack, token_t *return_token){
-    stack_node_t *tmp;
+void stack_pop(stack_node_t **stack){
+    token_t *tmp;
+    stack_node_t *tmp1;
     if(*stack == NULL){
-        return_token = NULL;
+        return;
     }
-    tmp = *stack;
-    return_token = (*stack)->current;
+    tmp = (*stack)->current;
+    tmp1 = *stack;
     (*stack) = (*stack)->next;
     free(tmp);
     tmp = NULL;
+    free(tmp1);
+    tmp1 = NULL;
 }
 
 void stack_top(stack_node_t **stack, token_t *return_token){
