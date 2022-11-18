@@ -66,23 +66,118 @@ bool program() {
 }
 
 bool konec() {
+    bool value = false;
     printf("[DEBUG INFO]: currently in konec(), token number: %d\n", tkn_num);
-    printf("[DEBUG INFO]: currently in konec(), returning: %d\n", 1);
-    return true;
+    if(current_tkn->type == token_none) {
+        value = true;
+    }
+    printf("[DEBUG INFO]: currently in konec(), returning: %d\n", value);
+    return value;
 }
 
 bool definice() {
-    free_tkn();
-    get_tkn();
+    bool value = false;
     printf("[DEBUG INFO]: currently in definice(), token number: %d\n", tkn_num);
-    printf("[DEBUG INFO]: currently in definice(), returning: %d\n", 1);
-    return true;
+    // FUNCTION
+    if(current_tkn->attr.keyword == keyword_function) {
+        value = true;
+        // ID
+        get_tkn();
+        if(value && current_tkn->type == token_identifier) {
+            // TODO pridat identifikator do stromu
+            string_free(current_tkn->attr.str);
+        } else {
+            value = false;
+        }
+        // (
+        get_tkn();
+        if(value && current_tkn->type != token_parentheses_left) {
+            value = false;
+        }
+        // <parametry>
+        get_tkn();
+        if(value && !parametry()) {
+            value = false;
+        }
+        // )
+        get_tkn();
+        if(value && current_tkn->type != token_parentheses_right) {
+            value = false;
+        }
+        // :
+        get_tkn();
+        if(value && current_tkn->type != token_colon) {
+            value = false;
+        }
+        // TYP
+        get_tkn();
+        if(value && current_tkn->attr.keyword == keyword_void) {
+            // TODO pridat ostatni moznosti typu a asi ulozit do stromu
+        } else {
+            value = false;
+        }
+        // {
+        get_tkn();
+        if(value && current_tkn->type != token_curly_left) {
+            value = false;
+        }
+        // <prikaz_fce>
+        get_tkn();
+        if(value && !prikaz_fce()) {
+            value = false;
+        }
+        // }
+        get_tkn();
+        if(value && current_tkn->type != token_curly_right) {
+            value = false;
+        }
+    }
+    printf("[DEBUG INFO]: currently in definice(), returning: %d\n", value);
+    return value;
 }
 
 bool prikaz() {
-    free_tkn();
-    get_tkn();
     printf("[DEBUG INFO]: currently in prikaz(), token number: %d\n", tkn_num);
     printf("[DEBUG INFO]: currently in prikaz(), returning: %d\n", 1);
+    return true;
+}
+
+bool parametry() {
+    bool value = false;
+    bool is_type = false; // is true if there was a token of a type
+    printf("[DEBUG INFO]: currently in parametry(), token number: %d\n", tkn_num);
+    // rule: <parametry> -> eps
+    if(current_tkn->type == token_parentheses_right) {
+        value = true;
+    // rule: <parametry> -> TYP VAR_ID <param>
+    } else if(current_tkn->attr.keyword == keyword_int) {
+        // TODO zkontrolovat ostatní typy a nekam ulozit (do stromu)
+        is_type = true;
+        get_tkn();
+    } else if(current_tkn->attr.keyword == keyword_float) {
+        // TODO zkontrolovat ostatní typy a nekam ulozit (do stromu)
+        is_type = true;
+        get_tkn();
+    }
+
+    // if the previous token was type, continues to check if the current token is VAR_ID
+    if(is_type && current_tkn->type == token_varieble) {
+        // TODO ulozit hodnotu
+        string_free(current_tkn->attr.str);
+        value = param();
+    }
+    printf("[DEBUG INFO]: currently in parametry(), returning: %d\n", value);
+    return value;
+}
+
+bool param() {
+    printf("[DEBUG INFO]: currently in param(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in param(), returning: %d\n", 1);
+    return true;
+}
+
+bool prikaz_fce() {
+    printf("[DEBUG INFO]: currently in prikaz_fce(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", 1);
     return true;
 }

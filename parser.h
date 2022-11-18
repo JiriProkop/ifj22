@@ -55,4 +55,25 @@ bool definice();
 */
 bool prikaz();
 
+/**
+ * A function for the <parametry> rule.
+ * 
+ * @return True if it was correct.
+*/
+bool parametry();
+
+/**
+ * A function for the <param> rule.
+ * 
+ * @return True if it was correct.
+*/
+bool param();
+
+/**
+ * A function for the <prikaz_fce> rule.
+ * 
+ * @return True if it was correct.
+*/
+bool prikaz_fce();
+
 #endif
