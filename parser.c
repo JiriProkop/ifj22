@@ -72,6 +72,7 @@ bool konec() {
 }
 
 bool definice() {
+    free_tkn();
     get_tkn();
     printf("[DEBUG INFO]: currently in definice(), token number: %d\n", tkn_num);
     printf("[DEBUG INFO]: currently in definice(), returning: %d\n", 1);
@@ -79,6 +80,7 @@ bool definice() {
 }
 
 bool prikaz() {
+    free_tkn();
     get_tkn();
     printf("[DEBUG INFO]: currently in prikaz(), token number: %d\n", tkn_num);
     printf("[DEBUG INFO]: currently in prikaz(), returning: %d\n", 1);
