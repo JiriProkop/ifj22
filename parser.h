@@ -41,4 +41,18 @@ bool program();
 */
 bool konec();
 
+/**
+ * A function for the <definice> rule.
+ * 
+ * @return True if it was correct.
+*/
+bool definice();
+
+/**
+ * A function for the <prikaz> rule.
+ * 
+ * @return True if it was correct.
+*/
+bool prikaz();
+
 #endif
