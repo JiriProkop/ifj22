@@ -2,15 +2,17 @@
 #define _STACK_H
 
 #include "scanner.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #define MALLOC_ERROR 99
 
 /**
  * @struct stack node.
  */
-typedef struct stack {
+typedef struct stack_node {
     token_t *current;
-    stack_node_t *next;
+    struct stack_node *next;
 } stack_node_t;
 
 /**
@@ -38,12 +40,11 @@ bool stack_is_empty(stack_node_t **stack);
 int stack_push(stack_node_t **stack, token_t *token);
 
 /**
- * @brief removes/pops token of stack 
+ * @brief removes/pops token of stack, if the stack is empty does nothing 
  * 
  * @param stack the stack from which to pop
- * @param return_token pointer to popped token, if the list is empty NULL
  */
-void stack_pop(stack_node_t **stack, token_t *return_token);
+void stack_pop(stack_node_t **stack);
 
 /**
  * @brief returns the first node in stack without it being removed
