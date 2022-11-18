@@ -4,7 +4,7 @@ LDLIBS = -lm
 
 TESTDIR = tests/
 SOURCES = src/
-CASES = tests_dynstr tests_scanner tests_parser
+CASES = tests_dynstr tests_scanner tests_parser tests_stack
 TESTS = $(addprefix $(TESTDIR), $(CASES))
 
 PARTS = $(TESTS)
@@ -23,12 +23,23 @@ test: $(TESTS)
 # parser tests
 	$(TESTDIR)tests_parser < $(TESTDIR)tests_parser.input
 #   diff -su $(TESTDIR)tests_parser.output $(TESTDIR)correct_out/tests_parser.output
+=======
+# stack tests
+	$(TESTDIR)tests_stack > $(TESTDIR)tests_stack.output
+#	diff -su $(TESTDIR)tests_stack.output $(TESTDIR)correct_out/tests_stack.output
+>>>>>>> b8a1c81 (edited Makefile and renamed test to tests)
 
 # check the tests with valgrind
 valgrind: $(TESTS)
 	valgrind $(TESTDIR)tests_dynstr
 	valgrind $(TESTDIR)tests_scanner < $(TESTDIR)tests_scanner.input
 	valgrind $(TESTDIR)tests_parser < $(TESTDIR)tests_parser.input
+<<<<<<< HEAD
+
+# $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
+$(TESTDIR)tests_dynstr: dynstr.o error.o
+=======
+	valgrind $(TESTDIR)tests_stack
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
 $(TESTDIR)tests_dynstr: $(SOURCES)dynstr.o $(SOURCES)error.o
@@ -37,6 +48,9 @@ $(TESTDIR)tests_scanner: $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_parser: $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
+$(TESTDIR)tests_dynstr: $(SOURCES)stack.o
+>>>>>>> b8a1c81 (edited Makefile and renamed test to tests)
+	$(CC) $(CFLAGS) $^ $@.c -o $@
 # --------------------------------------------------
 
 # compile object files
