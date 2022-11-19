@@ -78,7 +78,7 @@ bool konec() {
 bool definice() {
     bool value = false;
     printf("[DEBUG INFO]: currently in definice(), token number: %d\n", tkn_num);
-    // FUNCTION
+    // rule: <definice> -> FUNCTION ID ( <parametry> ) : TYP { <prikaz_fce> }
     if(current_tkn->attr.keyword == keyword_function) {
         value = true;
         // ID
@@ -137,9 +137,48 @@ bool definice() {
 }
 
 bool prikaz() {
+    bool value = false;
     printf("[DEBUG INFO]: currently in prikaz(), token number: %d\n", tkn_num);
-    printf("[DEBUG INFO]: currently in prikaz(), returning: %d\n", 1);
-    return true;
+    // rule: <prikaz> -> RETURN <vyraz> ;
+    if(current_tkn->attr.keyword == keyword_return) {
+        value = true;
+        // <vyraz>
+        get_tkn();
+        if(value && !vyraz()) {
+            value = false; 
+        }
+        // ;
+        get_tkn();
+        if(value && current_tkn->type != token_semicol) {
+            value = false;
+        }
+    // rule: <prikaz> -> ID ( <vol_parametry> ) ;
+    } else if(current_tkn->type == token_identifier) {
+        // TODO - kontrola ID
+        value = true;
+        // (
+        get_tkn();
+        if(value && current_tkn->type != token_parentheses_left) {
+            value = false;
+        }
+        // <vol_parametry>
+        get_tkn();
+        if(value && !vol_parametry()) {
+            value = false;
+        }
+        // )
+        get_tkn();
+        if(value && current_tkn->type != token_parentheses_right) {
+            value = false;
+        }
+        // ;
+        get_tkn();
+        if(value && current_tkn->type != token_semicol) {
+            value = false;
+        }
+    }
+    printf("[DEBUG INFO]: currently in prikaz(), returning: %d\n", value);
+    return value;
 }
 
 bool parametry() {
@@ -179,5 +218,9 @@ bool param() {
 bool prikaz_fce() {
     printf("[DEBUG INFO]: currently in prikaz_fce(), token number: %d\n", tkn_num);
     printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", 1);
+    return true;
+}
+
+bool vyraz() {
     return true;
 }

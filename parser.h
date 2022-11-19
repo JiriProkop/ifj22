@@ -76,4 +76,18 @@ bool param();
 */
 bool prikaz_fce();
 
+/**
+ * A function for the <vyraz> rule.
+ * 
+ * @return True if it was correct.
+*/
+bool vyraz();
+
+/**
+ * A function for the <vol_parametry> rule.
+ * 
+ * @return True if it was correct.
+*/
+bool vol_parametry();
+
 #endif
