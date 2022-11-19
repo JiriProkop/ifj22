@@ -8,8 +8,8 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../dynstr.h"
-#include "../error.h"
+#include "../src/dynstr.h"
+#include "../src/error.h"
 
 int ret = 0;
 int main() {

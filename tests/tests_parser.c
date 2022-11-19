@@ -9,9 +9,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "../scanner.h"
-#include "../parser.h"
-#include "../error.h"
+#include "../src/scanner.h"
+#include "../src/parser.h"
+#include "../src/error.h"
 
 int ret = 0;
 int main() {

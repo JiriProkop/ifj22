@@ -163,9 +163,10 @@ bool prikaz() {
         }
         // <vol_parametry>
         get_tkn();
-        if(value && !vol_parametry()) {
-            value = false;
-        }
+		// undefined reference to `vol_parametry'
+        // if(value && !vol_parametry()) {
+        //     value = false;
+        // }
         // )
         get_tkn();
         if(value && current_tkn->type != token_parentheses_right) {

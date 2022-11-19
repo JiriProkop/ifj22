@@ -3,6 +3,7 @@ CFLAGS = -std=c11 -Wall -Wextra -g #-O2 na debug vypnu, also pribylo -g
 LDLIBS = -lm
 
 TESTDIR = tests/
+SOURCES = src/
 CASES = tests_dynstr tests_scanner tests_parser
 TESTS = $(addprefix $(TESTDIR), $(CASES))
 
@@ -30,17 +31,17 @@ valgrind: $(TESTS)
 	valgrind $(TESTDIR)tests_parser < $(TESTDIR)tests_parser.input
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
-$(TESTDIR)tests_dynstr: dynstr.o error.o
+$(TESTDIR)tests_dynstr: $(SOURCES)dynstr.o $(SOURCES)error.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
-$(TESTDIR)tests_scanner: scanner.o error.o dynstr.o
+$(TESTDIR)tests_scanner: $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
-$(TESTDIR)tests_parser: parser.o scanner.o error.o dynstr.o
+$(TESTDIR)tests_parser: $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 # --------------------------------------------------
 
 # compile object files
-%.o: %.c
+%.o: $(SOURCES)%.c
 	$(CC) $(CFLAGS) -c $^
 
 clean:
-	rm -f *.o $(PARTS) $(TESTS) $(TESTDIR)*.output
+	rm -f $(SOURCES)*.o $(PARTS) $(TESTS) $(TESTDIR)*.output

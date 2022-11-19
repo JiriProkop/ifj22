@@ -8,9 +8,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../scanner.h"
-#include "../dynstr.h"
-#include "../error.h"
+#include "../src/scanner.h"
+#include "../src/dynstr.h"
+#include "../src/error.h"
 
 // define the types, so I can print them later
 char *types[] = {
