@@ -240,6 +240,9 @@ bool get_token(token_t *tok) {
                 } else if (c == '-') {
                     tok->type = token_minus;
                     return true;
+                } else if(c == ',') {
+                    tok->type = token_comma;
+					return true;
                 }
                 break;
             case division_s: {
