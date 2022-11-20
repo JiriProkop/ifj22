@@ -347,10 +347,44 @@ bool prikaz_fce() {
 
 bool vyraz() {
     // TODO dodelat precedencni
-    return true;
+    bool value = true;
+    printf("[DEBUG INFO]: currently in vyraz(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in vyraz(), returning: %d\n", value);
+    return value;
 }
 
 bool vol_parametry() {
+    bool value = false;
+    printf("[DEBUG INFO]: currently in vol_parametry(), token number: %d\n", tkn_num);
+    // rule: <vol_parametry> -> eps
+    if(current_tkn->type == token_parentheses_right) {
+        value = true;
+    //rule: <vol_parametry> -> <vyraz> <vol_param>
+    } else if(current_tkn->type == token_integer || current_tkn->type == token_float ||
+              current_tkn->type == token_string) { // TODO zbytek moznosti na vyraz?
+
+        value = true;
+        // <vyraz>
+        // no get_tkn(), since the token in if -^ is also a first token from <vyraz>
+        if(value && !vyraz()) {
+            value = false;
+        }
+        // <vol_param>
+        get_tkn();
+        if(value && !vol_param()) {
+            value = false;
+        }
+    // rule: <vol_parametry> -> VAR_ID <vol_param>
+    } else if(current_tkn->type == token_varieble) {
+        // TODO ulozit hodnotu
+        string_free(current_tkn->attr.str);
+        value = vol_param();
+    }
+    printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", value);
+    return value;
+}
+
+bool vol_param() {
     return true;
 }
 

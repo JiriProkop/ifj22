@@ -91,6 +91,13 @@ bool vyraz();
 bool vol_parametry();
 
 /**
+ * A function for the <vol_param> rule.
+ * 
+ * @return True if it was correct.
+*/
+bool vol_param();
+
+/**
  * A function for the <else> rule.
  * 
  * @return True if it was correct.
