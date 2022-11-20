@@ -5,6 +5,8 @@
 #include "error.h"
 #include "parser.h"
 
+// TODO: get_tkn() na konci prikaz a definice vyresit
+
 /**
  * A global variable used for the current token.
 */
@@ -100,7 +102,7 @@ bool definice() {
             value = false;
         }
         // )
-        get_tkn();
+        // no get_tkn(), since the token is already loaded from previous function
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
@@ -127,12 +129,12 @@ bool definice() {
             value = false;
         }
         // }
-        get_tkn();
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
     }
     printf("[DEBUG INFO]: currently in definice(), returning: %d\n", value);
+    get_tkn();
     return value;
 }
 
@@ -168,7 +170,6 @@ bool prikaz() {
             value = false;
         }
         // )
-        get_tkn();
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
@@ -177,7 +178,7 @@ bool prikaz() {
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
-    // rule: <prikaz> -> IF ( <vyraz> ) { <prikaz> } <else>
+    // rule: <prikaz> -> IF ( <vyraz> ) { <prikaz_fce> } <else>
     } else if(current_tkn->attr.keyword == keyword_if) {
         value = true;
         // (
@@ -191,7 +192,7 @@ bool prikaz() {
             value = false; 
         }
         // )
-        get_tkn();
+        get_tkn(); // TODO, podle implementace vyrazu nechat nebo smazat
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
@@ -200,13 +201,12 @@ bool prikaz() {
         if(value && current_tkn->type != token_curly_left) {
             value = false;
         }
-        // <prikaz>
+        // <prikaz_fce>
         get_tkn();
-        if(value && !prikaz()) {
+        if(value && !prikaz_fce()) {
             value = false;
         }
         // }
-        get_tkn();
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
@@ -215,7 +215,7 @@ bool prikaz() {
         if(value && !else_rule()) {
             value = false;
         }
-    // rule: <prikaz>-> WHILE ( <vyraz> ) { <prikaz> }
+    // rule: <prikaz>-> WHILE ( <vyraz> ) { <prikaz_fce> }
     } else if(current_tkn->attr.keyword == keyword_while) {
         value = true;
         // (
@@ -229,7 +229,7 @@ bool prikaz() {
             value = false; 
         }
         // )
-        get_tkn();
+        get_tkn(); // TODO
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
@@ -238,13 +238,12 @@ bool prikaz() {
         if(value && current_tkn->type != token_curly_left) {
             value = false;
         }
-        // <prikaz>
+        // <prikaz_fce>
         get_tkn();
-        if(value && !prikaz()) {
+        if(value && !prikaz_fce()) {
             value = false;
         }
         // }
-        get_tkn();
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
@@ -268,6 +267,7 @@ bool prikaz() {
         }
     }
     printf("[DEBUG INFO]: currently in prikaz(), returning: %d\n", value);
+    get_tkn();
     return value;
 }
 
@@ -293,6 +293,7 @@ bool parametry() {
     if(is_type && current_tkn->type == token_varieble) {
         // TODO ulozit hodnotu
         string_free(current_tkn->attr.str);
+        get_tkn();
         value = param();
     }
     printf("[DEBUG INFO]: currently in parametry(), returning: %d\n", value);
@@ -310,11 +311,14 @@ bool param() {
     } else if(current_tkn->type == token_comma) {
         value = true;
         // TYP
+        get_tkn();
         if(value && current_tkn->attr.keyword == keyword_int) {
             // TODO pridat ostatni typy
             is_type = true;
+            get_tkn();
         } else if(value && current_tkn->attr.keyword == keyword_float) {
             is_type = true;
+            get_tkn();
         }
     }
 
@@ -322,6 +326,7 @@ bool param() {
     if(is_type && current_tkn->type == token_varieble) {
             // TODO ulozit hodnotu
             string_free(current_tkn->attr.str);
+            get_tkn();
             value = param();
     }
     printf("[DEBUG INFO]: currently in param(), returning: %d\n", value);
@@ -332,14 +337,23 @@ bool prikaz_fce() {
     bool value = false;
     printf("[DEBUG INFO]: currently in prikaz_fce(), token number: %d\n", tkn_num);
     // rule: <prikaz_fce> -> eps
-    if(current_tkn->type == token_none) {
+    if(current_tkn->type == token_curly_right) {
         value = true;
-    // rule: <prikaz_fce> -> <prikaz>
+    // rule: <prikaz_fce> -> <prikaz> <prikaz_fce>
     } else if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
               current_tkn->attr.keyword == keyword_return || current_tkn->attr.keyword == keyword_if ||
               current_tkn->attr.keyword == keyword_while) {
         
-        value = prikaz();
+        value = true;
+
+        // <prikaz>
+        if(value && !prikaz()) {
+            value = false;
+        }
+        // <prikaz_fce>
+        if(value && !prikaz_fce()) {
+            value = false;
+        }
     }
     printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", value);
     return value;
@@ -370,7 +384,7 @@ bool vol_parametry() {
             value = false;
         }
         // <vol_param>
-        get_tkn();
+        get_tkn(); // TODO
         if(value && !vol_param()) {
             value = false;
         }
@@ -378,14 +392,51 @@ bool vol_parametry() {
     } else if(current_tkn->type == token_varieble) {
         // TODO ulozit hodnotu
         string_free(current_tkn->attr.str);
+        get_tkn();
         value = vol_param();
     }
-    printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", value);
+    printf("[DEBUG INFO]: currently in vol_parametry(), returning: %d\n", value);
     return value;
 }
 
 bool vol_param() {
-    return true;
+    bool value = false;
+    printf("[DEBUG INFO]: currently in vol_param(), token number: %d\n", tkn_num);
+    // rule: <vol_param> -> eps
+    if(current_tkn->type == token_parentheses_right) {
+        value = true;
+    // rule: <vol_param> -> , <vol_par>
+    } else if(current_tkn->type == token_comma) {
+        get_tkn();
+        value = vol_par();
+    }
+    printf("[DEBUG INFO]: currently in vol_param(), returning: %d\n", value);
+    return value;
+}
+
+bool vol_par() {
+    bool value = false;
+    printf("[DEBUG INFO]: currently in vol_par(), token number: %d\n", tkn_num);
+    // rule: <vol_par> -> VAR_ID <vol_param>
+    if(current_tkn->type == token_varieble) {
+        get_tkn();
+        value = vol_param();
+    // rule: <vol_par> -> <vyraz> <vol_param>
+    } else if(current_tkn->type == token_integer) { // TODO pridat ostatni stavy vyrazu
+        value = true;
+        // <vyraz>
+        // no get_tkn(), since the token in if -^ is also a first token from <vyraz>
+        if(value && !vyraz()) {
+            value = false;
+        }
+        // <vol_param>
+        get_tkn(); // TODO - zalezi na implementaci vyrazu
+        if(value && !vol_param()) {
+            value = false;
+        }
+    }
+    printf("[DEBUG INFO]: currently in vol_par(), returning: %d\n", value);
+    return value;
 }
 
 bool else_rule() {
@@ -398,7 +449,7 @@ bool else_rule() {
        current_tkn->attr.keyword == keyword_if || current_tkn->attr.keyword == keyword_while) {
     
         value = true;
-    // rule: <else> -> ELSE { <prikaz> }
+    // rule: <else> -> ELSE { <prikaz_fce> }
     } else if(current_tkn->attr.keyword == keyword_else) {
         value = true;
         // {
@@ -406,13 +457,12 @@ bool else_rule() {
         if(value && current_tkn->type != token_curly_left) {
             value = false;
         }
-        // <prikaz>
+        // <prikaz_fce>
         get_tkn();
-        if(value && !prikaz()) {
+        if(value && !prikaz_fce()) {
             value = false;
         }
         // }
-        get_tkn();
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }

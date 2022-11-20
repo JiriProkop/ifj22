@@ -98,6 +98,13 @@ bool vol_parametry();
 bool vol_param();
 
 /**
+ * A function for the <vol_par> rule.
+ * 
+ * @return True if it was correct.
+*/
+bool vol_par();
+
+/**
  * A function for the <else> rule.
  * 
  * @return True if it was correct.
