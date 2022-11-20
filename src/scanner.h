@@ -42,6 +42,7 @@ typedef enum {
 	token_plus,
 	token_minus,
 	token_keyword,
+	token_comma,
 }
 token_type;
 
