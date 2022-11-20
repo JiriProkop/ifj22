@@ -155,6 +155,7 @@ bool prikaz() {
     // rule: <prikaz> -> ID ( <vol_parametry> ) ;
     } else if(current_tkn->type == token_identifier) {
         // TODO - kontrola ID
+        string_free(current_tkn->attr.str);
         value = true;
         // (
         get_tkn();
@@ -163,10 +164,9 @@ bool prikaz() {
         }
         // <vol_parametry>
         get_tkn();
-		// undefined reference to `vol_parametry'
-        // if(value && !vol_parametry()) {
-        //     value = false;
-        // }
+        if(value && !vol_parametry()) {
+            value = false;
+        }
         // )
         get_tkn();
         if(value && current_tkn->type != token_parentheses_right) {
@@ -174,6 +174,95 @@ bool prikaz() {
         }
         // ;
         get_tkn();
+        if(value && current_tkn->type != token_semicol) {
+            value = false;
+        }
+    // rule: <prikaz> -> IF ( <vyraz> ) { <prikaz> } <else>
+    } else if(current_tkn->attr.keyword == keyword_if) {
+        value = true;
+        // (
+        get_tkn();
+        if(value && current_tkn->type != token_parentheses_left) {
+            value = false;
+        }
+        // <vyraz>
+        get_tkn();
+        if(value && !vyraz()) {
+            value = false; 
+        }
+        // )
+        get_tkn();
+        if(value && current_tkn->type != token_parentheses_right) {
+            value = false;
+        }
+        // {
+        get_tkn();
+        if(value && current_tkn->type != token_curly_left) {
+            value = false;
+        }
+        // <prikaz>
+        get_tkn();
+        if(value && !prikaz()) {
+            value = false;
+        }
+        // }
+        get_tkn();
+        if(value && current_tkn->type != token_curly_right) {
+            value = false;
+        }
+        // <else>
+        get_tkn();
+        if(value && !else_rule()) {
+            value = false;
+        }
+    // rule: <prikaz>-> WHILE ( <vyraz> ) { <prikaz> }
+    } else if(current_tkn->attr.keyword == keyword_while) {
+        value = true;
+        // (
+        get_tkn();
+        if(value && current_tkn->type != token_parentheses_left) {
+            value = false;
+        }
+        // <vyraz>
+        get_tkn();
+        if(value && !vyraz()) {
+            value = false; 
+        }
+        // )
+        get_tkn();
+        if(value && current_tkn->type != token_parentheses_right) {
+            value = false;
+        }
+        // {
+        get_tkn();
+        if(value && current_tkn->type != token_curly_left) {
+            value = false;
+        }
+        // <prikaz>
+        get_tkn();
+        if(value && !prikaz()) {
+            value = false;
+        }
+        // }
+        get_tkn();
+        if(value && current_tkn->type != token_curly_right) {
+            value = false;
+        }
+    // rule: <prikaz> -> VAR_ID = <vyraz> ;
+    } else if(current_tkn->type == token_varieble) {
+        // TODO ulozit do stromu
+        string_free(current_tkn->attr.str);
+        value = true;
+        // =
+        get_tkn();
+        if(value && current_tkn->type != token_assign) {
+            value = false;
+        }
+        // <vyraz>
+        if(value && !vyraz()) {
+            value = false;
+        }
+        // ;
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
@@ -211,17 +300,89 @@ bool parametry() {
 }
 
 bool param() {
+    bool value = false;
+    bool is_type = false;
     printf("[DEBUG INFO]: currently in param(), token number: %d\n", tkn_num);
-    printf("[DEBUG INFO]: currently in param(), returning: %d\n", 1);
-    return true;
+    // rule: <param> -> eps
+    if(current_tkn->type == token_parentheses_right) {
+        value = true;
+    // rule: <param> -> , TYP VAR_ID <param>
+    } else if(current_tkn->type == token_comma) {
+        value = true;
+        // TYP
+        if(value && current_tkn->attr.keyword == keyword_int) {
+            // TODO pridat ostatni typy
+            is_type = true;
+        } else if(value && current_tkn->attr.keyword == keyword_float) {
+            is_type = true;
+        }
+    }
+
+    // if the previous token was type, continues to check if the current token is VAR_ID
+    if(is_type && current_tkn->type == token_varieble) {
+            // TODO ulozit hodnotu
+            string_free(current_tkn->attr.str);
+            value = param();
+    }
+    printf("[DEBUG INFO]: currently in param(), returning: %d\n", value);
+    return value;
 }
 
 bool prikaz_fce() {
+    bool value = false;
     printf("[DEBUG INFO]: currently in prikaz_fce(), token number: %d\n", tkn_num);
-    printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", 1);
-    return true;
+    // rule: <prikaz_fce> -> eps
+    if(current_tkn->type == token_none) {
+        value = true;
+    // rule: <prikaz_fce> -> <prikaz>
+    } else if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
+              current_tkn->attr.keyword == keyword_return || current_tkn->attr.keyword == keyword_if ||
+              current_tkn->attr.keyword == keyword_while) {
+        
+        value = prikaz();
+    }
+    printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", value);
+    return value;
 }
 
 bool vyraz() {
+    // TODO dodelat precedencni
     return true;
+}
+
+bool vol_parametry() {
+    return true;
+}
+
+bool else_rule() {
+    bool value = false;
+    printf("[DEBUG INFO]: currently in else_rule(), token number: %d\n", tkn_num);
+    // rule: <else> -> eps
+    if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
+       current_tkn->type == token_none || current_tkn->type == token_curly_right ||
+       current_tkn->attr.keyword == keyword_function || current_tkn->attr.keyword == keyword_return ||
+       current_tkn->attr.keyword == keyword_if || current_tkn->attr.keyword == keyword_while) {
+    
+        value = true;
+    // rule: <else> -> ELSE { <prikaz> }
+    } else if(current_tkn->attr.keyword == keyword_else) {
+        value = true;
+        // {
+        get_tkn();
+        if(value && current_tkn->type != token_curly_left) {
+            value = false;
+        }
+        // <prikaz>
+        get_tkn();
+        if(value && !prikaz()) {
+            value = false;
+        }
+        // }
+        get_tkn();
+        if(value && current_tkn->type != token_curly_right) {
+            value = false;
+        }
+    }
+    printf("[DEBUG INFO]: currently in else_rule(), returning: %d\n", value);
+    return value;
 }
