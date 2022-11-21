@@ -12,3 +12,4 @@ You can run tests my typing `make test`. It generates output files to `tests/tes
 Currently, it tests:
 - Dynamic strings
 - Scanner
+- Parser (kinda)
