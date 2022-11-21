@@ -5,8 +5,6 @@
 #include "error.h"
 #include "parser.h"
 
-// TODO: get_tkn() na konci prikaz a definice vyresit
-
 /**
  * A global variable used for the current token.
 */
@@ -30,6 +28,7 @@ void free_tkn() {
     current_tkn = NULL;
 } 
 
+// the parser functions start here:
 bool start() {
     bool value = false;
     get_tkn();
@@ -82,16 +81,6 @@ bool program() {
         }
     }
     printf("[DEBUG INFO]: currently in program(), returning: %d\n", value);
-    return value;
-}
-
-bool konec() {
-    bool value = false;
-    printf("[DEBUG INFO]: currently in konec(), token number: %d\n", tkn_num);
-    if(current_tkn->type == token_none) {
-        value = true;
-    }
-    printf("[DEBUG INFO]: currently in konec(), returning: %d\n", value);
     return value;
 }
 
@@ -152,6 +141,98 @@ bool definice() {
         }
     }
     printf("[DEBUG INFO]: currently in definice(), returning: %d\n", value);
+    return value;
+}
+
+bool parametry() {
+    bool value = false;
+    bool is_type = false; // is true if there was a token of a type
+    printf("[DEBUG INFO]: currently in parametry(), token number: %d\n", tkn_num);
+    // rule: <parametry> -> eps
+    if(current_tkn->type == token_parentheses_right) {
+        value = true;
+    // rule: <parametry> -> TYP VAR_ID <param>
+    } else if(current_tkn->attr.keyword == keyword_int) {
+        // TODO zkontrolovat ostatní typy a nekam ulozit (do stromu)
+        is_type = true;
+        get_tkn();
+    } else if(current_tkn->attr.keyword == keyword_float) {
+        // TODO zkontrolovat ostatní typy a nekam ulozit (do stromu)
+        is_type = true;
+        get_tkn();
+    }
+
+    // if the previous token was type, continues to check if the current token is VAR_ID
+    if(is_type && current_tkn->type == token_varieble) {
+        // TODO ulozit hodnotu
+        string_free(current_tkn->attr.str);
+        get_tkn();
+        value = param();
+    }
+    printf("[DEBUG INFO]: currently in parametry(), returning: %d\n", value);
+    return value;
+}
+
+bool param() {
+    bool value = false;
+    bool is_type = false;
+    printf("[DEBUG INFO]: currently in param(), token number: %d\n", tkn_num);
+    // rule: <param> -> eps
+    if(current_tkn->type == token_parentheses_right) {
+        value = true;
+    // rule: <param> -> , TYP VAR_ID <param>
+    } else if(current_tkn->type == token_comma) {
+        value = true;
+        // TYP
+        get_tkn();
+        if(value && current_tkn->attr.keyword == keyword_int) {
+            // TODO pridat ostatni typy
+            is_type = true;
+            get_tkn();
+        } else if(value && current_tkn->attr.keyword == keyword_float) {
+            is_type = true;
+            get_tkn();
+        }
+    }
+
+    // if the previous token was type, continues to check if the current token is VAR_ID
+    if(is_type && current_tkn->type == token_varieble) {
+            // TODO ulozit hodnotu
+            string_free(current_tkn->attr.str);
+            get_tkn();
+            value = param();
+    }
+    printf("[DEBUG INFO]: currently in param(), returning: %d\n", value);
+    return value;
+}
+
+bool prikaz_fce() {
+    bool value = false;
+    printf("[DEBUG INFO]: currently in prikaz_fce(), token number: %d\n", tkn_num);
+    // rule: <prikaz_fce> -> eps
+    if(current_tkn->type == token_curly_right) {
+        value = true;
+    // rule: <prikaz_fce> -> <prikaz> <prikaz_fce>
+    } else if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
+              current_tkn->attr.keyword == keyword_return || current_tkn->attr.keyword == keyword_if ||
+              current_tkn->attr.keyword == keyword_while) {
+        
+        value = true;
+        // <prikaz>
+        if(value && !prikaz()) {
+            value = false;
+        }
+
+        // <prikaz_fce>
+        if(value && current_tkn->type == token_curly_right) {
+            // if it gets to right curly bracket, it reached "the end"
+            value = true;
+        } else {
+            get_tkn();
+            value = prikaz_fce();
+        }
+    }
+    printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", value);
     return value;
 }
 
@@ -287,103 +368,35 @@ bool prikaz() {
     return value;
 }
 
-bool parametry() {
+bool else_rule() {
     bool value = false;
-    bool is_type = false; // is true if there was a token of a type
-    printf("[DEBUG INFO]: currently in parametry(), token number: %d\n", tkn_num);
-    // rule: <parametry> -> eps
-    if(current_tkn->type == token_parentheses_right) {
+    printf("[DEBUG INFO]: currently in else_rule(), token number: %d\n", tkn_num);
+    // rule: <else> -> eps
+    if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
+       current_tkn->type == token_none || current_tkn->type == token_curly_right ||
+       current_tkn->attr.keyword == keyword_function || current_tkn->attr.keyword == keyword_return ||
+       current_tkn->attr.keyword == keyword_if || current_tkn->attr.keyword == keyword_while) {
+    
         value = true;
-    // rule: <parametry> -> TYP VAR_ID <param>
-    } else if(current_tkn->attr.keyword == keyword_int) {
-        // TODO zkontrolovat ostatní typy a nekam ulozit (do stromu)
-        is_type = true;
+    // rule: <else> -> ELSE { <prikaz_fce> }
+    } else if(current_tkn->attr.keyword == keyword_else) {
+        value = true;
+        // {
         get_tkn();
-    } else if(current_tkn->attr.keyword == keyword_float) {
-        // TODO zkontrolovat ostatní typy a nekam ulozit (do stromu)
-        is_type = true;
-        get_tkn();
-    }
-
-    // if the previous token was type, continues to check if the current token is VAR_ID
-    if(is_type && current_tkn->type == token_varieble) {
-        // TODO ulozit hodnotu
-        string_free(current_tkn->attr.str);
-        get_tkn();
-        value = param();
-    }
-    printf("[DEBUG INFO]: currently in parametry(), returning: %d\n", value);
-    return value;
-}
-
-bool param() {
-    bool value = false;
-    bool is_type = false;
-    printf("[DEBUG INFO]: currently in param(), token number: %d\n", tkn_num);
-    // rule: <param> -> eps
-    if(current_tkn->type == token_parentheses_right) {
-        value = true;
-    // rule: <param> -> , TYP VAR_ID <param>
-    } else if(current_tkn->type == token_comma) {
-        value = true;
-        // TYP
-        get_tkn();
-        if(value && current_tkn->attr.keyword == keyword_int) {
-            // TODO pridat ostatni typy
-            is_type = true;
-            get_tkn();
-        } else if(value && current_tkn->attr.keyword == keyword_float) {
-            is_type = true;
-            get_tkn();
-        }
-    }
-
-    // if the previous token was type, continues to check if the current token is VAR_ID
-    if(is_type && current_tkn->type == token_varieble) {
-            // TODO ulozit hodnotu
-            string_free(current_tkn->attr.str);
-            get_tkn();
-            value = param();
-    }
-    printf("[DEBUG INFO]: currently in param(), returning: %d\n", value);
-    return value;
-}
-
-bool prikaz_fce() {
-    bool value = false;
-    printf("[DEBUG INFO]: currently in prikaz_fce(), token number: %d\n", tkn_num);
-    // rule: <prikaz_fce> -> eps
-    if(current_tkn->type == token_curly_right) {
-        value = true;
-    // rule: <prikaz_fce> -> <prikaz> <prikaz_fce>
-    } else if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
-              current_tkn->attr.keyword == keyword_return || current_tkn->attr.keyword == keyword_if ||
-              current_tkn->attr.keyword == keyword_while) {
-        
-        value = true;
-        // <prikaz>
-        if(value && !prikaz()) {
+        if(value && current_tkn->type != token_curly_left) {
             value = false;
         }
-
         // <prikaz_fce>
-        if(value && current_tkn->type == token_curly_right) {
-            // if it gets to right curly bracket, it reached "the end"
-            value = true;
-        } else {
-            get_tkn();
-            value = prikaz_fce();
+        get_tkn();
+        if(value && !prikaz_fce()) {
+            value = false;
+        }
+        // }
+        if(value && current_tkn->type != token_curly_right) {
+            value = false;
         }
     }
-    printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", value);
-    return value;
-}
-
-bool vyraz() {
-    // TODO dodelat precedencni
-    bool value = true;
-    printf("[DEBUG INFO]: currently in vyraz(), token number: %d\n", tkn_num);
-    printf("[DEBUG INFO]: currently in vyraz(), returning: %d\n", value);
+    printf("[DEBUG INFO]: currently in else_rule(), returning: %d\n", value);
     return value;
 }
 
@@ -459,34 +472,20 @@ bool vol_par() {
     return value;
 }
 
-bool else_rule() {
+bool konec() {
     bool value = false;
-    printf("[DEBUG INFO]: currently in else_rule(), token number: %d\n", tkn_num);
-    // rule: <else> -> eps
-    if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
-       current_tkn->type == token_none || current_tkn->type == token_curly_right ||
-       current_tkn->attr.keyword == keyword_function || current_tkn->attr.keyword == keyword_return ||
-       current_tkn->attr.keyword == keyword_if || current_tkn->attr.keyword == keyword_while) {
-    
+    printf("[DEBUG INFO]: currently in konec(), token number: %d\n", tkn_num);
+    if(current_tkn->type == token_none) {
         value = true;
-    // rule: <else> -> ELSE { <prikaz_fce> }
-    } else if(current_tkn->attr.keyword == keyword_else) {
-        value = true;
-        // {
-        get_tkn();
-        if(value && current_tkn->type != token_curly_left) {
-            value = false;
-        }
-        // <prikaz_fce>
-        get_tkn();
-        if(value && !prikaz_fce()) {
-            value = false;
-        }
-        // }
-        if(value && current_tkn->type != token_curly_right) {
-            value = false;
-        }
     }
-    printf("[DEBUG INFO]: currently in else_rule(), returning: %d\n", value);
+    printf("[DEBUG INFO]: currently in konec(), returning: %d\n", value);
+    return value;
+}
+
+bool vyraz() {
+    // TODO dodelat precedencni
+    bool value = true;
+    printf("[DEBUG INFO]: currently in vyraz(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in vyraz(), returning: %d\n", value);
     return value;
 }

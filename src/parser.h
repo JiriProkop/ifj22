@@ -11,12 +11,13 @@
 #define _PARSER_H
 
 /**
- * Function for geting data into the token.
+ * Function for geting data into the global token.
 */
 void get_tkn();
 
 /**
- * Function for freeing the token.
+ * Function for freeing the gloal token.
+ * @warning Should be only run at the end of the program or when it encounters a error.
 */
 void free_tkn();
 
@@ -35,25 +36,11 @@ bool start();
 bool program();
 
 /**
- * A function for the <konec> rule.
- * 
- * @return True if it was correct.
-*/
-bool konec();
-
-/**
  * A function for the <definice> rule.
  * 
  * @return True if it was correct.
 */
 bool definice();
-
-/**
- * A function for the <prikaz> rule.
- * 
- * @return True if it was correct.
-*/
-bool prikaz();
 
 /**
  * A function for the <parametry> rule.
@@ -77,11 +64,18 @@ bool param();
 bool prikaz_fce();
 
 /**
- * A function for the <vyraz> rule.
+ * A function for the <prikaz> rule.
  * 
  * @return True if it was correct.
 */
-bool vyraz();
+bool prikaz();
+
+/**
+ * A function for the <else> rule.
+ * 
+ * @return True if it was correct.
+*/
+bool else_rule();
 
 /**
  * A function for the <vol_parametry> rule.
@@ -105,10 +99,17 @@ bool vol_param();
 bool vol_par();
 
 /**
- * A function for the <else> rule.
+ * A function for the <konec> rule.
  * 
  * @return True if it was correct.
 */
-bool else_rule();
+bool konec();
+
+/**
+ * A function for the <vyraz> rule.
+ * 
+ * @return True if it was correct.
+*/
+bool vyraz();
 
 #endif
