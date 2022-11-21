@@ -11,7 +11,7 @@
 token_t *current_tkn = NULL;
 
 /**
- * A global variable to tell the functions that a token has been already loaded.
+ * A global variable to tell the functions that a token has already been loaded.
 */
 bool tkn_already_loaded = false;
 
@@ -290,7 +290,6 @@ bool prikaz() {
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
-        printf("token je line %d\n", current_tkn->line);
     // rule: <prikaz> -> IF ( <vyraz> ) { <prikaz_fce> } <else>
     } else if(current_tkn->attr.keyword == keyword_if) {
         value = true;
