@@ -23,8 +23,12 @@ function testfuncafsdf(int $testvar) : void {
 
 if(453) {
     afsdf();
+}
+
+if(543) {
+    func1();
 } else {
-    dfas();
+    func2();
 }
 
 

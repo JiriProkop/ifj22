@@ -10,6 +10,11 @@
 */
 token_t *current_tkn = NULL;
 
+/**
+ * A global variable to tell the functions that a token has been already loaded.
+*/
+bool tkn_already_loaded = false;
+
 int tkn_num = 0; // TODO - cislo jen na debug
 
 void get_tkn() {
@@ -59,7 +64,11 @@ bool program() {
             value = false;
         }
         // <program>
-        get_tkn();
+        if(!tkn_already_loaded) {
+            get_tkn();
+        } else {
+            tkn_already_loaded = false;
+        }
         if(value && !program()) {
             value = false;
         }
@@ -75,7 +84,11 @@ bool program() {
             value = false;
         }
         // <program>
-        get_tkn();
+        if(!tkn_already_loaded) {
+            get_tkn();
+        } else {
+            tkn_already_loaded = false;
+        }
         if(value && !program()) {
             value = false;
         }
@@ -224,7 +237,11 @@ bool prikaz_fce() {
         }
 
         // <prikaz_fce>
-        get_tkn();
+        if(!tkn_already_loaded) {
+            get_tkn();
+        } else {
+            tkn_already_loaded = false;
+        }
         if(value && !prikaz_fce()) {
             value = false;
         }
@@ -273,6 +290,7 @@ bool prikaz() {
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
+        printf("token je line %d\n", current_tkn->line);
     // rule: <prikaz> -> IF ( <vyraz> ) { <prikaz_fce> } <else>
     } else if(current_tkn->attr.keyword == keyword_if) {
         value = true;
@@ -376,6 +394,7 @@ bool else_rule() {
        current_tkn->attr.keyword == keyword_function || current_tkn->attr.keyword == keyword_return ||
        current_tkn->attr.keyword == keyword_if || current_tkn->attr.keyword == keyword_while) {
     
+        tkn_already_loaded = true;
         value = true;
     // rule: <else> -> ELSE { <prikaz_fce> }
     } else if(current_tkn->attr.keyword == keyword_else) {
