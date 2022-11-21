@@ -32,7 +32,7 @@ void free_tkn() {
 bool start() {
     bool value = false;
     get_tkn();
-    printf("[DEBUG INFO]: currently in start(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in start(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // first it checks the token types and if then legal keywords
     if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
        current_tkn->type == token_none || current_tkn->attr.keyword == keyword_function ||
@@ -46,7 +46,7 @@ bool start() {
 }
 
 bool program() {
-    printf("[DEBUG INFO]: currently in program(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in program(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     bool value = false;
     // rule: <program> -> eps
     if(current_tkn->type == token_none) {
@@ -86,7 +86,7 @@ bool program() {
 
 bool definice() {
     bool value = false;
-    printf("[DEBUG INFO]: currently in definice(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in definice(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <definice> -> FUNCTION ID ( <parametry> ) : TYP { <prikaz_fce> }
     if(current_tkn->attr.keyword == keyword_function) {
         value = true;
@@ -147,7 +147,7 @@ bool definice() {
 bool parametry() {
     bool value = false;
     bool is_type = false; // is true if there was a token of a type
-    printf("[DEBUG INFO]: currently in parametry(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in parametry(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <parametry> -> eps
     if(current_tkn->type == token_parentheses_right) {
         value = true;
@@ -176,7 +176,7 @@ bool parametry() {
 bool param() {
     bool value = false;
     bool is_type = false;
-    printf("[DEBUG INFO]: currently in param(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in param(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <param> -> eps
     if(current_tkn->type == token_parentheses_right) {
         value = true;
@@ -208,7 +208,7 @@ bool param() {
 
 bool prikaz_fce() {
     bool value = false;
-    printf("[DEBUG INFO]: currently in prikaz_fce(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in prikaz_fce(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <prikaz_fce> -> eps
     if(current_tkn->type == token_curly_right) {
         value = true;
@@ -224,12 +224,9 @@ bool prikaz_fce() {
         }
 
         // <prikaz_fce>
-        if(value && current_tkn->type == token_curly_right) {
-            // if it gets to right curly bracket, it reached "the end"
-            value = true;
-        } else {
-            get_tkn();
-            value = prikaz_fce();
+        get_tkn();
+        if(value && !prikaz_fce()) {
+            value = false;
         }
     }
     printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", value);
@@ -238,7 +235,7 @@ bool prikaz_fce() {
 
 bool prikaz() {
     bool value = false;
-    printf("[DEBUG INFO]: currently in prikaz(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in prikaz(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <prikaz> -> RETURN <vyraz> ;
     if(current_tkn->attr.keyword == keyword_return) {
         value = true;
@@ -372,7 +369,7 @@ bool prikaz() {
 
 bool else_rule() {
     bool value = false;
-    printf("[DEBUG INFO]: currently in else_rule(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in else_rule(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <else> -> eps
     if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
        current_tkn->type == token_none || current_tkn->type == token_curly_right ||
@@ -404,7 +401,7 @@ bool else_rule() {
 
 bool vol_parametry() {
     bool value = false;
-    printf("[DEBUG INFO]: currently in vol_parametry(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in vol_parametry(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <vol_parametry> -> eps
     if(current_tkn->type == token_parentheses_right) {
         value = true;
@@ -436,7 +433,7 @@ bool vol_parametry() {
 
 bool vol_param() {
     bool value = false;
-    printf("[DEBUG INFO]: currently in vol_param(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in vol_param(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <vol_param> -> eps
     if(current_tkn->type == token_parentheses_right) {
         value = true;
@@ -451,7 +448,7 @@ bool vol_param() {
 
 bool vol_par() {
     bool value = false;
-    printf("[DEBUG INFO]: currently in vol_par(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in vol_par(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <vol_par> -> VAR_ID <vol_param>
     if(current_tkn->type == token_varieble) {
         get_tkn();
@@ -476,7 +473,7 @@ bool vol_par() {
 
 bool konec() {
     bool value = false;
-    printf("[DEBUG INFO]: currently in konec(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in konec(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     if(current_tkn->type == token_none) {
         value = true;
     }
@@ -487,7 +484,7 @@ bool konec() {
 bool vyraz() {
     // TODO dodelat precedencni
     bool value = true;
-    printf("[DEBUG INFO]: currently in vyraz(), token number: %d\n", tkn_num);
+    printf("[DEBUG INFO]: currently in vyraz(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     printf("[DEBUG INFO]: currently in vyraz(), returning: %d\n", value);
     return value;
 }
