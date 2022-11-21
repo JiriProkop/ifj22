@@ -54,14 +54,32 @@ bool program() {
         value = true;
     // rule: <program> -> <definice> <program>
     } else if(current_tkn->type == token_keyword && current_tkn->attr.keyword == keyword_function) {
-        value = definice() && program();
+        value = true;
+        // <definice>
+        if(value && !definice()) {
+            value = false;
+        }
+        // <program>
+        get_tkn();
+        if(value && !program()) {
+            value = false;
+        }
     // rule: <program> -> <prikaz> <program>
     } else if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
               current_tkn->attr.keyword == keyword_return ||
               current_tkn->attr.keyword == keyword_if ||
               current_tkn->attr.keyword == keyword_while) {
 
-        value = prikaz() && program();
+        value = true;
+        // <prikaz>
+        if(value && !prikaz()) {
+            value = false;
+        }
+        // <program>
+        get_tkn();
+        if(value && !program()) {
+            value = false;
+        }
     }
     printf("[DEBUG INFO]: currently in program(), returning: %d\n", value);
     return value;
@@ -134,7 +152,6 @@ bool definice() {
         }
     }
     printf("[DEBUG INFO]: currently in definice(), returning: %d\n", value);
-    get_tkn();
     return value;
 }
 
@@ -267,7 +284,6 @@ bool prikaz() {
         }
     }
     printf("[DEBUG INFO]: currently in prikaz(), returning: %d\n", value);
-    get_tkn();
     return value;
 }
 
@@ -345,14 +361,18 @@ bool prikaz_fce() {
               current_tkn->attr.keyword == keyword_while) {
         
         value = true;
-
         // <prikaz>
         if(value && !prikaz()) {
             value = false;
         }
+
         // <prikaz_fce>
-        if(value && !prikaz_fce()) {
-            value = false;
+        if(value && current_tkn->type == token_curly_right) {
+            // if it gets to right curly bracket, it reached "the end"
+            value = true;
+        } else {
+            get_tkn();
+            value = prikaz_fce();
         }
     }
     printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", value);

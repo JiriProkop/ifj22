@@ -3,7 +3,14 @@ declare(strict_types=1);
 
 function testfunc(int $testvar) : void {
     return 43;
+    if(3) {
+        funkce($ahoj);
+    }
+}
 
-    funkce($ahoj);
 
+if(345) {
+    funkcrdsa($afsd);
+} else {
+    dfadf();
 }
