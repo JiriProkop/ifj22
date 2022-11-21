@@ -356,10 +356,12 @@ bool prikaz() {
             value = false;
         }
         // <vyraz>
+        get_tkn();
         if(value && !vyraz()) {
             value = false;
         }
         // ;
+        get_tkn(); // TODO - zalezi na vyraz();
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }

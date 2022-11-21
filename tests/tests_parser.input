@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 function testfunc(int $testvar) : void {
     return 43;
+    $asfdfa = 234;
     if(3) {
         funkce($ahoj);
     }
