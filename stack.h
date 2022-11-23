@@ -16,7 +16,7 @@ typedef struct stack_node {
 } stack_node_t;
 
 typedef struct{
-	struct stack_node_t *top; 
+	struct stack_node *top; 
 }stack;
 
 /**
@@ -48,7 +48,7 @@ int stack_push(stack *stack, token_t *token);
  * 
  * @param stack the stack from which to pop
  */
-void stack_pop(stack_node_t **stack);
+void stack_pop(stack *stack);
 
 /**
  * @brief returns the first node in stack without it being removed
@@ -56,19 +56,19 @@ void stack_pop(stack_node_t **stack);
  * @param stack the stack to from which the first node will be 
  * @param return_token pointer to the first token in stack 
  */
-void stack_top(stack_node_t **stack, token_t *return_token);
+token_t *stack_top(stack *stack);
 
 /**
  * @brief disposes of stack leaves the tokens be
  * 
  * @param stack the stack to dispose off
  */
-void stack_dispose(stack_node_t **stack);
+void stack_dispose(stack *stack);
 
 /**
  * @brief disposes of stack and the tokens in it 
  * 
  * @param stack the stack to be disposed
  */
-void stack_dispose_all(stack_node_t **stack);
+void stack_dispose_all(stack *stack);
 #endif
