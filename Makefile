@@ -33,8 +33,8 @@ $(TESTDIR)tests_scanner: scanner.o error.o dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_dynstr: stack.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
-$(TESTDIR)tests_scanner: scanner.o error.o dynstr.o
-	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
+$(TESTDIR)tests_stack: stack.o error.o
+	$(CC) $(CFLAGS) $^ $@.c -o $@
 # --------------------------------------------------
 
 
