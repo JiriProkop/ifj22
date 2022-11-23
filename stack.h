@@ -15,6 +15,9 @@ typedef struct stack_node {
 	struct stack_node *next;
 } stack_node_t;
 
+/**
+ * @struct stack
+ */
 typedef struct{
 	struct stack_node *top; 
 }stack;
@@ -71,4 +74,12 @@ void stack_dispose(stack *stack);
  * @param stack the stack to be disposed
  */
 void stack_dispose_all(stack *stack);
+
+/**
+ * @brief returns topmost terminal from stack
+ * 
+ * @param stack stack to be searched
+ * @return token_t* terminal of NULL if no terminal found on stack
+ */
+token_t *stack_top_terminal(stack *stack);
 #endif
