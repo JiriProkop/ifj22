@@ -24,7 +24,10 @@ void get_tkn() {
             error_handle(0, compiler_error);
         }
     }
-    get_token(current_tkn);
+    if(get_token(current_tkn) == false) { // -> error, free everything and abort
+        free(current_tkn);
+		//TODO free symtable
+    }
     tkn_num++; // TODO - debug cislo
 }
 
