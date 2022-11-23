@@ -15,12 +15,16 @@ typedef struct stack_node {
 	struct stack_node *next;
 } stack_node_t;
 
+typedef struct{
+	struct stack_node_t *top; 
+}stack;
+
 /**
  * @brief inicialize stack 
  * 
  * @param stack the stack to be inicialize
  */
-void stack_init(stack_node_t **stack);
+void stack_init(stack *stack);
 
 /**
  * @brief returns 1 if stack is empty 0 if it is not 
@@ -29,7 +33,7 @@ void stack_init(stack_node_t **stack);
  * @return true 
  * @return false 
  */
-bool stack_is_empty(stack_node_t **stack);
+bool stack_is_empty(stack *stack);
 
 /**
  * @brief adds/pushes token on stack 
@@ -37,7 +41,7 @@ bool stack_is_empty(stack_node_t **stack);
  * @param stack the stack on which the token is to be pushed
  * @param token the token to be pushed 
  */
-int stack_push(stack_node_t **stack, token_t *token);
+int stack_push(stack *stack, token_t *token);
 
 /**
  * @brief removes/pops token of stack, if the stack is empty does nothing 
