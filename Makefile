@@ -36,18 +36,13 @@ valgrind: $(TESTS)
 <<<<<<< HEAD
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
-$(TESTDIR)tests_dynstr: dynstr.o error.o
-=======
-	valgrind $(TESTDIR)tests_stack
-
-# $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
 $(TESTDIR)tests_dynstr: $(SOURCES)dynstr.o $(SOURCES)error.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 $(TESTDIR)tests_scanner: $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_parser: $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
-$(TESTDIR)tests_dynstr: $(SOURCES)stack.o
+$(TESTDIR)tests_stack: $(SOURCES)stack.o $(SOURCES)error.o
 >>>>>>> b8a1c81 (edited Makefile and renamed test to tests)
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 # --------------------------------------------------
