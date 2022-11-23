@@ -27,7 +27,6 @@ test: $(TESTS)
 # stack tests
 	$(TESTDIR)tests_stack > $(TESTDIR)tests_stack.output
 #	diff -su $(TESTDIR)tests_stack.output $(TESTDIR)correct_out/tests_stack.output
->>>>>>> b8a1c81 (edited Makefile and renamed test to tests)
 
 # check the tests with valgrind
 valgrind: $(TESTS)
