@@ -11,8 +11,8 @@
  * @struct stack node.
  */
 typedef struct stack_node {
-    token_t *current;
-    struct stack_node *next;
+	token_t *current;
+	struct stack_node *next;
 } stack_node_t;
 
 /**
