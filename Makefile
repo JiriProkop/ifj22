@@ -16,25 +16,14 @@ test: $(TESTS)
 # dynstr tests
 	$(TESTDIR)tests_dynstr > $(TESTDIR)tests_dynstr.output
 	diff -su $(TESTDIR)tests_dynstr.output $(TESTDIR)correct_out/tests_dynstr.output
-<<<<<<< HEAD
-# scanner tests
-	$(TESTDIR)tests_scanner < $(TESTDIR)tests_scanner.input > $(TESTDIR)tests_scanner.output
-	diff -su $(TESTDIR)tests_scanner.output $(TESTDIR)correct_out/tests_scanner.output
-=======
 # stack tests
 	$(TESTDIR)tests_stack > $(TESTDIR)tests_stack.output
 #	diff -su $(TESTDIR)tests_stack.output $(TESTDIR)correct_out/tests_stack.output
->>>>>>> b8a1c81 (edited Makefile and renamed test to tests)
 
 # check the tests with valgrind
 valgrind: $(TESTS)
 	valgrind $(TESTDIR)tests_dynstr
 	valgrind $(TESTDIR)tests_scanner < $(TESTDIR)tests_scanner.input
-<<<<<<< HEAD
-
-# $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
-$(TESTDIR)tests_dynstr: dynstr.o error.o
-=======
 	valgrind $(TESTDIR)tests_stack
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
@@ -43,7 +32,6 @@ $(TESTDIR)tests_dynstr: dynstr.o error.o
 $(TESTDIR)tests_scanner: scanner.o error.o dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_dynstr: stack.o
->>>>>>> b8a1c81 (edited Makefile and renamed test to tests)
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 $(TESTDIR)tests_scanner: scanner.o error.o dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
