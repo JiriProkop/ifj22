@@ -1,0 +1,26 @@
+start ::= program konec
+program ::= ''
+program ::= definice program
+program ::= příkaz program
+definice ::= FUNCTION ID ( parametry ) : TYP { příkaz_fce }
+parametry ::= ''
+parametry ::= TYP VAR_ID param
+param ::= ''
+param ::= , TYP VAR_ID param
+příkaz_fce ::= ''
+příkaz_fce ::= příkaz
+příkaz ::= RETURN výraz ;    
+příkaz ::= ID ( vol_parametry ) ;
+příkaz ::= IF ( výraz ) { příkaz } else
+else ::= ''
+else ::= ELSE { příkaz }
+příkaz ::= WHILE ( výraz ) { příkaz }
+příkaz ::=  VAR_ID = výraz ;
+vol_parametry ::= ''
+vol_parametry ::= výraz vol_param
+vol_parametry ::= VAR_ID vol_param
+vol_param ::= ''
+vol_param ::= , vol_par
+vol_par ::=  výraz vol_param
+vol_par ::=  VAR_ID vol_param
+konec ::= EOF

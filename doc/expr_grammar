@@ -1,0 +1,19 @@
+//types
+<val>	-> integer
+<val>	-> float
+<val>	-> string
+<val>	-> id
+
+<exp>	-> <val>
+<exp>	-> <exp> + <exp>
+<exp>	-> <exp> - <exp>
+<exp>	-> <exp> / <exp>
+<exp>	-> <exp> * <exp>
+<exp>	-> <exp> . <exp>
+<exp>	-> <exp> === <exp>
+<exp>	-> <exp> !== <exp>
+<exp>	-> <exp> < <exp>
+<exp>	-> <exp> > <exp>
+<exp>	-> <exp> <= <exp>
+<exp>	-> <exp> >= <exp>
+<exp>	-> ( <exp> )
