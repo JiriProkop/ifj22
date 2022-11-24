@@ -362,6 +362,7 @@ bool prikaz() {
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
+    // TODO rule prirazeni funkce
     // rule: <prikaz> -> VAR_ID = <vyraz> ;
     } else if(current_tkn->type == token_varieble) {
         // TODO ulozit do stromu
