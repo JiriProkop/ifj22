@@ -1,9 +1,3 @@
-token_t *ll_search(list *list);
-
-void *ll_insert_after(list *list);
-
-
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -79,3 +73,6 @@ void list_init(list *list){
 // 	}
 // }
 
+// token_t *ll_search(list *list);
+
+// void *ll_insert_after(list *list);
