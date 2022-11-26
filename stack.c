@@ -81,3 +81,11 @@ void stack_dispose_all(stack *stack){
 	}
 }
 
+token_t *stack_top_terminal(stack *stack){
+	stack_node_t *tmp;
+	tmp = stack->top->current;
+	while(tmp->current->type != token_string && tmp->current->type != token_integer && tmp->current->type != token_float && tmp->current->type != token_varieble && tmp->next != NULL){
+		tmp = tmp->next;
+	}
+	
+}
