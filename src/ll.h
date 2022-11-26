@@ -4,6 +4,7 @@
 #include "scanner.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "dynstr.h"
 
 #define MALLOC_ERROR 99
 
@@ -17,8 +18,9 @@
 // } list_node_t;
 
 typedef struct list_node{
-    enum token_type; 
-    char *id; 
+    token_type type; 
+    dynstr_t *id; 
+    list_node *next;
 } list_node_t;
 
 
@@ -26,7 +28,7 @@ typedef struct list_node{
  * @struct list
  */
 typedef struct{
-	struct list_node *top; 
+	struct list_node *end; 
 }list;
 
 /**
@@ -36,29 +38,29 @@ typedef struct{
  */
 void list_init(list *list);
 
-// /**
-//  * @brief returns 1 if list is empty 0 if it is not 
-//  * 
-//  * @param list 
-//  * @return true 
-//  * @return false 
-//  */
-// bool list_is_empty(list *list);
+/**
+ * @brief returns 1 if list is empty 0 if it is not 
+ * 
+ * @param list 
+ * @return true is empty 
+ * @return false is not empty 
+ */
+bool list_is_empty(list *list);
 
-// /**
-//  * @brief adds/pushes token on list 
-//  * 
-//  * @param list the list on which the token is to be pushed
-//  * @param token the token to be pushed 
-//  */
-// int list_push(list *list, token_t *token);
+/**
+ * @brief adds node on the end of the list 
+ * 
+ * @param list 
+ * @param token  
+ */
+int list_add(list *list, token_type type, dynstr_t* id);
 
-// /**
-//  * @brief removes/pops token of list, if the list is empty does nothing 
-//  * 
-//  * @param list the list from which to pop
-//  */
-// void list_pop(list *list);
+/**
+ * @brief removes/pops token of list, if the list is empty does nothing 
+ * 
+ * @param list the list from which to pop
+ */
+void list_pop(list *list);
 
 // /**
 //  * @brief returns the first node in list without it being removed

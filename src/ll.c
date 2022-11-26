@@ -3,30 +3,31 @@
 
 #include "scanner.h"
 #include "ll.h"
+#include "error.h"
 
 
 void list_init(list *list){
-	list->top = NULL;
+	list->end = NULL;
 }
 
-// bool list_is_empty(list *list){
-// 	return list->top == NULL;
-// }
+bool list_is_empty(list *list){
+ 	return list->end == NULL;
+}
 
-// int list_push(list*list, token_t *token){
-// 	list_node_t *tmp = malloc(sizeof(list_node_t));
-// 	if(tmp == NULL){
-// 		return MALLOC_ERROR;
-// 	}
-// 	if(list == NULL){
-// 		tmp->next = NULL;
-// 	} else{
-// 		tmp->next = list->top;
-// 	}
-// 	tmp->current = token;
-// 	list->top = tmp;
-// 	return 0;
-// }
+int list_add(list *list, token_type type, dynstr_t* id){
+	list_node_t *node = malloc(sizeof(list_node_t));
+	if(node == NULL){
+		error_handle(0,compiler_error);
+	}
+	node->id = id;
+	node->type = type;
+	if(list->end == NULL){
+		node->next = NULL;
+	}else{
+		node->next = list->end;
+	}
+	list->end = node;
+}
 
 // void list_pop(list *list){
 // 	token_t *tmp;
