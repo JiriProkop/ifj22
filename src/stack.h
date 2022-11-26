@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MALLOC_ERROR 99
+#define NO_SHIFT 42
 
 /**
  * @struct stack node.

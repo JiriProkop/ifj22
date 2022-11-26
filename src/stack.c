@@ -62,7 +62,7 @@ void stack_pop(stack *stack){
 	stack->top = stack->top->next;
 	if(tmp_token->type == token_identifier || tmp_token->type == token_string){
 		if(tmp_token->attr.str != NULL){
-			dynstr_delete(tmp_token->attr.str);
+			string_free(tmp_token->attr.str);
 		}
 	}
 	free(tmp_token);
@@ -96,7 +96,7 @@ void stack_dispose_all(stack *stack){
 		stack->top = stack->top->next;
 		if(tmp_token->type == token_identifier || tmp_token->type == token_string){
 			if(tmp_token->attr.str != NULL){
-				dynstr_delete(tmp_token->attr.str);
+				string_free(tmp_token->attr.str);
 			}
 		}
 		free(tmp_token);
@@ -159,4 +159,21 @@ void stack_insert_shift(stack *stack){
 	i->next = new_node;
 }
 
-// && tmp->current->type != token_integer && tmp->current->type != token_float && tmp->current->type != token_varieble && tmp->next != NULL)
+unsigned tokens_to_shift(stack *stack){
+	if(stack == NULL){
+		return NO_SHIFT;
+	}
+
+	unsigned sum = 0;
+	stack_node_t *i;
+	i = stack->top;
+	while(i != NULL &&
+		i->current->type != token_expr_shift){
+		i = i->next;
+		sum ++;
+	}
+	if (i == NULL){
+		return NO_SHIFT;
+	}
+	return sum;
+}

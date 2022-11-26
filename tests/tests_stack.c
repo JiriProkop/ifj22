@@ -6,7 +6,7 @@
 #include "../src/dynstr.h"
 
 
-
+#define MALLOC_ERROR 99
 
 // pushes token and fills token without token_att, it is not required to test stack
 void push_token(stack *stack, token_t *token, token_type type, unsigned line){
@@ -263,25 +263,37 @@ int main() {
     push_token(stack, token2, token_multiply, 40);
     top_terminal = stack_top_terminal(stack);
     print_type(top_terminal);
+    free(top_terminal);
     // test finds E 
     push_token(stack, token4, token_integer, 67);
     push_token(stack, token5, token_expr_e, 42);
     top_terminal = stack_top_terminal(stack);
     print_type(top_terminal);
-
+    free(top_terminal);
+    // pop and save
     printf("\n[stack test pop and save]\n");
     push_token(stack, token6, token_compare, 32);
     top_terminal = stack_save_pop(stack);
     if(top_terminal->type == token_compare){
         printf("stack_save_pop working\n");
     }
-
+    free(top_terminal);
+    // insert shift 
     printf("\n[stack test insert shift]\n");
     stack_insert_shift(stack);
     stack_pop(stack);
     top_terminal = stack_save_pop(stack);
     if(top_terminal->type == token_expr_shift){
         printf("stack insert shift working\n");
+    }
+    free(top_terminal);
+    stack_dispose_all(stack);
+    // tokens to shift
+    push_token(stack, token0, token_expr_shift, 12);
+    push_token(stack, token1, token_compare_neg, 77);
+    push_token(stack, token2, token_curly_left, 76);
+    if(tokens_to_shift(stack) == 2){
+        printf("tokens to shift works");
     }
     stack_dispose_all(stack);
     free(stack);
