@@ -43,6 +43,11 @@ typedef enum {
 	token_minus,
 	token_keyword,
 	token_comma,
+	// tokens for expr. parser stack
+	token_expr_dollar,
+	token_expr_shift,
+	token_expr_brackets,
+	token_expr_e,
 }
 token_type;
 
