@@ -27,6 +27,8 @@ int list_add(list *list, token_type type, dynstr_t* id){
 		node->next = list->end;
 	}
 	list->end = node;
+
+	return 0;
 }
 
 // void list_pop(list *list){

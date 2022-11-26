@@ -1,9 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../src/scanner.h"
 #include "../src/ll.h"
 #include "../src/error.h"
+
+void print_same_node(list *list, token_type type, bool first, char id[]){
+    char *str = malloc(sizeof(strlen(id)));
+    strcpy(str, id);
+    if(list->end->type != type){
+        printf("wrong type \n");
+        return;
+    }
+    if(!dynstr_compare(list->end->id, str)){
+        printf("wrong id \n");
+    }
+    if(first && list->end->next != NULL){
+        printf("should be first or last but has nexx != NULL \n");
+        return;
+    }
+    if((!first) && list->end->next == NULL){
+        printf("should not be last but next == NULL \n");
+    }
+    printf("succesful \n");
+}
 
 int ret = 0;
 
@@ -28,13 +49,28 @@ int main(){
     }
     // ll add node 
     printf("\n[list add test]\n");
-    list_node_t *node0, *node1, *node2, *node3, *node4, *node5;
-    list_add(list, token_varieble, "hello");
-    if(list->end->type == token_varieble && list->end->next == NULL && dynstr_compare(list->end->id, "hello")){
-        printf("first node added succesfully");
+    dynstr_t *added_dynstr = NULL;
+
+    dynstr_add_string(added_dynstr, "hello");
+    list_add(list, token_varieble, added_dynstr);
+    print_same_node(list, token_varieble, true, "hello");
+
+    dynstr_add_string(added_dynstr,"there");
+    list_add(list, token_string, added_dynstr);
+    print_same_node(list, token_string, false, "there");
+
+    dynstr_add_string(added_dynstr, "Obi-wan");
+    list_add(list, token_dot, added_dynstr);
+    print_same_node(list,token_dot, false, "Obi-wan");
+
+    // ll list not empty 
+    printf("\n[list not empty test]\n");
+    if(!list_is_empty(list)){
+        printf("list is not empty \n");
     }
-    //list_add(list, token_string, "there");
 
-
+    printf("--- [LINKED LIST END TEST] ---\n");
     return ret;
 }
+
+

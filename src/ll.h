@@ -20,7 +20,7 @@
 typedef struct list_node{
     token_type type; 
     dynstr_t *id; 
-    list_node *next;
+    struct list_node *next;
 } list_node_t;
 
 
