@@ -47,6 +47,14 @@ bool stack_is_empty(stack *stack);
 int stack_push(stack *stack, token_t *token);
 
 /**
+ * @brief pops first token and returns it in return token, if the stack is empty returns NULL
+ * 
+ * @param stack stack from which to pop
+ * @param return_token poped element is returned or NULL if empty stack
+ */
+token_t *stack_save_pop(stack *stack);
+
+/**
  * @brief removes/pops token of stack, if the stack is empty does nothing 
  * 
  * @param stack the stack from which to pop
@@ -76,10 +84,17 @@ void stack_dispose(stack *stack);
 void stack_dispose_all(stack *stack);
 
 /**
- * @brief returns topmost terminal from stack
+ * @brief returns topmost terminal from stack. if it finds < (shift) or E before terminal it deos othing
  * 
  * @param stack stack to be searched
- * @return token_t* terminal of NULL if no terminal found on stack
+ * @return token_t* terminal of NULL if no terminal found on stack or found < or E first
  */
 token_t *stack_top_terminal(stack *stack);
+
+/**
+ * @brief inserts < (shift) before first E it finds
+ * 
+ * @param stack the stack in which to insert to
+ */
+void stack_insert_shift(stack *stack);
 #endif

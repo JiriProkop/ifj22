@@ -25,7 +25,7 @@ bool stack_is_empty(stack *stack){
 int stack_push(stack*stack, token_t *token){
 	stack_node_t *tmp = malloc(sizeof(stack_node_t));
 	if(tmp == NULL){
-		return MALLOC_ERROR;
+		error_handle(0,compiler_error);
 	}
 	if(stack == NULL){
 		tmp->next = NULL;
@@ -37,19 +37,33 @@ int stack_push(stack*stack, token_t *token){
 	return 0;
 }
 
+token_t *stack_save_pop(stack *stack){
+	stack_node_t *tmp_node;
+	token_t *tmp_token;
+	if(stack->top == NULL){
+		return NULL;
+	}
+	tmp_node = stack->top;
+	tmp_token = stack->top->current;
+	stack->top = stack->top->next;
+	free(tmp_node);
+	tmp_node = NULL;
+	return tmp_token;
+}
+
 void stack_pop(stack *stack){
-	token_t *tmp;
-	stack_node_t *tmp1;
+	token_t *tmp_token;
+	stack_node_t *tmp_node;
 	if(stack->top == NULL){
 		return;
 	}
-	tmp = stack->top->current;
-	tmp1 = stack->top;
+	tmp_token = stack->top->current;
+	tmp_node = stack->top;
 	stack->top = stack->top->next;
-	free(tmp);
-	tmp = NULL;
-	free(tmp1);
-	tmp1 = NULL;
+	free(tmp_token);
+	tmp_token = NULL;
+	free(tmp_node);
+	tmp_node = NULL;
 }
 
 token_t *stack_top(stack *stack){
@@ -94,12 +108,45 @@ token_t *stack_top_terminal(stack *stack){
 		i->current->type != token_float && 
 		i->current->type != token_string &&
 		i->current->type != token_varieble){
+		if(i->current->type == token_expr_e || i->current->type == token_expr_shift){
+			return NULL;
+		}
 		i = i->next;
 	}
 	if (i == NULL){
 		return NULL;
 	}
 	return i->current;
+}
+
+void stack_insert_shift(stack *stack){
+	if(stack == NULL){
+		return;
+	}
+
+	stack_node_t *i;
+	i = stack->top;
+	while(i != NULL && i->current->type != token_expr_e){
+		i = i->next;
+	}
+	if(i == NULL){
+		return;
+	}
+
+	stack_node_t *new_node = malloc(sizeof(stack_node_t));
+	if(new_node == NULL){
+		error_handle(0, compiler_error);
+	}
+	token_t *new_token = malloc(sizeof(token_t));
+	if(new_token == NULL){
+		free(new_node);
+		error_handle(0, compiler_error);
+	}
+
+	new_node->next = i->next;
+	new_node->current = new_token;
+	new_token->type = token_expr_shift;
+	i->next = new_node;
 }
 
 // && tmp->current->type != token_integer && tmp->current->type != token_float && tmp->current->type != token_varieble && tmp->next != NULL)

@@ -26,7 +26,7 @@ void push_token(stack *stack, token_t *token, token_type type, unsigned line){
 
 void print_type(token_t *token){
     if(token == NULL){
-        printf("token either not terminal or searched stack was empty\n");
+        printf("token either not terminal or searched stack was empty or E or < (shift) \n");
         return;
     }
     switch (token->type){
@@ -251,6 +251,33 @@ int main() {
     top_terminal = stack_top_terminal(stack);
     print_type(top_terminal);
     stack_dispose_all(stack);
+    // test finds < (shift)
+    push_token(stack, token0, token_varieble, 10);
+    push_token(stack, token1, token_expr_shift, 12);
+    push_token(stack, token2, token_multiply, 40);
+    top_terminal = stack_top_terminal(stack);
+    print_type(top_terminal);
+    // test finds E 
+    push_token(stack, token4, token_integer, 67);
+    push_token(stack, token5, token_expr_e, 42);
+    top_terminal = stack_top_terminal(stack);
+    print_type(top_terminal);
+
+    printf("\n[stack test pop and save]\n");
+    push_token(stack, token6, token_compare, 32);
+    top_terminal = stack_save_pop(stack);
+    if(top_terminal->type == token_compare){
+        printf("stack_save_pop working\n");
+    }
+
+    printf("\n[stack test insert shift]\n");
+    stack_insert_shift(stack);
+    stack_pop(stack);
+    top_terminal = stack_save_pop(stack);
+    if(top_terminal->type == token_expr_shift){
+        printf("stack insert shift working\n");
+    }
+
     free(stack);
     printf("\n[end stack test]\n");
     return ret;
