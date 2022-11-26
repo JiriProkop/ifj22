@@ -23,7 +23,6 @@ test: $(TESTS)
 # parser tests
 	$(TESTDIR)tests_parser < $(TESTDIR)tests_parser.input
 #   diff -su $(TESTDIR)tests_parser.output $(TESTDIR)correct_out/tests_parser.output
-=======
 # stack tests
 	$(TESTDIR)tests_stack > $(TESTDIR)tests_stack.output
 #	diff -su $(TESTDIR)tests_stack.output $(TESTDIR)correct_out/tests_stack.output
@@ -33,7 +32,6 @@ valgrind: $(TESTS)
 	valgrind $(TESTDIR)tests_dynstr
 	valgrind $(TESTDIR)tests_scanner < $(TESTDIR)tests_scanner.input
 	valgrind $(TESTDIR)tests_parser < $(TESTDIR)tests_parser.input
-<<<<<<< HEAD
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
 $(TESTDIR)tests_dynstr: $(SOURCES)dynstr.o $(SOURCES)error.o
@@ -43,7 +41,6 @@ $(TESTDIR)tests_scanner: $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.
 $(TESTDIR)tests_parser: $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_stack: $(SOURCES)stack.o $(SOURCES)error.o
->>>>>>> b8a1c81 (edited Makefile and renamed test to tests)
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 # --------------------------------------------------
 

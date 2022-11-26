@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "../stack.h"
-#include "../error.h"
+#include "../src/stack.h"
+#include "../src/error.h"
 
 
 int ret = 0;
