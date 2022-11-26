@@ -97,4 +97,7 @@ token_t *stack_top_terminal(stack *stack);
  * @param stack the stack in which to insert to
  */
 void stack_insert_shift(stack *stack);
+
+
+unsigned tokens_to_shift(stack *stack);
 #endif

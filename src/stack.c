@@ -12,7 +12,7 @@
 #include "scanner.h"
 #include "stack.h"
 #include "error.h"
-
+#include "dynstr.h"
 
 void stack_init(stack *stack){
 	stack->top = NULL;
@@ -60,6 +60,11 @@ void stack_pop(stack *stack){
 	tmp_token = stack->top->current;
 	tmp_node = stack->top;
 	stack->top = stack->top->next;
+	if(tmp_token->type == token_identifier || tmp_token->type == token_string){
+		if(tmp_token->attr.str != NULL){
+			dynstr_delete(tmp_token->attr.str);
+		}
+	}
 	free(tmp_token);
 	tmp_token = NULL;
 	free(tmp_node);
@@ -83,16 +88,21 @@ void stack_dispose(stack *stack){
 }
 
 void stack_dispose_all(stack *stack){
-	token_t *tmp;
-	stack_node_t *tmp1;
+	token_t *tmp_token;
+	stack_node_t *tmp_node;
 	while(stack->top != NULL){
-		tmp = stack->top->current;
-		tmp1 = stack->top;
+		tmp_token = stack->top->current;
+		tmp_node = stack->top;
 		stack->top = stack->top->next;
-		free(tmp);
-		tmp = NULL;
-		free(tmp1);
-		tmp1 = NULL;
+		if(tmp_token->type == token_identifier || tmp_token->type == token_string){
+			if(tmp_token->attr.str != NULL){
+				dynstr_delete(tmp_token->attr.str);
+			}
+		}
+		free(tmp_token);
+		tmp_token = NULL;
+		free(tmp_node);
+		tmp_node = NULL;
 	}
 }
 

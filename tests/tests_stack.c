@@ -3,6 +3,7 @@
 #include "../src/stack.h"
 #include "../src/error.h"
 #include "../src/scanner.h"
+#include "../src/dynstr.h"
 
 
 
@@ -18,6 +19,7 @@ void push_token(stack *stack, token_t *token, token_type type, unsigned line){
     // fill in token
     token->type = type;
     token->line = line;
+    token->attr.str = NULL;
     // push token 
     if(stack_push(stack, token) == MALLOC_ERROR){
         printf("failed to push token");
@@ -177,6 +179,10 @@ int main() {
     if(stack_push(stack, token6) == MALLOC_ERROR){
         printf("failed to malloc token 6 stack node\n");
     }
+    dynstr_t *dispose_str = malloc(sizeof(dynstr_t));
+    dynstr_init(dispose_str);
+    dynstr_add_char(dispose_str, 'f');
+    token6->attr.str = dispose_str;
 
     stack_dispose_all(stack);
     printf("After stack_dispose_all use valgrind I know not how to check \n");
@@ -277,7 +283,7 @@ int main() {
     if(top_terminal->type == token_expr_shift){
         printf("stack insert shift working\n");
     }
-
+    stack_dispose_all(stack);
     free(stack);
     printf("\n[end stack test]\n");
     return ret;
