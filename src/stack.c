@@ -11,6 +11,7 @@
 
 #include "scanner.h"
 #include "stack.h"
+#include "error.h"
 
 
 void stack_init(stack *stack){
@@ -82,10 +83,23 @@ void stack_dispose_all(stack *stack){
 }
 
 token_t *stack_top_terminal(stack *stack){
-	stack_node_t *tmp;
-	tmp = stack->top->current;
-	while(tmp->current->type != token_string && tmp->current->type != token_integer && tmp->current->type != token_float && tmp->current->type != token_varieble && tmp->next != NULL){
-		tmp = tmp->next;
+	if(stack == NULL){
+		return NULL;
 	}
-	
+
+	stack_node_t *i;
+	i = stack->top;
+	while(i != NULL &&
+		i->current->type != token_integer &&
+		i->current->type != token_float && 
+		i->current->type != token_string &&
+		i->current->type != token_varieble){
+		i = i->next;
+	}
+	if (i == NULL){
+		return NULL;
+	}
+	return i->current;
 }
+
+// && tmp->current->type != token_integer && tmp->current->type != token_float && tmp->current->type != token_varieble && tmp->next != NULL)

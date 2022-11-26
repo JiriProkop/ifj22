@@ -2,6 +2,51 @@
 #include <stdio.h>
 #include "../src/stack.h"
 #include "../src/error.h"
+#include "../src/scanner.h"
+
+
+
+
+// pushes token and fills token without token_att, it is not required to test stack
+void push_token(stack *stack, token_t *token, token_type type, unsigned line){
+    token = malloc(sizeof(token_t));
+    // malloc structures
+    if(token == NULL){
+        printf("token failed to malloc");
+        return;
+    }
+    // fill in token
+    token->type = type;
+    token->line = line;
+    // push token 
+    if(stack_push(stack, token) == MALLOC_ERROR){
+        printf("failed to push token");
+    };
+}
+
+void print_type(token_t *token){
+    if(token == NULL){
+        printf("token either not terminal or searched stack was empty\n");
+        return;
+    }
+    switch (token->type){
+    case token_integer:
+        printf("token type integer\n");
+        break;
+    case token_varieble:
+        printf("token type varialbe\n");
+        break;
+    case token_float:
+        printf("token type float\n");
+        break;
+    case token_string:
+        printf("token type string\n");
+        break;
+    default:
+        printf("undefined behavior in print_type \n");
+        break;
+    }
+}
 
 
 int ret = 0;
@@ -174,9 +219,40 @@ int main() {
     }
 
     free(token7);
+    token7 = NULL;
     free(token8);
+    token8 = NULL;
     free(token9);
+    token9 = NULL;
+    // test stack top terminal
+    printf("\n[stack top terminal]\n");
+    token_t *top_terminal;
+    // test no terminal
+    push_token(stack, token0, token_parentheses_left, 4);
+    push_token(stack, token1, token_minus, 5);
+    top_terminal = stack_top_terminal(stack);
+    print_type(top_terminal);
+    // test integer terminal
+    push_token(stack, token2, token_integer, 6);
+    push_token(stack, token4, token_plus, 7);
+    top_terminal = stack_top_terminal(stack);
+    print_type(top_terminal);
+    // test string terminal 
+    push_token(stack, token5, token_string, 7);
+    top_terminal = stack_top_terminal(stack);
+    print_type(top_terminal);
+    // test float
+    push_token(stack, token7, token_float, 12);
+    push_token(stack, token6, token_compare_neg, 8);
+    top_terminal = stack_top_terminal(stack);
+    print_type(top_terminal);
+    // test variable
+    push_token(stack,token8, token_varieble, 60);
+    top_terminal = stack_top_terminal(stack);
+    print_type(top_terminal);
+    stack_dispose_all(stack);
     free(stack);
     printf("\n[end stack test]\n");
     return ret;
 }
+
