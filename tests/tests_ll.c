@@ -26,6 +26,10 @@ void print_same_node(list *list, token_type type, bool first, char id[]){
     printf("succesful \n");
 }
 
+void print_list(list *list){
+    
+}
+
 int ret = 0;
 
 int main(){
@@ -47,21 +51,24 @@ int main(){
     if(list_is_empty(list)){
         printf("list is empty\n");
     }
-    // ll add node 
+    // ll add node foo (int hello , char there , bool Obi-wan);
     printf("\n[list add test]\n");
-    dynstr_t *added_dynstr = NULL;
+    dynstr_t *added_dynstr = malloc(sizeof(dynstr_t));
 
     dynstr_add_string(added_dynstr, "hello");
     list_add(list, token_varieble, added_dynstr);
     print_same_node(list, token_varieble, true, "hello");
+    dynstr_clear(added_dynstr);
 
     dynstr_add_string(added_dynstr,"there");
     list_add(list, token_string, added_dynstr);
     print_same_node(list, token_string, false, "there");
+    dynstr_clear(added_dynstr);
 
     dynstr_add_string(added_dynstr, "Obi-wan");
     list_add(list, token_dot, added_dynstr);
     print_same_node(list,token_dot, false, "Obi-wan");
+    dynstr_clear(added_dynstr);
 
     // ll list not empty 
     printf("\n[list not empty test]\n");
@@ -69,6 +76,8 @@ int main(){
         printf("list is not empty \n");
     }
 
+    // 
+    string_free(added_dynstr);
     printf("--- [LINKED LIST END TEST] ---\n");
     return ret;
 }

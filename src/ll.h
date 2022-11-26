@@ -28,6 +28,7 @@ typedef struct list_node{
  * @struct list
  */
 typedef struct{
+    struct list_node *first;
 	struct list_node *end; 
 }list;
 

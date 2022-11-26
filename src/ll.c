@@ -21,13 +21,16 @@ int list_add(list *list, token_type type, dynstr_t* id){
 	}
 	node->id = id;
 	node->type = type;
-	if(list->end == NULL){
-		node->next = NULL;
-	}else{
-		node->next = list->end;
-	}
-	list->end = node;
 
+	if(list->first == NULL){
+		node->next = NULL;
+		list->end = node;
+		list->first = node;
+	}else{
+		list->end->next = node;
+		node->next = NULL;
+		list->end = node;
+	}
 	return 0;
 }
 
