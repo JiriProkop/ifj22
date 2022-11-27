@@ -6,35 +6,61 @@
 #include "../src/ll.h"
 #include "../src/error.h"
 
-void print_same_node(list *list, token_type type, bool first, char id[]){
-    char *str = malloc(sizeof(strlen(id)));
-    strcpy(str, id);
-    if(list->end->type != type){
+void print_add_node(list_t *list, token_type type, bool first, char id[]){
+    char *str = malloc(sizeof(char)* (strlen(id)+1));
+    str = strcpy(str, id);
+    if(list == NULL){
+        return;
+    }
+
+    if(list->last->type != type){
         printf("wrong type \n");
         return;
     }
-    if(!dynstr_compare(list->end->id, str)){
+    if(!dynstr_compare(list->last->id, str)){
         printf("wrong id \n");
+        return;
     }
-    if(first && list->end->next != NULL){
+    if(first && list->last->next != NULL){
         printf("should be first or last but has nexx != NULL \n");
         return;
     }
-    if((!first) && list->end->next == NULL){
+    if((!first) && list->first->next == NULL){
         printf("should not be last but next == NULL \n");
+        return;
     }
-    printf("succesful \n");
+    printf("added succesfully \n");
+    free(str);
 }
 
-void print_list(list *list){
-    
+void print_list(list_t *list){
+    list_node_t *i = list->first; 
+    printf("list from the start : ");
+    while(i != NULL){
+        printf(" '%s',", i->id->array);
+        i = i->next;
+    }
+    printf("\n");
+}
+
+void add_node(list_t *list, char id[], token_type type){
+    char* tmp_str = malloc(sizeof(char)*(strlen(id) + 1));
+    if(tmp_str == NULL){
+        printf("failed to malloc dynstr in add node tests_ll");
+    }
+    dynstr_t *tmp_dstr = malloc(sizeof(dynstr_t));
+    dynstr_init(tmp_dstr);
+    tmp_str = strcpy(tmp_str, id);
+    dynstr_add_string(tmp_dstr, tmp_str);
+    list_add(list, type, tmp_dstr);
+    free(tmp_str);
 }
 
 int ret = 0;
 
 int main(){
     printf("--- [LINKED LIST TEST] ---\n");
-    list *list = malloc(sizeof(list));
+    list_t *list = malloc(sizeof(list_t));
     if(list == NULL){
         error_handle(0, compiler_error);
         return 1;
@@ -43,7 +69,7 @@ int main(){
     // ll initialization 
     printf("\n[list init test]\n");
     list_init(list);
-    if(list->end == NULL){
+    if(list->last == NULL){
         printf("initialization succesful \n");
     }
     // ll empty 
@@ -53,31 +79,29 @@ int main(){
     }
     // ll add node foo (int hello , char there , bool Obi-wan);
     printf("\n[list add test]\n");
-    dynstr_t *added_dynstr = malloc(sizeof(dynstr_t));
 
-    dynstr_add_string(added_dynstr, "hello");
-    list_add(list, token_varieble, added_dynstr);
-    print_same_node(list, token_varieble, true, "hello");
-    dynstr_clear(added_dynstr);
+    add_node(list, "hello", token_varieble);
+    print_add_node(list, token_varieble, true, "hello");
 
-    dynstr_add_string(added_dynstr,"there");
-    list_add(list, token_string, added_dynstr);
-    print_same_node(list, token_string, false, "there");
-    dynstr_clear(added_dynstr);
+    add_node(list, "there", token_string);
+    print_add_node(list, token_string, false, "there");
 
-    dynstr_add_string(added_dynstr, "Obi-wan");
-    list_add(list, token_dot, added_dynstr);
-    print_same_node(list,token_dot, false, "Obi-wan");
-    dynstr_clear(added_dynstr);
+    add_node(list, "Obi-wan", token_dot);
+    print_add_node(list,token_dot, false, "Obi-wan");
 
+    print_list(list);
     // ll list not empty 
     printf("\n[list not empty test]\n");
     if(!list_is_empty(list)){
         printf("list is not empty \n");
     }
 
-    // 
-    string_free(added_dynstr);
+    // test delete all (use valgrind)
+    list_dispose(list);
+    // test list delete_first
+    list = malloc(sizeof(list_t));
+    
+
     printf("--- [LINKED LIST END TEST] ---\n");
     return ret;
 }
