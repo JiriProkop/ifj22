@@ -17,6 +17,12 @@ bool tkn_already_loaded = false;
 
 int tkn_num = 0; // TODO - cislo jen na debug
 
+void abort() {
+	free(current_tkn);
+	//TODO free symtable
+    exit(ret);
+}
+
 void get_tkn() {
     if(current_tkn == NULL) {
         current_tkn = malloc(sizeof(token_t));
@@ -25,8 +31,7 @@ void get_tkn() {
         }
     }
     if(get_token(current_tkn) == false) { // -> error, free everything and abort
-        free(current_tkn);
-		//TODO free symtable
+        abort();
     }
     tkn_num++; // TODO - debug cislo
 }
