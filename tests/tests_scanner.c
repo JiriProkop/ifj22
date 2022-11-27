@@ -56,7 +56,6 @@ char *keywords_str[] = {
     "keyword_while",
 };
 
-int ret = 0;
 int main() {
     printf("--- [SCANNER TESTS] ---\n");
 

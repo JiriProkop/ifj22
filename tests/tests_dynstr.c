@@ -11,7 +11,6 @@
 #include "../src/dynstr.h"
 #include "../src/error.h"
 
-int ret = 0;
 int main() {
 	printf("--- [DYNSTR TESTS] ---\n");
 
