@@ -138,14 +138,19 @@ void stack_insert_shift(stack *stack){
 
 	stack_node_t *i;
 	i = stack->top;
-	while(i != NULL && i->current->type != token_expr_e){
-		i = i->next;
-	}
-	if(i == NULL){
-		return;
-	}
+	if(i->current->type != token_expr_e) {
+		token_t *tok = malloc(sizeof(token_t));
+		if(tok == NULL) {
+			error_handle(0, compiler_error);
+	    	stack_dispose_all(stack);
+        	abort();	
+		}
+        tok->type = token_expr_shift;
+        stack_push(stack, tok);
+        return;
+    }
 
-	stack_node_t *new_node = malloc(sizeof(stack_node_t));
+    stack_node_t *new_node = malloc(sizeof(stack_node_t));
 	if(new_node == NULL){
 		error_handle(0, compiler_error);
 	    stack_dispose_all(stack);
