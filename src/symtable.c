@@ -2,12 +2,16 @@
 #include <string.h>
 #include "error.h"
 #include "symtable.h"
+#include "dynstr.h"
+
 
 void st_init(sym_table **tab) {
     *tab = NULL;
 }
 
-void st_insert(sym_table **tab, char *key, sym_data *data) {
+// TODO all string operation to dynstr_t operations 
+
+void st_insert(sym_table **tab, dynstr_t *id, sym_data *data) {
     if (*tab == NULL) {
         sym_table *new = malloc(sizeof(sym_table));
         if (new == NULL) {
@@ -16,38 +20,38 @@ void st_insert(sym_table **tab, char *key, sym_data *data) {
         }
         new->left = NULL;
         new->right = NULL;
-        new->key = key;
+        new->id = id;
         new->data = data;
         *tab = new;
     } else {
-        int cmp = strcmp(key, (*tab)->key);
+        int cmp = dynstrcmp(id, (*tab)->id);
         if (!cmp) {
             free((*tab)->data);
             (*tab)->data = data;
         } else if (cmp < 0) {
-            st_insert(&(*tab)->left, key, data);
+            st_insert(&(*tab)->left, id, data);
         } else {
-            st_insert(&(*tab)->right, key, data);
+            st_insert(&(*tab)->right, id, data);
         }
     }
 }
 
-sym_data *tab_search(sym_table *tab, char *key) {
+sym_data *st_search(sym_table *tab, dynstr_t *id) {
     if (tab != NULL) {
-        int cmp = strcmp(key, tab->key);
+        int cmp = dynstrcmp(id, tab->id);
         if (!cmp)
             return tab->data;
         else if (cmp < 0)
-            return st_search(tab->left, key);
+            return st_search(tab->left, id);
         else
-            return st_search(tab->left, key);
+            return st_search(tab->left, id);
     }
     return NULL;
 }
 
 void replace_by_rightmost(sym_table *target, sym_table **tab) {
     if ((*tab)->right == NULL) {
-        target->key = (*tab)->key;
+        target->id = (*tab)->id;
         target->data = (*tab)->data;
         sym_table *d = *tab;
         *tab = d->left;
@@ -57,9 +61,9 @@ void replace_by_rightmost(sym_table *target, sym_table **tab) {
     }
 }
 
-void st_delete(sym_table **tab, char *key) {
+void st_delete(sym_table **tab, dynstr_t *id) {
     if (*tab != NULL) {
-        int cmp = strcmp(key, (*tab)->key);
+        int cmp = dynstrcmp(id, (*tab)->id);
         if (!cmp) {
             if (((*tab)->left == NULL) && ((*tab)->right == NULL)) {
                 free(*tab);
@@ -75,9 +79,9 @@ void st_delete(sym_table **tab, char *key) {
                 free(d);
             }
         } else if (cmp < 0) {
-            st_delete(&(*tab)->left, key);
+            st_delete(&(*tab)->left, id);
         } else {
-            st_delete(&(*tab)->right, key);
+            st_delete(&(*tab)->right, id);
         }
     }
 }

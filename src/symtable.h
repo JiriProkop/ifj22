@@ -11,26 +11,25 @@
 #define _SYMTABLE_H
 
 #include <stdbool.h>
+#include "scanner.h"
+#include "ll.h"
+#include "dynstr.h"
 
 // TODO additional functions?, data types?, keep track of unused variables?
 
-/// @enum Symbol type
-typedef enum {
-    s_func, // function
-    s_var   // variable
-} sym_type;
-
 /// @struct Symbol data structure
-typedef struct { 
-    sym_type type; // symbol type
+typedef struct{ 
+    token_type type; // symbol type
+    token_type return_type; // return type for functions
     bool defined;
     struct tree_node *local_frame; // local symbol table
     unsigned int params; // number of parameters
+    list_t *parameters;
 } sym_data;
 
 /// @struct Symbol table structure
 typedef struct tree_node {
-    char *key; // identifier
+    dynstr_t *id; // identifier
     sym_data *data; // node data
     struct tree_node *left; // left child
     struct tree_node *right; // right child
@@ -50,7 +49,7 @@ void st_init(sym_table **tab);
  * @param key Identifier
  * @param data Node data
  */
-void st_insert(sym_table **tab, char *key, sym_data *data);
+void st_insert(sym_table **tab, dynstr_t *id, sym_data *data);
 
 /**
  * @brief Searches a symbol table for a node with a specified identifier and returns its data.
@@ -59,7 +58,7 @@ void st_insert(sym_table **tab, char *key, sym_data *data);
  * @param key Identifier
  * @return A pointer to node data when found, NULL otherwise.
  */
-sym_data *st_search(sym_table *tab, char *key);
+sym_data *st_search(sym_table *tab, dynstr_t *id);
 
 /**
  * @brief Deletes a node from a symbol table.
@@ -70,7 +69,7 @@ sym_data *st_search(sym_table *tab, char *key);
  * @param tab Pointer to a pointer to a symbol table
  * @param key Identifier
  */
-void st_delete(sym_table **tab, char *key);
+void st_delete(sym_table **tab, dynstr_t *id);
 
 /**
  * @brief Disposes a symbol table by returning it to the initial state.

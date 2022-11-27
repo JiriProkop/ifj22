@@ -88,4 +88,15 @@ dynstr_t *string_innit();
  */
 void string_free(dynstr_t *attr);
 
+/**
+ * @brief strcmp fot dynstr 
+ * 
+ * @param strplus 
+ * @param strminus 
+ * @return int 0 if strinfs are the same 
+ *        return > 0 if first different char is bigger in *strplus
+ *        return < 0 if first different char is bigger in *strminus
+ */
+int dynstrcmp(dynstr_t *strplus, dynstr_t *strminus);
+
 #endif
