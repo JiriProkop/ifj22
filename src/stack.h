@@ -92,7 +92,7 @@ void stack_dispose_all(stack *stack);
 token_t *stack_top_terminal(stack *stack);
 
 /**
- * @brief inserts < (shift) before first E it finds
+ * @brief Push '<' shift to stack. If the on top of stack is token_expr_e, insert it after it instead.
  * 
  * @param stack the stack in which to insert to
  */
