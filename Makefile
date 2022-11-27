@@ -4,7 +4,7 @@ LDLIBS = -lm
 
 TESTDIR = tests/
 SOURCES = src/
-CASES = tests_dynstr tests_scanner tests_parser
+CASES = tests_dynstr tests_scanner tests_parser tests_ll
 TESTS = $(addprefix $(TESTDIR), $(CASES))
 
 PARTS = $(TESTS)
@@ -23,6 +23,9 @@ test: $(TESTS)
 # parser tests
 	$(TESTDIR)tests_parser < $(TESTDIR)tests_parser.input
 #   diff -su $(TESTDIR)tests_parser.output $(TESTDIR)correct_out/tests_parser.output
+# stack tests
+	$(TESTDIR)tests_ll > $(TESTDIR)tests_ll.output
+#	diff -su $(TESTDIR)tests_stack.output $(TESTDIR)correct_out/tests_stack.output
 
 # check the tests with valgrind
 valgrind: $(TESTS)
@@ -37,6 +40,8 @@ $(TESTDIR)tests_scanner: $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_parser: $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
+$(TESTDIR)tests_ll: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o
+	$(CC) $(CFLAGS) $^ $@.c -o $@
 # --------------------------------------------------
 
 # compile object files
