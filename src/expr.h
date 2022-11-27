@@ -9,25 +9,30 @@
 #ifndef _EXPR_H
 #define _EXPR_H
 
+#include <stdbool.h>
+#include "../src/scanner.h"
+
 typedef enum {
-	erule_int,				// <val>	-> integer
-	erule_float,			// <val>	-> float
-	erule_string,			// <val>	-> string
-	erule_id,				// <val>	-> id
-    erule_val,				// <exp>	-> <val>
-	erule_plus,				// <exp>	-> <exp> + <exp>
-	erule_minus,			// <exp>	-> <exp> - <exp>
-	erule_div,				// <exp>	-> <exp> / <exp>
-	erule_mul,				// <exp>	-> <exp> * <exp>
-	erule_cat,				// <exp>	-> <exp> . <exp>
-	erule_comp,				// <exp>	-> <exp> === <exp>
-	erule_comp_neg,			// <exp>	-> <exp> !== <exp>
-	erule_lower,			// <exp>	-> <exp> < <exp>
-	erule_lower_equal,		// <exp>	-> <exp> <= <exp>
-	erule_greater,			// <exp>	-> <exp> > <exp>
-	erule_greater_equal,	// <exp>	-> <exp> >= <exp>
-	erule_brackets,			// <exp>	-> ( <exp> )
+	erule_int,				// 0:	<val>	-> integer
+	erule_float,			// 1:	<val>	-> float
+	erule_string,			// 2:	<val>	-> string
+	erule_id,				// 3:	<val>	-> id
+    erule_val,				// 4:	<exp>	-> <val>
+	erule_plus,				// 5:	<exp>	-> <exp> + <exp>
+	erule_minus,			// 6:	<exp>	-> <exp> - <exp>
+	erule_div,				// 7:	<exp>	-> <exp> / <exp>
+	erule_mul,				// 8:	<exp>	-> <exp> * <exp>
+	erule_cat,				// 9:	<exp>	-> <exp> . <exp>
+	erule_comp,				// 10:	<exp>	-> <exp> === <exp>
+	erule_comp_neg,			// 11:	<exp>	-> <exp> !== <exp>
+	erule_lower,			// 12:	<exp>	-> <exp> < <exp>
+	erule_lower_equal,		// 13:	<exp>	-> <exp> <= <exp>
+	erule_greater,			// 14:	<exp>	-> <exp> > <exp>
+	erule_greater_equal,	// 15:	<exp>	-> <exp> >= <exp>
+	erule_brackets,			// 16:	<exp>	-> ( <exp> )
 }
 expr_rules;
+
+bool expr(token_t first_tok);
 
 #endif
