@@ -50,9 +50,9 @@ bool list_is_empty(list_t *list);
 int list_add(list_t *list, token_type type, dynstr_t* id);
 
 /**
- * @brief removes/pops token of list, if the list is empty does nothing 
+ * @brief removes first node of the list, if the list is empty does nothing 
  * 
- * @param list the list from which to pop
+ * @param list list from which to delete
  */
 void list_delete_first(list_t *list);
 
@@ -62,7 +62,7 @@ void list_delete_first(list_t *list);
  * @param list the list to from which the first node will be 
  * @return first node or NULL if the list is empty 
  */
-token_t *list_top(list_t *list);
+list_node_t *list_first(list_t *list);
 
 
 /**
@@ -73,9 +73,7 @@ token_t *list_top(list_t *list);
 void list_dispose(list_t *list);
 
 
-// token_t *ll_search(list *list);
-
-// void *ll_insert_after(list *list);
+list_node_t *list_search(list_t *list, dynstr_t *searched_str);
 
 
 #endif

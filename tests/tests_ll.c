@@ -98,11 +98,75 @@ int main(){
 
     // test delete all (use valgrind)
     list_dispose(list);
-    // test list delete_first
+    // test list first
+    printf("\n[list first]\n");
+    list_node_t *first_n;
     list = malloc(sizeof(list_t));
-    
+    list_init(list);
 
-    printf("--- [LINKED LIST END TEST] ---\n");
+    add_node(list, "I am first", token_dot);
+    first_n = list_first(list);
+    printf(" '%s',", first_n->id->array);
+
+    add_node(list, "I am second", token_assign);
+    first_n = list_first(list);
+    printf(" '%s',", first_n->id->array);
+
+    // test delete first 
+    printf("\n[list delete first]\n");
+    add_node(list, "I am third", token_keyword_w_null);
+    
+    while(list->first != NULL){
+        printf(" '%s',", list->first->id->array);
+        list_delete_first(list);
+        first_n = list_first(list);
+    }
+    list_delete_first(list);
+    // free(first_n);
+    // first_n = NULL;
+    first_n = list_first(list);
+    if(first_n == NULL){
+        printf("no node to delelete");
+    }    
+
+    //test ll search
+    list_node_t *returned_node, *searched_node;
+    printf("\n[test list search]\n");
+    add_node(list, "1", token_assign);
+    add_node(list, "2", token_assign);
+    add_node(list, "3", token_assign);
+    add_node(list, "4", token_assign);
+    add_node(list, "5", token_assign);
+    add_node(list, "6", token_assign);
+
+    print_list(list);
+
+    printf("searching for 1\n");
+    searched_node = list->first;
+    returned_node = list_search(list, searched_node->id);
+    if(dynstr_compare(returned_node->id, searched_node->id->array)){
+        printf("one found\n");
+    }
+
+
+    printf("searching for 3\n");
+    searched_node = searched_node->next;
+    searched_node = searched_node->next;
+    returned_node = list_search(list, searched_node->id);
+    if(dynstr_compare(returned_node->id, searched_node->id->array)){
+        printf("three found\n");
+    }
+
+    printf("searching for 6\n");
+    searched_node = searched_node->next;
+    searched_node = searched_node->next;
+    searched_node = searched_node->next;
+    returned_node = list_search(list, searched_node->id);
+    if(dynstr_compare(returned_node->id, searched_node->id->array)){
+        printf("six found\n");
+    }
+    list_dispose(list);
+    printf("\n --- [LINKED LIST END TEST] ---\n");
     return ret;
 }
 
