@@ -13,6 +13,7 @@
 #include "stack.h"
 #include "error.h"
 #include "dynstr.h"
+#include "parser.h"
 
 void stack_init(stack *stack){
 	stack->top = NULL;
@@ -26,8 +27,10 @@ int stack_push(stack*stack, token_t *token){
 	stack_node_t *tmp = malloc(sizeof(stack_node_t));
 	if(tmp == NULL){
 		error_handle(0,compiler_error);
-	}
-	if(stack == NULL){
+		stack_dispose_all(stack);
+		abort();
+    }
+    if(stack == NULL){
 		tmp->next = NULL;
 	} else{
 		tmp->next = stack->top;
@@ -107,26 +110,25 @@ void stack_dispose_all(stack *stack){
 }
 
 token_t *stack_top_terminal(stack *stack){
-	if(stack == NULL){
-		return NULL;
-	}
-
-	stack_node_t *i;
-	i = stack->top;
-	while(i != NULL &&
-		i->current->type != token_integer &&
-		i->current->type != token_float && 
-		i->current->type != token_string &&
-		i->current->type != token_varieble){
-		if(i->current->type == token_expr_e || i->current->type == token_expr_shift){
-			return NULL;
-		}
-		i = i->next;
-	}
+    stack_node_t *i = stack->top;
+    while (i != NULL) {
+		if(i->current->type == token_expr_shift || i->current->type == token_expr_e) {
+        	i = i->next;
+		} else {
+            return i->current;
+            }
+        }
 	if (i == NULL){
-		return NULL;
-	}
-	return i->current;
+        token_t *tok = malloc(sizeof(token_t));
+		if(tok == NULL) {
+			error_handle(0, compiler_error);
+            abort();
+        }
+        tok->type = token_none;
+        stack_push(stack, tok);
+        return tok;
+        }
+    return i->current;
 }
 
 void stack_insert_shift(stack *stack){
@@ -146,11 +148,14 @@ void stack_insert_shift(stack *stack){
 	stack_node_t *new_node = malloc(sizeof(stack_node_t));
 	if(new_node == NULL){
 		error_handle(0, compiler_error);
-	}
+	    stack_dispose_all(stack);
+        abort();
+        }
 	token_t *new_token = malloc(sizeof(token_t));
 	if(new_token == NULL){
-		free(new_node);
 		error_handle(0, compiler_error);
+		stack_dispose_all(stack);
+		abort();
 	}
 
 	new_node->next = i->next;
