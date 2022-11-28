@@ -4,7 +4,7 @@ LDLIBS = -lm
 
 TESTDIR = tests/
 SOURCES = src/
-CASES = tests_dynstr tests_scanner tests_parser tests_stack tests_expr
+CASES = tests_dynstr tests_scanner tests_parser tests_stack tests_expr tests_ll
 TESTS = $(addprefix $(TESTDIR), $(CASES))
 
 PARTS = $(TESTS)
@@ -22,7 +22,7 @@ test: $(TESTS)
 	diff -su $(TESTDIR)tests_scanner.output $(TESTDIR)correct_out/tests_scanner.output
 # parser tests
 	$(TESTDIR)tests_parser < $(TESTDIR)tests_parser.input
-	diff -su $(TESTDIR)tests_parser.output $(TESTDIR)correct_out/tests_parser.output
+  diff -su $(TESTDIR)tests_parser.output $(TESTDIR)correct_out/tests_parser.output
 # stack tests
 	$(TESTDIR)tests_stack > $(TESTDIR)tests_stack.output
 	diff -su $(TESTDIR)tests_stack.output $(TESTDIR)correct_out/tests_stack.output
@@ -47,6 +47,8 @@ $(TESTDIR)tests_stack: $(SOURCES)stack.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 $(TESTDIR)tests_expr: $(SOURCES)expr.o $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)stack.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
+$(TESTDIR)tests_ll: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o
+	$(CC) $(CFLAGS) $^ $@.c -o $@
 # --------------------------------------------------
 
 # compile object files
