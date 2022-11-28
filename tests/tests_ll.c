@@ -56,8 +56,6 @@ void add_node(list_t *list, char id[], token_type type){
     free(tmp_str);
 }
 
-int ret = 0;
-
 int main(){
     printf("--- [LINKED LIST TEST] ---\n");
     list_t *list = malloc(sizeof(list_t));

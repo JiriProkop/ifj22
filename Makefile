@@ -22,7 +22,7 @@ test: $(TESTS)
 	diff -su $(TESTDIR)tests_scanner.output $(TESTDIR)correct_out/tests_scanner.output
 # parser tests
 	$(TESTDIR)tests_parser < $(TESTDIR)tests_parser.input
-  diff -su $(TESTDIR)tests_parser.output $(TESTDIR)correct_out/tests_parser.output
+	diff -su $(TESTDIR)tests_parser.output $(TESTDIR)correct_out/tests_parser.output
 # stack tests
 	$(TESTDIR)tests_stack > $(TESTDIR)tests_stack.output
 	diff -su $(TESTDIR)tests_stack.output $(TESTDIR)correct_out/tests_stack.output
