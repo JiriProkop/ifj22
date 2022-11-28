@@ -8,6 +8,9 @@
 
 #define PREC_TABLE_SIZE 8
 
+/**
+ * @enum precedence expression parser table position
+ */
 typedef enum {
     pos_plus,
     pos_mul,
@@ -19,6 +22,13 @@ typedef enum {
     pos_dollar,
 } prec_tab_pos;
 
+/**
+ * Function allocates new token and pushes it to given stack.
+ *
+ * @param pstk pointer to initialized stack
+ * @param tok token which will be pushed to stack
+ * @return Returns false if error was encountered, true otherwise.
+ */
 bool allocpush_token_stack(stack *pstk, token_t tok) {
     token_t *tmp = malloc(sizeof(token_t));
     if (tmp == NULL) {
@@ -32,6 +42,13 @@ bool allocpush_token_stack(stack *pstk, token_t tok) {
     return true;
 }
 
+/**
+ * Function finds right line or column number(in precedent table) for given token.
+ *
+ * @param colrow pointer to unsigned int
+ * @param tok pointer to token
+ * @return Returns false if error was encountered, true otherwise.
+ */
 bool get_colrow(unsigned *colrow, token_t *tok) {
     if (tok->type == token_plus || tok->type == token_minus || tok->type == token_dot) {
         *colrow = pos_plus;
@@ -45,22 +62,40 @@ bool get_colrow(unsigned *colrow, token_t *tok) {
         *colrow = pos_left_par;
     } else if (tok->type == token_parentheses_right) {
         *colrow = pos_right_par;
-    } else if (tok->type == token_string || tok->type == token_float || tok->type == token_integer || tok->type == token_identifier) {
+    } else if (tok->type == token_string || tok->type == token_float || tok->type == token_integer || tok->type == token_varieble) {
         *colrow = pos_val;
     } else if (tok->type == token_expr_dollar || tok->type == token_semicol) {
         *colrow = pos_dollar;
     } else {
-        // TODO chyba
+        error_handle(tok->line, syntax_error);
         return false;
     }
     return true;
 }
 
+/**
+ * Function implements 'reduction' operation of precedent expression parsing.
+ *
+ * @param pstk pointer to initialized stack
+ * @return Returns false if error was encountered, true otherwise.
+ */
 bool reduction(stack *pstk) {
     unsigned op_cnt = tokens_to_shift(pstk);
     token_t op = {.type = token_expr_e};
-    if (op_cnt == 1) { // TODO sem. kontrola
-        printf("%d", erule_id);
+    if (op_cnt == 1) {
+        token_t *tmp = stack_top_terminal(pstk);
+        if (tmp->type == token_integer) {
+            printf("%d", erule_int);
+        } else if (tmp->type == token_float) {
+            printf("%d", erule_float);
+        } else if (tmp->type == token_string) {
+            printf("%d", erule_string);
+        } else if (tmp->type == token_varieble) {
+            printf("%d", erule_id);
+        } else {
+            error_handle(tmp->line, syntax_error);
+            return false;
+        }
         stack_pop(pstk);
         stack_pop(pstk);
         if (!allocpush_token_stack(pstk, op)) {
@@ -74,84 +109,45 @@ bool reduction(stack *pstk) {
         switch (tok2->type) {
             case token_plus:
                 printf("%d", erule_plus);
-                /* FALLTHROUGH */
+                break;
             case token_minus:
-                /* FALLTHROUGH */
+                printf("%d", erule_minus);
+                break;
             case token_division:
-                /* FALLTHROUGH */
+                printf("%d", erule_div);
+                break;
             case token_multiply:
-                if (tok2->type == token_minus) {
-                    printf("%d", erule_minus);
-                } else if (tok2->type == token_division) {
-                    printf("%d", erule_div);
-                } else if (tok2->type == token_multiply) {
-                    printf("%d", erule_mul);
-                }
-                // TODO sem. check
-                // codegen prob.
-                op.type = token_expr_e;
-                if (!allocpush_token_stack(pstk, op)) {
-                    return false;
-                }
+                printf("%d", erule_mul);
                 break;
             case token_dot:
-                // TODO sem. check
                 printf("%d", erule_cat);
-                if (!allocpush_token_stack(pstk, op)) {
-                    return false;
-                }
                 break;
             case token_compare:
-                // TODO sem. check
                 printf("%d", erule_comp);
-                if (!allocpush_token_stack(pstk, op)) {
-                    return false;
-                }
                 break;
             case token_compare_neg:
                 printf("%d", erule_comp_neg);
-                // TODO sem. check
-                if (!allocpush_token_stack(pstk, op)) {
-                    return false;
-                }
                 break;
             case token_greater:
                 printf("%d", erule_greater);
-                // TODO sem. check
-                if (!allocpush_token_stack(pstk, op)) {
-                    return false;
-                }
                 break;
             case token_greater_equal:
                 printf("%d", erule_greater_equal);
-                // TODO sem. check
-                if (!allocpush_token_stack(pstk, op)) {
-                    return false;
-                }
                 break;
             case token_lower:
                 printf("%d", erule_lower);
-                // TODO sem. check
-                if (!allocpush_token_stack(pstk, op)) {
-                    return false;
-                }
                 break;
             case token_lower_equal:
                 printf("%d", erule_lower_equal);
-                // TODO sem. check
-                if (!allocpush_token_stack(pstk, op)) {
-                    return false;
-                }
                 break;
             case token_expr_e:
                 printf("%d", erule_brackets);
-                // TODO sem. check
-                if (!allocpush_token_stack(pstk, op)) {
-                    return false;
-                }
                 break;
             default:
                 return false;
+        }
+        if (!allocpush_token_stack(pstk, op)) {
+            return false;
         }
         free(tok1);
         free(tok2);
@@ -160,15 +156,21 @@ bool reduction(stack *pstk) {
     return true;
 }
 
+/**
+ * Function checks if only '$E' is in stack.
+ *
+ * @param pstk pointer to initialized stack
+ * @return Returns false if more, less or different tokens are found, true otherwise.
+ */
 bool final_check(stack *pstk) {
-    if (tokens_to_shift(&stk) != NO_SHIFT) {
-        stack_dispose_all(&stk);
+    if (tokens_to_shift(pstk) != NO_SHIFT) {
+        stack_dispose_all(pstk);
         return false;
     }
-    stack_pop(&stk);
-    stack_pop(&stk);
-    if (!stack_is_empty(&stk)) {
-        stack_dispose_all(&stk);
+    stack_pop(pstk);
+    stack_pop(pstk);
+    if (!stack_is_empty(pstk)) {
+        stack_dispose_all(pstk);
         return false;
     }
     return true;
@@ -179,7 +181,7 @@ bool expr(token_t first_tok) {
         //+	   *   ===   >=   (    )    i    $
         {'>', '<', '>', '>', '<', '>', '<', '>'}, // +, -, .
         {'>', '>', '>', '>', '<', '>', '<', '>'}, // *, /
-        {'<', '<', '<', '<', '<', '>', '<', '>'}, // ===, !==
+        {'<', '<', '>', '<', '<', '>', '<', '>'}, // ===, !==
         {'<', '<', '>', '>', '<', '>', '<', '>'}, // >, >=, <, <=
         {'<', '<', '<', '<', '<', '=', '<', '0'}, // (
         {'>', '>', '>', '>', '0', '>', '0', '>'}, // )
@@ -188,16 +190,20 @@ bool expr(token_t first_tok) {
     };
     stack stk;
     stack_init(&stk);
-    token_t tok = {.type = token_expr_dollar};
+    token_t tok = {.type = token_expr_dollar, .line = current_tkn->line};
     if (!allocpush_token_stack(&stk, tok)) {
         return false;
     }
     bool toread = false; // 1st token is given by parser
-    bool done = false;
     bool set = false;
     unsigned row, col;
-    unsigned par_left = 0;  // '(' count
+    unsigned par_left;      // '(' count
     unsigned par_right = 0; // ')' count
+    if (first_tok.type == token_parentheses_left) {
+        par_left = 1;
+    } else {
+        par_left = 0;
+    }
     tok = first_tok;
     char c;
     printf("Expr. parser pravy rozbor: ");
@@ -207,22 +213,21 @@ bool expr(token_t first_tok) {
             stack_dispose_all(&stk);
             return false;
         }
-        if (tok.type == token_parentheses_left) {
+        if (toread && tok.type == token_parentheses_left) {
             par_left++;
-        } else if (tok.type == token_parentheses_right) {
+        } else if (toread && tok.type == token_parentheses_right) {
             par_right++;
         }
-        if (tok.type == token_parentheses_right && par_left - par_right == 1) {
+        if (tok.type == token_parentheses_right && par_right - par_left == 1) {
             // for if(expr) doesn't end with semicolon
             *current_tkn = tok;
             set = true;
-            tok.type = token_semicol
+            tok.type = token_semicol;
         }
         if (tok.type == token_semicol && top_term->type == token_expr_dollar) {
-            // correct only if '$E' is in stack, no less no more
-			if(!set) {
-				*current_tkn = tok;
-			}
+            if (!set) {
+                *current_tkn = tok;
+            }
             printf("\n");
             return final_check(&stk);
         }
@@ -251,5 +256,3 @@ bool expr(token_t first_tok) {
     }
     return true;
 }
-// TODO implicitni konverze
-// TODO semanticke kontroly

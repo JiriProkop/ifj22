@@ -12,11 +12,14 @@
 #include <stdbool.h>
 #include "../src/scanner.h"
 
+/**
+ * @enum expression rules
+ */
 typedef enum {
 	erule_int,				// 0:	<val>	-> integer
 	erule_float,			// 1:	<val>	-> float
 	erule_string,			// 2:	<val>	-> string
-	erule_id,				// 3:	<val>	-> id
+	erule_id,				// 3:	<val>	-> var
     erule_val,				// 4:	<exp>	-> <val>
 	erule_plus,				// 5:	<exp>	-> <exp> + <exp>
 	erule_minus,			// 6:	<exp>	-> <exp> - <exp>
@@ -33,6 +36,12 @@ typedef enum {
 }
 expr_rules;
 
+/**
+ * Function checks whether expression is valid based on expression rules defined in documentation.
+ *
+ * @param first_tok first token of expression
+ * @return Returns false if invalid expression was found, true otherwise.
+ */
 bool expr(token_t first_tok);
 
 #endif
