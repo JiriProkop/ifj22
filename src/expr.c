@@ -160,6 +160,20 @@ bool reduction(stack *pstk) {
     return true;
 }
 
+bool final_check(stack *pstk) {
+    if (tokens_to_shift(&stk) != NO_SHIFT) {
+        stack_dispose_all(&stk);
+        return false;
+    }
+    stack_pop(&stk);
+    stack_pop(&stk);
+    if (!stack_is_empty(&stk)) {
+        stack_dispose_all(&stk);
+        return false;
+    }
+    return true;
+}
+
 bool expr(token_t first_tok) {
     char prec_table[PREC_TABLE_SIZE][PREC_TABLE_SIZE] = {
         //+	   *   ===   >=   (    )    i    $
@@ -174,36 +188,43 @@ bool expr(token_t first_tok) {
     };
     stack stk;
     stack_init(&stk);
-    token_t dollar = {.type = token_expr_dollar};
-    if (!allocpush_token_stack(&stk, dollar)) {
+    token_t tok = {.type = token_expr_dollar};
+    if (!allocpush_token_stack(&stk, tok)) {
         return false;
     }
     bool toread = false; // 1st token is given by parser
     bool done = false;
+    bool set = false;
     unsigned row, col;
-    token_t tok = first_tok;
+    unsigned par_left = 0;  // '(' count
+    unsigned par_right = 0; // ')' count
+    tok = first_tok;
     char c;
     printf("Expr. parser pravy rozbor: ");
-    while (!done) {
+    while (1) {
         token_t *top_term = stack_top_terminal(&stk);
         if ((toread && !get_token(&tok)) || !get_colrow(&row, top_term) || !get_colrow(&col, &tok)) {
             stack_dispose_all(&stk);
             return false;
         }
+        if (tok.type == token_parentheses_left) {
+            par_left++;
+        } else if (tok.type == token_parentheses_right) {
+            par_right++;
+        }
+        if (tok.type == token_parentheses_right && par_left - par_right == 1) {
+            // for if(expr) doesn't end with semicolon
+            *current_tkn = tok;
+            set = true;
+            tok.type = token_semicol
+        }
         if (tok.type == token_semicol && top_term->type == token_expr_dollar) {
             // correct only if '$E' is in stack, no less no more
-            if (tokens_to_shift(&stk) != NO_SHIFT) {
-                stack_dispose_all(&stk);
-                return false;
-            }
-            stack_pop(&stk);
-            stack_pop(&stk);
-            if (!stack_is_empty(&stk)) {
-                stack_dispose_all(&stk);
-                return false;
-            }
-            done = true;
-            continue;
+			if(!set) {
+				*current_tkn = tok;
+			}
+            printf("\n");
+            return final_check(&stk);
         }
         c = prec_table[row][col];
         switch (c) {
@@ -228,7 +249,6 @@ bool expr(token_t first_tok) {
                 return false;
         }
     }
-    printf("\n");
     return true;
 }
 // TODO implicitni konverze
