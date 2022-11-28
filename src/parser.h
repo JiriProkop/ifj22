@@ -11,6 +11,11 @@
 #define _PARSER_H
 
 /**
+ * A global variable used for the current token.
+*/
+extern token_t *current_tkn;
+
+/**
  * Function frees everything allocated in parser and aborts.
 */
 void abort();
