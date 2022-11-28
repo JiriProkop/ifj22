@@ -1,0 +1,82 @@
+.IFJcode22
+CREATEFRAME
+PUSHFRAME
+
+# definice funkce
+JUMP funkce_end
+LABEL funkce
+CREATEFRAME
+DEFVAR TF@arg1
+DEFVAR TF@arg2
+DEFVAR TF@return
+POPS TF@arg1
+POPS TF@arg2
+PUSHFRAME
+
+WRITE LF@arg1
+WRITE LF@arg2
+ADD LF@return LF@arg1 LF@arg2
+
+PUSHS LF@return
+POPFRAME
+RETURN
+LABEL funkce_end
+
+
+
+# volani funkce
+PUSHS int@2
+PUSHS int@3
+CALL funkce
+DEFVAR LF@return
+POPS LF@return
+WRITE LF@return
+
+
+
+# prirazeni do promenne
+DEFVAR LF@promenna
+MOVE LF@promenna int@5
+
+
+
+
+# while cyklus
+DEFVAR LF@x
+MOVE LF@x int@0
+
+DEFVAR LF@temp1
+DEFVAR LF@temp2
+DEFVAR LF@podminka
+
+LABEL while_start
+# zpracovani podminky (x <= 4)
+LT LF@temp1 LF@x int@4
+EQ LF@temp2 LF@x int@4
+OR LF@podminka LF@temp1 LF@temp2
+JUMPIFNEQ while_end LF@podminka bool@true
+
+WRITE LF@x
+ADD LF@x LF@x int@1
+
+JUMP while_start
+LABEL while_end
+
+
+
+
+# if
+JUMPIFNEQ else_start LF@podminka bool@true
+WRITE string@pravda
+JUMP else_end
+
+LABEL else_start
+WRITE string@nepravda
+LABEL else_end
+
+
+
+#konec
+POPFRAME
+CLEARS
+EXIT int@0
