@@ -59,4 +59,5 @@ tests/tests_dynstr
 tests/tests_scanner
 tests/tests_parser
 tests/tests_ll
+tests/tests_generator
 tests/*.output
