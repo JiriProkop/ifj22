@@ -45,7 +45,7 @@ $(TESTDIR)tests_parser: $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_stack: $(SOURCES)stack.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
-$(TESTDIR)tests_expr: $(SOURCES)expr.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)stack.o
+$(TESTDIR)tests_expr: $(SOURCES)expr.o $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)stack.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 # --------------------------------------------------
 
