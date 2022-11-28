@@ -13,7 +13,7 @@
 #include <stdbool.h>
 
 /**
- * @enum
+ * @enum token types
  */
 typedef enum {
     token_none,
@@ -46,7 +46,6 @@ typedef enum {
 	// tokens for expr. parser stack
 	token_expr_dollar,
 	token_expr_shift,
-	token_expr_brackets,
 	token_expr_e,
 }
 token_type;

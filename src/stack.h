@@ -84,7 +84,7 @@ void stack_dispose(stack *stack);
 void stack_dispose_all(stack *stack);
 
 /**
- * @brief returns topmost terminal from stack. if it finds < (shift) or E before terminal it deos othing
+ * @brief returns topmost terminal from stack(skipps e and shift).
  * 
  * @param stack stack to be searched
  * @return token_t* terminal of NULL if no terminal found on stack or found < or E first
