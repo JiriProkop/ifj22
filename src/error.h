@@ -9,6 +9,10 @@
 #ifndef _ERROR_H
 #define _ERROR_H
 
+/**
+ * A global variable used for returning errnumber.
+*/
+extern int ret;
 
 /**
  * @enum

@@ -1,0 +1,18 @@
+<val>	-> integer
+<val>	-> float
+<val>	-> string
+<val>	-> var
+
+<exp>	-> <val>
+<exp>	-> <exp> + <exp>
+<exp>	-> <exp> - <exp>
+<exp>	-> <exp> / <exp>
+<exp>	-> <exp> * <exp>
+<exp>	-> <exp> . <exp>
+<exp>	-> <exp> === <exp>
+<exp>	-> <exp> !== <exp>
+<exp>	-> <exp> < <exp>
+<exp>	-> <exp> > <exp>
+<exp>	-> <exp> <= <exp>
+<exp>	-> <exp> >= <exp>
+<exp>	-> ( <exp> )
