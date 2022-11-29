@@ -66,7 +66,7 @@ list_node_t *list_first(list_t *list);
 
 
 /**
- * @brief disposes of list and the tokens in it 
+ * @brief disposes of the list 
  * 
  * @param list the list to be disposed
  */

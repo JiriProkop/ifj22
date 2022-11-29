@@ -96,8 +96,32 @@ int main() {
 	printf("Length: %lu\n", string->length);
 	printf("Allocated: %lu\n", string->allocated);
 
-	// free the dynstr_t structure
-	free(string);
 
-	return ret;
+    // test dynstrcmp
+    printf("\n--- test dynstrcmp ---\n");
+    dynstr_t *string1 = malloc(sizeof(dynstr_t));
+    if(string == NULL) {
+        error_handle(0, compiler_error);
+    }
+    int result = 1;
+    printf("comparing the same string\n");
+    dynstr_add_string(string, "some_string");
+    dynstr_add_string(string1, "some_string");
+    result = dynstrcmp(string,string1);
+    printf("result: %d \n", result);
+
+    printf("comparing first longer");
+    dynstr_clear(string);
+    dynstr_add_string(string, "some_string_here");
+    result = dynstrcmp(string,string1);
+    printf("result: %d \n", result);
+    printf("comparing second longer");
+    result = dynstrcmp(string1,string);
+    printf("result: %d \n", result);
+
+    dynstr_delete(string);
+    string_free(string1);
+    // free the dynstr_t structure
+    free(string);
+    return ret;
 }
