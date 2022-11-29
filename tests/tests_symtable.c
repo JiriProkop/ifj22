@@ -155,5 +155,3 @@ int main(){
     printf("\n --- TEST SYMTABLE OVER ---\n");
     return ret;   
 }
-//tree_empty(tree);
-//printf("%p\n", *tree);
