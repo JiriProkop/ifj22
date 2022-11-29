@@ -51,7 +51,11 @@ sym_data *st_search(sym_table *tab, dynstr_t *id) {
 
 void replace_by_rightmost(sym_table *target, sym_table **tab) {
     if ((*tab)->right == NULL) {
+        string_free(target->id);
         target->id = (*tab)->id;
+        list_dispose(target->data->parameters);
+        st_dispose(&target->data->local_frame);
+        free(target->data);
         target->data = (*tab)->data;
         sym_table *d = *tab;
         *tab = d->left;
@@ -74,6 +78,7 @@ void st_delete(sym_table **tab, dynstr_t *id) {
                 *tab = NULL;
             } else if (((*tab)->left != NULL) && ((*tab)->right != NULL)) {
                 replace_by_rightmost(*tab, &(*tab)->left);
+                return;
             } else {
                 sym_table *d = *tab;
                 if (d->left == NULL)
