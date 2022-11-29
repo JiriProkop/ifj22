@@ -1,29 +1,32 @@
 #include <stdlib.h>
 #include "dynstr.h"
+#include "parser.h"
+#include "error.h"
 
-int dynstr_init(dynstr_t *string) {
+void dynstr_init(dynstr_t *string) {
     string->array = malloc(sizeof(char) * STR_DEFAULT_LENGTH);
     if (string->array == NULL) {
-        return 0;
+        error_handle(0, compiler_error);
+        abort();
     }
     string->array[0] = '\0';
     string->length = 0;
     string->allocated = STR_DEFAULT_LENGTH - 1; // minus one, since the last char is for \0
-    return 1;
 }
 
+//TODO smazat clear i delete, nikdo je nepouziva
 void dynstr_clear(dynstr_t *string) {
     string->array[0] = '\0';
     string->length = 0;
 }
-
+// akorat delete je uzit ve funkci free o kousek nize
 void dynstr_delete(dynstr_t *string) {
     free(string->array);
     string->length = 0;
     string->allocated = 0;
 }
 
-int dynstr_add_char(dynstr_t *string, char character) {
+void dynstr_add_char(dynstr_t *string, char character) {
     if (string->length < string->allocated) {
         string->array[string->length] = character;
         string->array[string->length + 1] = '\0';
@@ -31,7 +34,8 @@ int dynstr_add_char(dynstr_t *string, char character) {
         // add more space (the +1 is fot the \0 symbol)
         string->array = realloc(string->array, sizeof(char) * (string->allocated + STR_DEFAULT_LENGTH + 1));
         if (string->array == NULL) {
-            return 0;
+            error_handle(0, compiler_error);
+        	abort();
         }
         string->allocated = string->allocated + STR_DEFAULT_LENGTH;
 
@@ -40,18 +44,14 @@ int dynstr_add_char(dynstr_t *string, char character) {
     }
 
     string->length++;
-    return 1;
 }
 
-int dynstr_add_string(dynstr_t *string, char *chars) {
+void dynstr_add_string(dynstr_t *string, char *chars) {
     unsigned long i = 0;
     while (chars[i] != '\0') {
-        if (dynstr_add_char(string, chars[i]) == 0) {
-            return 0;
-        }
+        dynstr_add_char(string, chars[i]);
         i++;
     }
-    return 1;
 }
 
 int dynstr_compare(dynstr_t *string, char *compare_str) {
@@ -65,7 +65,8 @@ int dynstr_compare(dynstr_t *string, char *compare_str) {
 
 dynstr_t *string_innit() {
     dynstr_t *str = malloc(sizeof(dynstr_t));
-    if (str == NULL || !dynstr_init(str)) {
+    dynstr_init(str);
+    if (str == NULL) {
         free(str);
         return NULL;
     }
