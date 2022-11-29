@@ -41,9 +41,11 @@ void free_tkn();
  * @param tree A tree to add the note to.
  * @param id A identifier of the function/variable.
  * @param is_function A bool value - true if it is a function, false if it is a variable.
+ * @param parameters A list of the function parameters.
+ * @param params A number of function parametres.
  * @param type Either a return type of the function or a type of a variable.
 */
-void add_node(sym_table **tree, dynstr_t *id, bool is_function, keywords type);
+void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters, unsigned int params, keywords type);
 
 /**
  * A function for the <start> rule.

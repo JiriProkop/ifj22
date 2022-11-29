@@ -9,7 +9,7 @@ void gen_header() {
 
 void gen_function_def(dynstr_t *id) {
     printf("JUMP %s_end\n", id->array);
-    printf("LABEL %s\n", id->array);
+    printf("LABEL %s_start\n", id->array);
     printf("CREATEFRAME\n");
     printf("PUSHFRAME\n");
 }
@@ -17,5 +17,5 @@ void gen_function_def(dynstr_t *id) {
 void gen_function_defend(dynstr_t *id) {
     printf("POPFRAME\n");
     printf("RETURN\n");
-    printf("LABEL %d_end\n", id->array);
+    printf("LABEL %s_end\n", id->array);
 }

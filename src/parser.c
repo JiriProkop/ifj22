@@ -6,6 +6,7 @@
 #include "expr.h"
 #include "parser.h"
 #include "symtable.h"
+#include "generator.h"
 
 /**
  * A global variable used for the current token.
@@ -48,7 +49,7 @@ void free_tkn() {
     current_tkn = NULL;
 } 
 
-void add_node(sym_table **tree, dynstr_t *id, bool is_function, keywords type) {
+void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters, unsigned int params, keywords type) {
     sym_data *data = malloc(sizeof(sym_data));
     if(data == NULL) {
         // TODO malloc error
@@ -62,13 +63,8 @@ void add_node(sym_table **tree, dynstr_t *id, bool is_function, keywords type) {
         st_init(&subtree);
         data->is_function = true;
         data->local_frame = subtree;
-        list_t *parameters = malloc(sizeof(list_t));
-        if(parameters == NULL) {
-            // TODO malloc error
-        }
-        list_init(parameters);
         data->parameters = parameters;
-        data->params = 0;
+        data->params = params;
         data->return_type = type;
     } else {
         data->is_function = false;
@@ -154,7 +150,14 @@ bool definice() {
     // rule: <definice> -> FUNCTION ID ( <parametry> ) : TYP { <prikaz_fce> }
     if(current_tkn->attr.keyword == keyword_function) {
         dynstr_t *id;
+        list_t *parameters = malloc(sizeof(list_t));
+        if(parameters == NULL) {
+            // TODO malloc error
+        }
+        list_init(parameters);
+        unsigned int params = 0;
         keywords type;
+
         value = true;
         // ID
         get_tkn();
@@ -210,7 +213,9 @@ bool definice() {
         }
 
         if(value) {
-            add_node(&tree, id, 1, type);
+            // TODO kontrola jestli uz tam neni
+            add_node(&tree, id, 1, parameters, params, type);
+            gen_function_def(id);
         }
     }
     printf("[DEBUG INFO]: currently in definice(), returning: %d\n", value);

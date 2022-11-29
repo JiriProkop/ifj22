@@ -4,7 +4,7 @@ PUSHFRAME
 
 # definice funkce
 JUMP funkce_end
-LABEL funkce
+LABEL funkce_start
 CREATEFRAME
 DEFVAR TF@arg1
 DEFVAR TF@arg2
@@ -27,7 +27,7 @@ LABEL funkce_end
 # volani funkce
 PUSHS int@2
 PUSHS int@3
-CALL funkce
+CALL funkce_start
 DEFVAR LF@return
 POPS LF@return
 WRITE LF@return

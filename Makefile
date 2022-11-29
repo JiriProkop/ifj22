@@ -32,18 +32,18 @@ test: $(TESTS)
 
 # check the tests with valgrind
 valgrind: $(TESTS)
-	valgrind $(TESTDIR)tests_generator
+	valgrind $(TESTDIR)tests_parser
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
 $(TESTDIR)tests_dynstr: $(SOURCES)dynstr.o $(SOURCES)error.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 $(TESTDIR)tests_scanner: $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
-$(TESTDIR)tests_parser: $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)expr.o $(SOURCES)stack.o $(SOURCES)symtable.o $(SOURCES)ll.o
+$(TESTDIR)tests_parser: $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)expr.o $(SOURCES)stack.o $(SOURCES)symtable.o $(SOURCES)ll.o $(SOURCES)generator.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_stack: $(SOURCES)stack.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
-$(TESTDIR)tests_expr: $(SOURCES)expr.o $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)stack.o $(SOURCES)symtable.o $(SOURCES)ll.o
+$(TESTDIR)tests_expr: $(SOURCES)expr.o $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)stack.o $(SOURCES)symtable.o $(SOURCES)ll.o $(SOURCES)generator.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_ll: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
