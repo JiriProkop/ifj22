@@ -42,6 +42,20 @@ typedef enum {
 } state;
 
 /**
+ * Converts some characters into 3 digit decimal escape sequence such as \032 for codegen
+ *
+ * @param tok pointer to allocated token
+ * @param c character to be converted - ASCII values 000-032, 035, 092 only
+ */
+void convert_to_escape(token_t* tok, char c) {
+    dynstr_add_char(tok->attr.str, '\\');
+
+    dynstr_add_char(tok->attr.str, (c / 100) % 10);
+    dynstr_add_char(tok->attr.str, (c / 10) % 10);
+    dynstr_add_char(tok->attr.str, c % 10);
+}
+
+/**
  * Converts integer writen as char to integer. ex. '6' -> 6
  *
  * @param str pointer to char array of numbers ending with '\0'
@@ -200,16 +214,12 @@ bool get_token(token_t *tok) {
                     }
                 } else if (c == '>') {
                     state = greater_s;
-                    // return true; // it cannot return
                 } else if (c == '<') {
                     state = lower_s;
-                    // return true;
                 } else if (c == '=') {
                     state = assign_s;
-                    // return true;
                 } else if (c == '!') {
                     state = compare_neg_s;
-                    // return true;
                 } else if (c == ';') {
                     tok->type = token_semicol;
                     return true;
@@ -240,9 +250,9 @@ bool get_token(token_t *tok) {
                 } else if (c == '-') {
                     tok->type = token_minus;
                     return true;
-                } else if(c == ',') {
+                } else if (c == ',') {
                     tok->type = token_comma;
-					return true;
+                    return true;
                 }
                 break;
             case division_s: {
@@ -297,15 +307,18 @@ bool get_token(token_t *tok) {
                 break;
             }
             case string_start_s: {
-
                 if (c == '"') {
                     state = start_s;
                     return true;
                 } else if (c == '\n') {
-                    line_c++;
+                    error_handle(line_c, lex_analysis_err);
+                    string_free(tok->attr.str);
+                    return false;
                 } else if (c == '\\') {
                     state = string_escape_s;
-                } else if (c > 31) {
+                } else if (c == ' ' || c == '#') {
+                    convert_to_escape(tok, c);
+                }else if (c > 31) {
                     dynstr_add_char(tok->attr.str, c);
                 }
                 break;
@@ -318,22 +331,22 @@ bool get_token(token_t *tok) {
                     tmp += 8 * 8 * (c - '0');
                     state = string_oct1_s;
                 } else if (c == 'n') {
-                    dynstr_add_char(tok->attr.str, '\n');
+                    convert_to_escape(tok, c);
                     state = string_start_s;
                 } else if (c == '"') {
                     dynstr_add_char(tok->attr.str, '"');
                     state = string_start_s;
                 } else if (c == 't') {
-                    dynstr_add_char(tok->attr.str, '\t');
+                    convert_to_escape(tok, c);
                     state = string_start_s;
                 } else if (c == '\\') {
-                    dynstr_add_char(tok->attr.str, '\\');
+                    convert_to_escape(tok, c);
                     state = string_start_s;
                 } else if (c == '$') {
                     dynstr_add_char(tok->attr.str, '$');
                     state = string_start_s;
                 } else {
-                    dynstr_add_char(tok->attr.str, '\\');
+                    convert_to_escape(tok, c);
                     ungetc(c, input);
                     state = string_start_s;
                 }
@@ -347,7 +360,8 @@ bool get_token(token_t *tok) {
                 } else if (c >= 'a' && c <= 'f') {
                     tmp += (c - 'a' + 10) * 16;
                 } else {
-                    error_handle(line_c, other_semantic_error);
+                    error_handle(line_c, lex_analysis_err);
+                    string_free(tok->attr.str);
                     return false;
                 }
                 state = string_hex2_s;
@@ -361,11 +375,13 @@ bool get_token(token_t *tok) {
                 } else if (c >= 'a' && c <= 'f') {
                     tmp += c - 'a' + 10;
                 } else {
-                    error_handle(line_c, other_semantic_error);
+                    error_handle(line_c, lex_analysis_err);
+                    string_free(tok->attr.str);
                     return false;
                 }
                 if (tmp > CHAR_MAX) {
-                    error_handle(line_c, other_semantic_error);
+                    error_handle(line_c, lex_analysis_err);
+                    string_free(tok->attr.str);
                     return false;
                 }
 
@@ -378,7 +394,8 @@ bool get_token(token_t *tok) {
                     tmp += 8 * (c - '0');
                     state = string_oct2_s;
                 } else {
-                    error_handle(line_c, other_semantic_error);
+                    error_handle(line_c, lex_analysis_err);
+                    string_free(tok->attr.str);
                     return false;
                 }
                 break;
@@ -388,11 +405,13 @@ bool get_token(token_t *tok) {
                     tmp += c - '0';
                     state = string_start_s;
                 } else {
-                    error_handle(line_c, other_semantic_error);
+                    error_handle(line_c, lex_analysis_err);
+                    string_free(tok->attr.str);
                     return false;
                 }
                 if (tmp > CHAR_MAX) {
-                    error_handle(line_c, other_semantic_error);
+                    error_handle(line_c, lex_analysis_err);
+                    string_free(tok->attr.str);
                     return false;
                 }
                 dynstr_add_char(tok->attr.str, tmp);
@@ -486,12 +505,12 @@ bool get_token(token_t *tok) {
                         (tok->attr.keyword == keyword_return) ||
                         (tok->attr.keyword == keyword_void) ||
                         (tok->attr.keyword == keyword_while)) {
-                        error_handle(line_c, expr_type_error);
+                        error_handle(line_c, lex_analysis_err);
                         return false;
                     } else if (tok->attr.keyword != keyword_float &&
                                tok->attr.keyword != keyword_int &&
                                tok->attr.keyword != keyword_string) {
-                        error_handle(line_c, expr_type_error);
+                        error_handle(line_c, lex_analysis_err);
                         return false;
                     }
                 }
@@ -499,7 +518,7 @@ bool get_token(token_t *tok) {
             }
             case exit_s: {
                 if (c != '\n' || (c = getc(input)) != EOF) {
-                    error_handle(line_c, syntax_error);
+                    error_handle(line_c, lex_analysis_err);
                     return false;
                 }
                 return true;
@@ -511,7 +530,7 @@ bool get_token(token_t *tok) {
                     c = getc(input);
                 }
                 if (!str_to_num(tok->attr.str->array, &tmp)) {
-                    error_handle(line_c, syntax_error);
+                    error_handle(line_c, lex_analysis_err);
                     string_free(tok->attr.str);
                     return false;
                 }
@@ -558,7 +577,7 @@ bool get_token(token_t *tok) {
                 } else if (isdigit(c)) {
                     ungetc(c, input);
                 } else if (c != '+') {
-                    error_handle(line_c, syntax_error);
+                    error_handle(line_c, lex_analysis_err);
                     return false;
                 }
                 state = expo_end_s;
@@ -575,7 +594,7 @@ bool get_token(token_t *tok) {
                 buffer[counter] = '\0';
                 int exp;
                 if (!str_to_num(buffer, &exp)) {
-                    error_handle(line_c, syntax_error);
+                    error_handle(line_c, lex_analysis_err);
                     return false;
                 }
                 long double holder;
@@ -641,7 +660,7 @@ bool get_token(token_t *tok) {
                     ungetc(c, input);
                     tok->type = token_assign;
                 } else if ((c = getc(input)) != '=') {
-                    error_handle(line_c, syntax_error);
+                    error_handle(line_c, lex_analysis_err);
                     return false;
                 } else {
                     tok->type = token_compare;
@@ -651,8 +670,8 @@ bool get_token(token_t *tok) {
             }
             case compare_neg_s: {
                 state = start_s;
-                if (c != '=' || (c = getc(input)) != '=' ) {
-                    error_handle(line_c, syntax_error);
+                if (c != '=' || (c = getc(input)) != '=') {
+                    error_handle(line_c, lex_analysis_err);
                     return false;
                 } else {
                     tok->type = token_compare_neg;

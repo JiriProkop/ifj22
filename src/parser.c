@@ -3,7 +3,9 @@
 #include <stdbool.h>
 #include "scanner.h"
 #include "error.h"
+#include "expr.h"
 #include "parser.h"
+#include "symtable.h"
 
 /**
  * A global variable used for the current token.
@@ -15,7 +17,18 @@ token_t *current_tkn = NULL;
 */
 bool tkn_already_loaded = false;
 
+/**
+ * A global variable for the symtable tree.
+*/
+sym_table *tree;
+
 int tkn_num = 0; // TODO - cislo jen na debug
+
+void abort() {
+	free(current_tkn);
+	//TODO free symtable
+    exit(ret);
+}
 
 void get_tkn() {
     if(current_tkn == NULL) {
@@ -25,8 +38,7 @@ void get_tkn() {
         }
     }
     if(get_token(current_tkn) == false) { // -> error, free everything and abort
-        free(current_tkn);
-		//TODO free symtable
+        abort();
     }
     tkn_num++; // TODO - debug cislo
 }
@@ -36,8 +48,44 @@ void free_tkn() {
     current_tkn = NULL;
 } 
 
+void add_node(sym_table **tree, dynstr_t *id, bool is_function, keywords type) {
+    sym_data *data = malloc(sizeof(sym_data));
+    if(data == NULL) {
+        // TODO malloc error
+    }
+    data->defined = true;
+    if(is_function) {
+        sym_table *subtree = malloc(sizeof(sym_data));
+        if(subtree == NULL) {
+            // TODO malloc error
+        }
+        st_init(&subtree);
+        data->is_function = true;
+        data->local_frame = subtree;
+        list_t *parameters = malloc(sizeof(list_t));
+        if(parameters == NULL) {
+            // TODO malloc error
+        }
+        list_init(parameters);
+        data->parameters = parameters;
+        data->params = 0;
+        data->return_type = type;
+    } else {
+        data->is_function = false;
+        data->type = type;
+    }
+    
+    st_insert(tree, id, data);
+}
+
 // the parser functions start here:
 bool start() {
+    tree = malloc(sizeof(sym_table));
+    if(tree == NULL) {
+        // TODO malloc error
+    }
+    st_init(&tree); // initialize the symtable tree
+
     bool value = false;
     get_tkn();
     printf("[DEBUG INFO]: currently in start(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
@@ -105,12 +153,13 @@ bool definice() {
     printf("[DEBUG INFO]: currently in definice(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <definice> -> FUNCTION ID ( <parametry> ) : TYP { <prikaz_fce> }
     if(current_tkn->attr.keyword == keyword_function) {
+        dynstr_t *id;
+        keywords type;
         value = true;
         // ID
         get_tkn();
         if(value && current_tkn->type == token_identifier) {
-            // TODO pridat identifikator do stromu
-            string_free(current_tkn->attr.str);
+            id = current_tkn->attr.str;
         } else {
             value = false;
         }
@@ -136,8 +185,12 @@ bool definice() {
         }
         // TYP
         get_tkn();
-        if(value && current_tkn->attr.keyword == keyword_void) {
-            // TODO pridat ostatni moznosti typu a asi ulozit do stromu
+        if(value && (current_tkn->attr.keyword == keyword_void ||
+                     current_tkn->attr.keyword == keyword_int ||
+                     current_tkn->attr.keyword == keyword_float ||
+                     current_tkn->attr.keyword == keyword_string)) {
+            // TODO pridat ostatni moznosti (nullable veci)
+            type = current_tkn->attr.keyword;
         } else {
             value = false;
         }
@@ -154,6 +207,10 @@ bool definice() {
         // }
         if(value && current_tkn->type != token_curly_right) {
             value = false;
+        }
+
+        if(value) {
+            add_node(&tree, id, 1, type);
         }
     }
     printf("[DEBUG INFO]: currently in definice(), returning: %d\n", value);
@@ -265,7 +322,6 @@ bool prikaz() {
             value = false; 
         }
         // ;
-        get_tkn();
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
@@ -307,7 +363,6 @@ bool prikaz() {
             value = false; 
         }
         // )
-        get_tkn(); // TODO, podle implementace vyrazu nechat nebo smazat
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
@@ -344,7 +399,6 @@ bool prikaz() {
             value = false; 
         }
         // )
-        get_tkn(); // TODO
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
@@ -379,7 +433,6 @@ bool prikaz() {
             value = false;
         }
         // ;
-        get_tkn(); // TODO - zalezi na vyraz();
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
@@ -438,7 +491,6 @@ bool vol_parametry() {
             value = false;
         }
         // <vol_param>
-        get_tkn(); // TODO
         if(value && !vol_param()) {
             value = false;
         }
@@ -484,7 +536,6 @@ bool vol_par() {
             value = false;
         }
         // <vol_param>
-        get_tkn(); // TODO - zalezi na implementaci vyrazu
         if(value && !vol_param()) {
             value = false;
         }
@@ -504,9 +555,8 @@ bool konec() {
 }
 
 bool vyraz() {
-    // TODO dodelat precedencni
-    bool value = true;
     printf("[DEBUG INFO]: currently in vyraz(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
-    printf("[DEBUG INFO]: currently in vyraz(), returning: %d\n", value);
-    return value;
+
+    printf("[DEBUG INFO]: currently in vyraz(), exiting\n");
+    return expr(*current_tkn);
 }

@@ -12,8 +12,9 @@
 #include "../src/scanner.h"
 #include "../src/parser.h"
 #include "../src/error.h"
+#include "../src/symtable.h"
+#include "../src/ll.h"
 
-int ret = 0;
 int main() {
     //printf("--- [SCANNER TESTS] ---\n");
     if(start()) {
