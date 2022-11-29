@@ -1,4 +1,5 @@
 #include"../src/symtable.h"
+#include "../src/error.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -74,7 +75,7 @@ void tree_empty(sym_table *tree){
     }
 }
 
-int ret = 0;
+//int ret = 0;
 int main(){
     printf("\n --- TEST SYMTABLE --- \n");
     // test init 

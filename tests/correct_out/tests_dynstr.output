@@ -50,3 +50,9 @@ String: 'some_string_some_another_longer_string12'
 And deleting the dynstr
 Length: 0
 Allocated: 0
+
+--- test dynstrcmp ---
+comparing the same string
+result: 0 
+comparing first longerresult: 95 
+comparing second longerresult: -95 

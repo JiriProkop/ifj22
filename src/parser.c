@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "scanner.h"
 #include "error.h"
+#include "expr.h"
 #include "parser.h"
 
 /**
@@ -270,7 +271,6 @@ bool prikaz() {
             value = false; 
         }
         // ;
-        get_tkn();
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
@@ -312,7 +312,6 @@ bool prikaz() {
             value = false; 
         }
         // )
-        get_tkn(); // TODO, podle implementace vyrazu nechat nebo smazat
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
@@ -349,7 +348,6 @@ bool prikaz() {
             value = false; 
         }
         // )
-        get_tkn(); // TODO
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
@@ -384,7 +382,6 @@ bool prikaz() {
             value = false;
         }
         // ;
-        get_tkn(); // TODO - zalezi na vyraz();
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
@@ -443,7 +440,6 @@ bool vol_parametry() {
             value = false;
         }
         // <vol_param>
-        get_tkn(); // TODO
         if(value && !vol_param()) {
             value = false;
         }
@@ -489,7 +485,6 @@ bool vol_par() {
             value = false;
         }
         // <vol_param>
-        get_tkn(); // TODO - zalezi na implementaci vyrazu
         if(value && !vol_param()) {
             value = false;
         }
@@ -509,9 +504,8 @@ bool konec() {
 }
 
 bool vyraz() {
-    // TODO dodelat precedencni
-    bool value = true;
     printf("[DEBUG INFO]: currently in vyraz(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
-    printf("[DEBUG INFO]: currently in vyraz(), returning: %d\n", value);
-    return value;
+
+    printf("[DEBUG INFO]: currently in vyraz(), exiting\n");
+    return expr(*current_tkn);
 }
