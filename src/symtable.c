@@ -3,7 +3,7 @@
 #include "error.h"
 #include "symtable.h"
 #include "dynstr.h"
-
+#include "ll.h"
 
 void st_init(sym_table **tab) {
     *tab = NULL;
@@ -44,7 +44,7 @@ sym_data *st_search(sym_table *tab, dynstr_t *id) {
         else if (cmp < 0)
             return st_search(tab->left, id);
         else
-            return st_search(tab->left, id);
+            return st_search(tab->right, id);
     }
     return NULL;
 }
@@ -66,6 +66,10 @@ void st_delete(sym_table **tab, dynstr_t *id) {
         int cmp = dynstrcmp(id, (*tab)->id);
         if (!cmp) {
             if (((*tab)->left == NULL) && ((*tab)->right == NULL)) {
+                string_free((*tab)->id);
+                list_dispose((*tab)->data->parameters);
+                st_dispose(&(*tab)->data->local_frame);
+                free((*tab)->data);
                 free(*tab);
                 *tab = NULL;
             } else if (((*tab)->left != NULL) && ((*tab)->right != NULL)) {
@@ -76,6 +80,10 @@ void st_delete(sym_table **tab, dynstr_t *id) {
                     *tab = d->right;
                 else
                     *tab = d->left;
+                string_free(d->id);
+                list_dispose(d->data->parameters);
+                st_dispose(&d->data->local_frame);
+                free(d->data);
                 free(d);
             }
         } else if (cmp < 0) {
@@ -92,6 +100,10 @@ void st_dispose(sym_table **tab) {
     if (*tab != NULL) {
         st_dispose(&(*tab)->left);
         st_dispose(&(*tab)->right);
+        st_dispose(&(*tab)->data->local_frame);
+        string_free((*tab)->id);
+        list_dispose((*tab)->data->parameters);
+        free((*tab)->data);
         free(*tab);
         *tab = NULL;
     }

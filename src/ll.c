@@ -54,6 +54,9 @@ list_node_t *list_first(list_t *list){
 }
 
 void list_dispose(list_t *list){
+	if(list == NULL){
+		return;
+	}
 	list_node_t *delete_node, *i = list->first;
 	while(i != NULL){
 		string_free(i->id);
