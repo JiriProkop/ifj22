@@ -18,9 +18,10 @@
 // TODO additional functions?, data types?, keep track of unused variables?
 
 /// @struct Symbol data structure
-typedef struct{ 
-    token_type type; // symbol type
-    token_type return_type; // return type for functions
+typedef struct{
+    bool is_function; // true if it is a function, false if it is a variable
+    keywords type; // symbol type
+    keywords return_type; // return type for functions
     bool defined;
     struct tree_node *local_frame; // local symbol table
     unsigned int params; // number of parameters

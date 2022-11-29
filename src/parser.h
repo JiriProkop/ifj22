@@ -9,12 +9,11 @@
 
 #include <stdbool.h>
 #include "scanner.h"
+#include "symtable.h"
 
 #ifndef _PARSER_H
 #define _PARSER_H
 
-#include <stdbool.h>
-#include "scanner.h"
 
 /**
  * A global variable used for the current token.
@@ -36,6 +35,15 @@ void get_tkn();
  * @warning Should be only run at the end of the program or when it encounters a error.
 */
 void free_tkn();
+
+/**
+ * Function for adding a node to the tree.
+ * @param tree A tree to add the note to.
+ * @param id A identifier of the function/variable.
+ * @param is_function A bool value - true if it is a function, false if it is a variable.
+ * @param type Either a return type of the function or a type of a variable.
+*/
+void add_node(sym_table **tree, dynstr_t *id, bool is_function, keywords type);
 
 /**
  * A function for the <start> rule.
