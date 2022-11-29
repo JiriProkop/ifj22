@@ -5,6 +5,7 @@
 #include "error.h"
 #include "expr.h"
 #include "parser.h"
+#include "symtable.h"
 
 /**
  * A global variable used for the current token.
@@ -15,6 +16,11 @@ token_t *current_tkn = NULL;
  * A global variable to tell the functions that a token has already been loaded.
 */
 bool tkn_already_loaded = false;
+
+/**
+ * A global variable for the symtable tree.
+*/
+sym_table *tree;
 
 int tkn_num = 0; // TODO - cislo jen na debug
 
@@ -44,6 +50,8 @@ void free_tkn() {
 
 // the parser functions start here:
 bool start() {
+    st_init(&tree);
+
     bool value = false;
     get_tkn();
     printf("[DEBUG INFO]: currently in start(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
