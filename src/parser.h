@@ -13,6 +13,9 @@
 #ifndef _PARSER_H
 #define _PARSER_H
 
+#include <stdbool.h>
+#include "scanner.h"
+
 /**
  * A global variable used for the current token.
 */
