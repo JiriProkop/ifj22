@@ -22,11 +22,10 @@ int main() {
 
 	// test initialization
 	printf("\n[dynstr init test]\n");
-	int return_val = dynstr_init(string);
+	dynstr_init(string);
 	printf("String: '%s'\n", string->array);
 	printf("Length: %lu\n", string->length);
 	printf("Allocated: %lu\n", string->allocated);
-	printf("Returned: %d\n", return_val);
 
 	// test adding characters
 	printf("\n[dynstr add char test]\n");
@@ -49,20 +48,17 @@ int main() {
 	printf("Allocated: %lu\n", string->allocated);
 
 	printf("\nAdding one more character:\n");
-	return_val = dynstr_add_char(string, '+');
+	dynstr_add_char(string, '+');
 	printf("String: '%s'\n", string->array);
 	printf("Length: %lu\n", string->length);
 	printf("Allocated: %lu\n", string->allocated);
-	printf("Returned: %d\n", return_val);
 
 	// test compare
 	printf("\n[dynstr compare test]\n");
 	printf("Compare with different string\n");
-	return_val = dynstr_compare(string, "somerandomstring");
-	printf("Returned: %d\n", return_val);
+	dynstr_compare(string, "somerandomstring");
 	printf("Compare with same string\n");
-	return_val = dynstr_compare(string, "helloXXXXXXXXXX+");
-	printf("Returned: %d\n", return_val);
+	dynstr_compare(string, "helloXXXXXXXXXX+");
 
 	// test clear
 	printf("\n[dynstr clear test]\n");

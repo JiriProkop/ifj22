@@ -4,7 +4,6 @@
 String: ''
 Length: 0
 Allocated: 15
-Returned: 1
 
 [dynstr add char test]
 Adding some characters:
@@ -21,13 +20,10 @@ Adding one more character:
 String: 'helloXXXXXXXXXX+'
 Length: 16
 Allocated: 31
-Returned: 1
 
 [dynstr compare test]
 Compare with different string
-Returned: 0
 Compare with same string
-Returned: 1
 
 [dynstr clear test]
 String: ''

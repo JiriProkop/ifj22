@@ -24,9 +24,8 @@ typedef struct {
  * Initialize the dynamic string.
  *
  * @param string Pointer to dynamic string with the dynstr_t type.
- * @return Returns 1, if the inicialization was correct.s
  */
-int dynstr_init(dynstr_t *string);
+void dynstr_init(dynstr_t *string);
 
 /**
  * Clears the dynamic string.
@@ -50,9 +49,8 @@ void dynstr_delete(dynstr_t *string);
  *
  * @param string Pointer to dynamic string with the dynstr_t type.
  * @param character A character of the type char.
- * @return Returns 1, if the character was added succesfully.
  */
-int dynstr_add_char(dynstr_t *string, char character);
+void dynstr_add_char(dynstr_t *string, char character);
 
 /**
  * Add a whole string to the dynstr.
@@ -61,9 +59,8 @@ int dynstr_add_char(dynstr_t *string, char character);
  *
  * @param string Pointer to dynamic string with the dynstr_t type.
  * @param chars A string to add.
- * @return Returns 1, if the string was added succesfully.
  */
-int dynstr_add_string(dynstr_t *string, char *chars);
+void dynstr_add_string(dynstr_t *string, char *chars);
 
 /**
  * Compares dynamic string content with given string.

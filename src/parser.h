@@ -7,6 +7,9 @@
  * @author TODO - dopište se tady
  */
 
+#include <stdbool.h>
+#include "scanner.h"
+
 #ifndef _PARSER_H
 #define _PARSER_H
 
