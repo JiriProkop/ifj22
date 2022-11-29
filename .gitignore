@@ -62,4 +62,5 @@ tests/tests_expr
 tests/tests_stack
 tests/tests_symtable
 tests/tests_ll
+tests/tests_generator
 tests/*.output

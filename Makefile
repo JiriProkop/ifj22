@@ -32,9 +32,7 @@ test: $(TESTS)
 
 # check the tests with valgrind
 valgrind: $(TESTS)
-	valgrind $(TESTDIR)tests_dynstr
-	valgrind $(TESTDIR)tests_scanner < $(TESTDIR)tests_scanner.input
-	valgrind $(TESTDIR)tests_parser < $(TESTDIR)tests_parser.input
+	valgrind $(TESTDIR)tests_generator
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
 $(TESTDIR)tests_dynstr: $(SOURCES)dynstr.o $(SOURCES)error.o
