@@ -58,5 +58,8 @@ dkms.conf
 tests/tests_dynstr
 tests/tests_scanner
 tests/tests_parser
+tests/tests_expr
+tests/tests_stack
+tests/tests_symtable
 tests/tests_ll
 tests/*.output
