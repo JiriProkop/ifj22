@@ -128,23 +128,22 @@ Token double attribute: 0.005000
 [token number 25]
 Type of token: token_string
 Token line: 33
-Token string attribute: 'normal string'
+Token string attribute: 'normal\'
 
 [token number 26]
 Type of token: token_string
 Token line: 34
-Token string attribute: 'some escape sequences: " 	 \ $ 
-'
+Token string attribute: 'some\'
 
 [token number 27]
 Type of token: token_string
 Token line: 35
-Token string attribute: 'characters with octan sequence :)'
+Token string attribute: 'characters\'
 
 [token number 28]
 Type of token: token_string
 Token line: 36
-Token string attribute: 'characters with hex sequence ;-)'
+Token string attribute: 'characters\'
 
 [token number 29]
 Type of token: token_keyword
