@@ -2,11 +2,10 @@
 
 #include "error.h"
 
-extern int ret; // to be returned by main
+int ret = 0;
 
 void error_handle(unsigned line, unsigned error_type) {
     ret = error_type;
-
 
     switch (error_type) {
         case lex_analysis_err:

@@ -13,7 +13,6 @@
 #include "../src/parser.h"
 #include "../src/error.h"
 
-int ret = 0;
 int main() {
     //printf("--- [SCANNER TESTS] ---\n");
     if(start()) {
