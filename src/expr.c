@@ -160,20 +160,20 @@ bool reduction(stack *pstk) {
 bool final_check(stack *pstk) {
     if (tokens_to_shift(pstk) != NO_SHIFT) {
         stack_dispose_all(pstk);
-		error_handle(current_tkn->line, syntax_error);
+        error_handle(current_tkn->line, syntax_error);
         return false;
     }
     stack_pop(pstk);
     stack_pop(pstk);
     if (!stack_is_empty(pstk)) {
         stack_dispose_all(pstk);
-		error_handle(current_tkn->line, syntax_error);
+        error_handle(current_tkn->line, syntax_error);
         return false;
     }
     return true;
 }
 
-bool expr(token_t first_tok) {
+bool expr(token_t first_tok, token_t* second_tok) {
     char prec_table[PREC_TABLE_SIZE][PREC_TABLE_SIZE] = {
         //+	   *   ===   >=   (    )    i    $
         {'>', '<', '>', '>', '<', '>', '<', '>'}, // +, -, .
@@ -193,6 +193,12 @@ bool expr(token_t first_tok) {
     }
     bool toread = false; // 1st token is given by parser
     bool set = false;
+    bool second_read;
+    if (second_tok) {
+        second_read = false;
+    } else {
+        second_read = true;
+    }
     unsigned row, col;
     unsigned par_left;      // '(' count
     unsigned par_right = 0; // ')' count
@@ -206,6 +212,11 @@ bool expr(token_t first_tok) {
     printf("Expr. parser pravy rozbor: ");
     while (1) {
         token_t *top_term = stack_top_terminal(&stk);
+        if (toread && !second_read) {
+            toread = false;
+            tok = *second_tok;
+            second_read = true;
+        }
         if ((toread && !get_token(&tok)) || !get_colrow(&row, top_term) || !get_colrow(&col, &tok)) {
             stack_dispose_all(&stk);
             return false;

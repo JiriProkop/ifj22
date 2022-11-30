@@ -33,11 +33,12 @@ typedef enum {
 expr_rules;
 
 /**
- * Function checks whether expression is valid based on expression rules defined in documentation.
+ * Function checks whether expression is valid based on precedent expression table defined in documentation.
  *
  * @param first_tok first token of expression
+ * @param second_tok second token of expression, give NULL if 2nd token is unknown
  * @return Returns false if invalid expression was found, true otherwise.
  */
-bool expr(token_t first_tok);
+bool expr(token_t first_tok, token_t* second_tok);
 
 #endif
