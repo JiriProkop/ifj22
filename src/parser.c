@@ -396,7 +396,6 @@ bool prikaz() {
             error_handle(current_tkn->line, func_def_error);
             abort();
         }
-        // TODO - rekurzivni volani 
         value = true;
         // (
         get_tkn();
@@ -484,25 +483,31 @@ bool prikaz() {
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
-    // TODO rule prirazeni funkce
     // rule: <prikaz> -> VAR_ID = <vyraz> ;
     } else if(current_tkn->type == token_varieble) {
-        // TODO ulozit do stromu
-        string_free(current_tkn->attr.str);
+        dynstr_t *id = current_tkn->attr.str;
+
         value = true;
         // =
         get_tkn();
         if(value && current_tkn->type != token_assign) {
             value = false;
         }
+
+        if(st_search(tree, id) == NULL) {
+            add_node(&tree, id, 0, NULL, 0, keyword_null, true);
+        }
+
         // <vyraz>
         get_tkn();
-        if(value && !vyraz()) {
-            value = false;
-        }
-        // ;
-        if(value && current_tkn->type != token_semicol) {
-            value = false;
+        if(value && current_tkn->type == token_identifier) {
+            value = prikaz();
+        } else {
+            value = vyraz();
+            // ;
+            if(value && current_tkn->type != token_semicol) {
+                value = false;
+            }
         }
     }
     printf("[DEBUG INFO]: currently in prikaz(), returning: %d\n", value);
@@ -628,3 +633,6 @@ bool vyraz() {
     printf("[DEBUG INFO]: currently in vyraz(), exiting\n");
     return expr(*current_tkn);
 }
+
+// TODO vyraz do prikazu
+// TODO rozdeleni prirazeni do promenne u = 
