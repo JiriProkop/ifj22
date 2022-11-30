@@ -145,6 +145,10 @@ bool start() {
         value = program() && konec();
     }
     printf("[DEBUG INFO]: currently in start(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
@@ -392,10 +396,8 @@ bool prikaz() {
         }
     // rule: <prikaz> -> ID ( <vol_parametry> ) ;
     } else if(current_tkn->type == token_identifier) {
-        if(st_search(tree, current_tkn->attr.str) == NULL) {
-            error_handle(current_tkn->line, func_def_error);
-            abort();
-        }
+        dynstr_t *id = current_tkn->attr.str;
+
         value = true;
         // (
         get_tkn();
@@ -416,6 +418,12 @@ bool prikaz() {
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
+
+        if(st_search(tree, id) == NULL) {
+            error_handle(current_tkn->line, func_def_error);
+            abort();
+        }
+
     // rule: <prikaz> -> IF ( <vyraz> ) { <prikaz_fce> } <else>
     } else if(current_tkn->attr.keyword == keyword_if) {
         value = true;
