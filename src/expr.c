@@ -144,6 +144,7 @@ bool reduction(stack *pstk) {
                 printf("%d", erule_brackets);
                 break;
             default:
+                error_handle(tok1->line, syntax_error);
                 return false;
         }
         if (!allocpush_token_stack(pstk, op)) {
@@ -165,12 +166,14 @@ bool reduction(stack *pstk) {
 bool final_check(stack *pstk) {
     if (tokens_to_shift(pstk) != NO_SHIFT) {
         stack_dispose_all(pstk);
+		error_handle(current_tkn->line, syntax_error);
         return false;
     }
     stack_pop(pstk);
     stack_pop(pstk);
     if (!stack_is_empty(pstk)) {
         stack_dispose_all(pstk);
+		error_handle(current_tkn->line, syntax_error);
         return false;
     }
     return true;
