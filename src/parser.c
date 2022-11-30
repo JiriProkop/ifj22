@@ -254,6 +254,15 @@ bool definice() {
         } else {
             value = false;
         }
+
+        if(st_search(tree, id) == NULL) {
+            add_node(&tree, id, 1, parameters, params, type, can_be_null);
+            gen_function_def(id);
+        } else {
+            error_handle(line_num, func_def_error);
+            abort();
+        }
+
         // {
         get_tkn();
         if(value && current_tkn->type != token_curly_left) {
@@ -267,16 +276,6 @@ bool definice() {
         // }
         if(value && current_tkn->type != token_curly_right) {
             value = false;
-        }
-
-        if(value) {
-            if(st_search(tree, id) == NULL) {
-                add_node(&tree, id, 1, parameters, params, type, can_be_null);
-                gen_function_def(id);
-            } else {
-                error_handle(line_num, func_def_error);
-                abort();
-            }
         }
     }
     printf("[DEBUG INFO]: currently in definice(), returning: %d\n", value);
