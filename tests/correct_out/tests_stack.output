@@ -1,0 +1,53 @@
+--- [STACK TESTS] ---
+
+[stack inicialization test]
+stack initialized succesfully
+
+[stack is_empty test]
+stack is empty 
+
+[stack push test]
+pushing first token : type none, line 50
+token type none
+first token inserted line 50 
+only node (next == NULL) 
+inserting second token: type division, line 25
+token type division
+second token inserted line 25 
+test if second node points to first node 
+pointed node line 25 
+token type none
+inserting third token: type token identifier, line 72
+token type identifier
+third token inserted line 72 
+
+[stack is not empty test]
+stack is not empty 
+
+[stack top and pop tests]
+current top token line 72 
+token type identifier
+stack pop 0
+Current top token line 25 
+token type division
+stack pop 1
+Current top token line 50 
+token type none
+stack should not be empty 
+stack is not empty 
+stack pop 3 
+stack should be empty 
+stack is empty 
+stack pop 4 
+
+[stack dispose all test]
+No segfault, use valgrind for details
+
+[stack test pop and save]
+stack_save_pop working
+
+[stack test insert shift]
+
+[stack test tokens to shift]
+tokens to shift works
+[end stack test]

@@ -1,0 +1,244 @@
+
+ --- TEST SYMTABLE --- 
+initalization succesfull
+tree is empty
+
+--- test insert ---
+add root 
+
+50
+add left node 
+
+50
+
+          25
+add ringht node 
+
+          75
+
+50
+
+          25
+add many nodes
+
+                              99
+
+                    90
+
+                              80
+
+          75
+
+                              70
+
+                    62
+
+                              55
+
+50
+
+                              37
+
+                                        35
+
+                    33
+
+          25
+
+                              20
+
+                                        120
+
+                    12
+
+                                        1110
+
+                              10
+
+--- test search ---
+searching for id :50 
+search succesesful
+searching for id :33 
+search succesesful
+searching for id :10 
+search succesesful
+searching for id :1110 
+search succesesful
+search for id not in tree 
+searching for id :69 
+search unseccesful 
+
+--- test delete ---
+deleting no child node
+
+                              99
+
+                    90
+
+                              80
+
+          75
+
+                              70
+
+                    62
+
+                              55
+
+50
+
+                              37
+
+                    33
+
+          25
+
+                              20
+
+                                        120
+
+                    12
+
+                                        1110
+
+                              10
+deleting right child node
+
+                              99
+
+                    90
+
+                              80
+
+          75
+
+                              70
+
+                    62
+
+                              55
+
+50
+
+                              37
+
+                    33
+
+          25
+
+                              20
+
+                                        120
+
+                    12
+
+                              1110
+deleting left child node
+
+                              99
+
+                    90
+
+                              80
+
+          75
+
+                              70
+
+                    62
+
+                              55
+
+50
+
+                              37
+
+                    33
+
+          25
+
+                              120
+
+                    12
+
+                              1110
+deleting node with two sons 
+
+                              99
+
+                    90
+
+                              80
+
+          75
+
+                              70
+
+                    62
+
+                              55
+
+50
+
+                    37
+
+          25
+
+                              120
+
+                    12
+
+                              1110
+deleting node with two subtrees 
+
+                              99
+
+                    90
+
+                              80
+
+          70
+
+                    62
+
+                              55
+
+50
+
+                    37
+
+          25
+
+                              120
+
+                    12
+
+                              1110
+deleting root 
+
+                              99
+
+                    90
+
+                              80
+
+          70
+
+                    62
+
+                              55
+
+37
+
+          25
+
+                              120
+
+                    12
+
+                              1110
+
+--- test dispose ---
+tree is empty
+
+ --- TEST SYMTABLE OVER ---

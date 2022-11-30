@@ -27,7 +27,7 @@ int tkn_num = 0; // TODO - cislo jen na debug
 
 void abort() {
 	free(current_tkn);
-    st_dispose(tree);
+    st_dispose(&tree);
     exit(ret);
 }
 

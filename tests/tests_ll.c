@@ -46,7 +46,7 @@ void print_list(list_t *list){
 void add_node(list_t *list, char id[], token_type type){
     char* tmp_str = malloc(sizeof(char)*(strlen(id) + 1));
     if(tmp_str == NULL){
-        printf("failed to malloc dynstr in add node tests_ll");
+        printf("failed to malloc dynstr in add node tests_ll\n");
     }
     dynstr_t *tmp_dstr = malloc(sizeof(dynstr_t));
     dynstr_init(tmp_dstr);
@@ -104,11 +104,11 @@ int main(){
 
     add_node(list, "I am first", token_dot);
     first_n = list_first(list);
-    printf(" '%s',", first_n->id->array);
-
+    printf(" '%s' \n,", first_n->id->array);
+    printf("adding node");
     add_node(list, "I am second", token_assign);
     first_n = list_first(list);
-    printf(" '%s',", first_n->id->array);
+    printf(" '%s' \n,", first_n->id->array);
 
     // test delete first 
     printf("\n[list delete first]\n");
@@ -120,11 +120,9 @@ int main(){
         first_n = list_first(list);
     }
     list_delete_first(list);
-    // free(first_n);
-    // first_n = NULL;
     first_n = list_first(list);
     if(first_n == NULL){
-        printf("no node to delelete");
+        printf(" no node to delelete");
     }    
 
     //test ll search

@@ -1,0 +1,33 @@
+--- [LINKED LIST TEST] ---
+
+[list init test]
+initialization succesful 
+
+[list is empty test]
+list is empty
+
+[list add test]
+added succesfully 
+added succesfully 
+added succesfully 
+list from the start :  'hello', 'there', 'Obi-wan',
+
+[list not empty test]
+list is not empty 
+
+[list first]
+ 'I am first' 
+,adding node 'I am first' 
+,
+[list delete first]
+ 'I am first', 'I am second', 'I am third', no node to delelete
+[test list search]
+list from the start :  '1', '2', '3', '4', '5', '6',
+searching for 1
+one found
+searching for 3
+three found
+searching for 6
+six found
+
+ --- [LINKED LIST END TEST] ---
