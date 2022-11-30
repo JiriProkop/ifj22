@@ -47,7 +47,7 @@ typedef enum {
  * @param tok pointer to allocated token
  * @param c character to be converted - ASCII values 000-032, 035, 092 only
  */
-void convert_to_escape(token_t* tok, char c) {
+void convert_to_escape(token_t *tok, char c) {
     dynstr_add_char(tok->attr.str, '\\');
 
     dynstr_add_char(tok->attr.str, (c / 100) % 10);
@@ -318,7 +318,7 @@ bool get_token(token_t *tok) {
                     state = string_escape_s;
                 } else if (c == ' ' || c == '#') {
                     convert_to_escape(tok, c);
-                }else if (c > 31) {
+                } else if (c > 31) {
                     dynstr_add_char(tok->attr.str, c);
                 }
                 break;
@@ -546,6 +546,10 @@ bool get_token(token_t *tok) {
                     tok->attr.integer = tmp;
                     state = expo_start_s;
                 } else {
+                    if (isalpha(c) || c == '$' || c == '"' || c == '?' || c == '\\') {
+						error_handle(line_c, lex_analysis_err);
+                        return false;
+                    }
                     ungetc(c, input);
                     tok->type = token_integer;
                     string_free(tok->attr.str);
