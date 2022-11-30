@@ -9,8 +9,6 @@ void st_init(sym_table **tab) {
     *tab = NULL;
 }
 
-// TODO all string operation to dynstr_t operations 
-
 void st_insert(sym_table **tab, dynstr_t *id, sym_data *data) {
     if (*tab == NULL) {
         sym_table *new = malloc(sizeof(sym_table));
@@ -98,8 +96,6 @@ void st_delete(sym_table **tab, dynstr_t *id) {
         }
     }
 }
-
-// TODO additional functions?
 
 void st_dispose(sym_table **tab) {
     if (*tab != NULL) {

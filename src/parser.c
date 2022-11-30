@@ -27,7 +27,7 @@ int tkn_num = 0; // TODO - cislo jen na debug
 
 void abort() {
 	free(current_tkn);
-	//TODO free symtable
+    st_dispose(tree);
     exit(ret);
 }
 
@@ -52,13 +52,15 @@ void free_tkn() {
 void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters, unsigned int params, keywords type) {
     sym_data *data = malloc(sizeof(sym_data));
     if(data == NULL) {
-        // TODO malloc error
+        error_handle(0,compiler_error);
+        abort();
     }
     data->defined = true;
     if(is_function) {
         sym_table *subtree = malloc(sizeof(sym_data));
         if(subtree == NULL) {
-            // TODO malloc error
+            error_handle(0,compiler_error);
+            abort();
         }
         st_init(&subtree);
         data->is_function = true;
@@ -78,7 +80,8 @@ void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *paramete
 bool start() {
     tree = malloc(sizeof(sym_table));
     if(tree == NULL) {
-        // TODO malloc error
+        error_handle(0, compiler_error);
+        abort();
     }
     st_init(&tree); // initialize the symtable tree
 
@@ -152,7 +155,8 @@ bool definice() {
         dynstr_t *id;
         list_t *parameters = malloc(sizeof(list_t));
         if(parameters == NULL) {
-            // TODO malloc error
+            error_handle(0, compiler_error);
+            abort();
         }
         list_init(parameters);
         unsigned int params = 0;
