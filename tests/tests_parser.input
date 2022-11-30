@@ -4,32 +4,28 @@ declare(strict_types=1);
 function testfunc(int $testvar) : void {
     return 43;
     $asfdfa = 234;
-    fadsfa($afds);
     while(3) {
-        fasdfa($asdfa);
     }
-    fadsfa();
-}
+    
+    }
 
 function testfuncafsdf(int $testvar) : void {
     return 43;
     $asfdfa = 234;
-    fadsfa($afds);
+testfunc();
     while(3) {
-        fasdfa($asdfa);
+
     }
-    fadsfa();
+
 }
 
 if(453) {
-    afsdf();
+
 }
 
 if(543) {
-    func1();
+
 } else {
-    func2();
+
 }
 
-
-afsd();

@@ -22,6 +22,7 @@ typedef struct{
     bool is_function; // true if it is a function, false if it is a variable
     keywords type; // symbol type
     keywords return_type; // return type for functions
+    bool can_be_null; // can the type be null?
     bool defined;
     struct tree_node *local_frame; // local symbol table
     unsigned int params; // number of parameters

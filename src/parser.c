@@ -8,6 +8,52 @@
 #include "symtable.h"
 #include "generator.h"
 
+
+
+
+
+
+
+
+
+
+/*
+
+
+void print_tree_actual(sym_table *tree, int space){
+    if(tree == NULL){
+        return;
+    }
+    space += COUNT;
+
+    print_tree_actual(tree->right, space);
+    printf("\n");
+    for(int i = COUNT; i <space; i++){
+        printf(" ");
+    }
+    printf("%s\n", tree->id->array);
+
+    print_tree_actual(tree->left, space);
+}
+
+void print_tree(sym_table *tree){
+    if(tree == NULL){
+        printf("tree is empty\n");
+    }
+    print_tree_actual(tree, 0);
+    return;
+}
+
+
+
+
+*/
+
+
+
+
+
+
 /**
  * A global variable used for the current token.
 */
@@ -49,7 +95,7 @@ void free_tkn() {
     current_tkn = NULL;
 } 
 
-void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters, unsigned int params, keywords type) {
+void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters, unsigned int params, keywords type, bool can_be_null) {
     sym_data *data = malloc(sizeof(sym_data));
     if(data == NULL) {
         error_handle(0,compiler_error);
@@ -68,9 +114,11 @@ void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *paramete
         data->parameters = parameters;
         data->params = params;
         data->return_type = type;
+        data->can_be_null = can_be_null;
     } else {
         data->is_function = false;
         data->type = type;
+        data->can_be_null = can_be_null;
     }
     
     st_insert(tree, id, data);
@@ -161,12 +209,15 @@ bool definice() {
         list_init(parameters);
         unsigned int params = 0;
         keywords type;
+        bool can_be_null = false;
+        int line_num = 0;
 
         value = true;
         // ID
         get_tkn();
         if(value && current_tkn->type == token_identifier) {
             id = current_tkn->attr.str;
+            line_num = current_tkn->line;
         } else {
             value = false;
         }
@@ -196,8 +247,10 @@ bool definice() {
                      current_tkn->attr.keyword == keyword_int ||
                      current_tkn->attr.keyword == keyword_float ||
                      current_tkn->attr.keyword == keyword_string)) {
-            // TODO pridat ostatni moznosti (nullable veci)
             type = current_tkn->attr.keyword;
+            if(current_tkn->type == token_keyword_w_null) {
+                can_be_null = true;
+            }
         } else {
             value = false;
         }
@@ -217,9 +270,13 @@ bool definice() {
         }
 
         if(value) {
-            // TODO kontrola jestli uz tam neni
-            add_node(&tree, id, 1, parameters, params, type);
-            gen_function_def(id);
+            if(st_search(tree, id) == NULL) {
+                add_node(&tree, id, 1, parameters, params, type, can_be_null);
+                gen_function_def(id);
+            } else {
+                error_handle(line_num, func_def_error);
+                abort();
+            }
         }
     }
     printf("[DEBUG INFO]: currently in definice(), returning: %d\n", value);
@@ -336,8 +393,11 @@ bool prikaz() {
         }
     // rule: <prikaz> -> ID ( <vol_parametry> ) ;
     } else if(current_tkn->type == token_identifier) {
-        // TODO - kontrola ID
-        string_free(current_tkn->attr.str);
+        if(st_search(tree, current_tkn->attr.str) == NULL) {
+            error_handle(current_tkn->line, func_def_error);
+            abort();
+        }
+        // TODO - rekurzivni volani 
         value = true;
         // (
         get_tkn();
