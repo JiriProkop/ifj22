@@ -23,7 +23,7 @@ bool stack_is_empty(stack *stack){
 	return stack->top == NULL;
 }
 
-int stack_push(stack*stack, token_t *token){
+void stack_push(stack*stack, token_t *token){
 	stack_node_t *tmp = malloc(sizeof(stack_node_t));
 	if(tmp == NULL){
 		error_handle(0,compiler_error);
@@ -37,7 +37,6 @@ int stack_push(stack*stack, token_t *token){
 	}
 	tmp->current = token;
 	stack->top = tmp;
-	return 0;
 }
 
 token_t *stack_save_pop(stack *stack){

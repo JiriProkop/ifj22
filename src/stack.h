@@ -44,7 +44,7 @@ bool stack_is_empty(stack *stack);
  * @param stack the stack on which the token is to be pushed
  * @param token the token to be pushed 
  */
-int stack_push(stack *stack, token_t *token);
+void stack_push(stack *stack, token_t *token);
 
 /**
  * @brief pops first token and returns it in return token, if the stack is empty returns NULL
