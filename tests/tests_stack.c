@@ -32,17 +32,86 @@ void print_type(token_t *token){
         return;
     }
     switch (token->type){
-    case token_integer:
-        printf("token type integer\n");
+    case token_none:
+        printf("token type none\n");
+        break;
+    case token_division:
+        printf("token type division\n");
+        break;
+    case token_string:
+        printf("token type string\n");
         break;
     case token_varieble:
         printf("token type varialbe\n");
         break;
+    case token_identifier:
+        printf("token type identifier\n");
+        break;
+    case token_keyword_w_null:
+        print("token type keyword_w_null\n");
+        break;
+    case token_integer:
+        printf("token type integer\n");
+        break;
     case token_float:
         printf("token type float\n");
         break;
-    case token_string:
-        printf("token type string\n");
+    case token_greater:
+        printf("token type greater\n");
+        break;
+    case token_greater_equal:
+        printf("token type greater equal\n");
+        break;
+    case token_lower:
+        printf("token lower\n");
+        break;
+    case token_lower_equal:
+        printf("token type lower equal\n");
+        break;
+    case token_assign:
+        printf("token type assign\n");
+        break;
+    case token_compare:
+        printf("token type compare\n");
+        break;
+    case token_compare_neg:
+        printf("token type compare neg\n");
+        break;
+    case token_semicol:
+        printf("token type semicol\n");
+        break;
+    case token_dot:
+        printf("token type  dot\n");
+        break;
+    case token_colon:
+        printf("token type colon\n");
+        break;
+    case token_curly_left:
+        printf("token type curly left\n");
+        break;
+    case token_curly_right:
+        printf("token type curly right\n");
+        break;
+    case token_parentheses_right:
+        printf("token type parentheses right\n");
+        break;
+    case token_parentheses_left:
+        print_type("token type parentheses left\n");
+        break;
+    case token_multiply:
+        printf("token type multiply");
+        break;
+    case token_plus:
+        printf("token type plus\n");
+        break;
+    case token_minus:
+        printf("token type minus");
+        break;
+    case token_keyword:
+        printf("token type keyword");
+        break;
+    case token_comma:
+        print("token type comma");
         break;
     default:
         printf("undefined behavior in print_type \n");
