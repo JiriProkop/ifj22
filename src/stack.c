@@ -117,16 +117,10 @@ token_t *stack_top_terminal(stack *stack){
             return i->current;
             }
         }
-	if (i == NULL){
-        token_t *tok = malloc(sizeof(token_t));
-		if(tok == NULL) {
-			error_handle(0, compiler_error);
-            abort();
-        }
-        tok->type = token_none;
-        stack_push(stack, tok);
-        return tok;
-        }
+	if (i == NULL) {
+    	error_handle(0, compiler_error);
+    	abort();
+	}
     return i->current;
 }
 
