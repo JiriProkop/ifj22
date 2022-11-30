@@ -39,10 +39,12 @@ sym_data *st_search(sym_table *tab, dynstr_t *id) {
         int cmp = dynstrcmp(id, tab->id);
         if (!cmp)
             return tab->data;
-        else if (cmp < 0)
+        else if (cmp < 0){
             return st_search(tab->left, id);
-        else
+        }
+        else{
             return st_search(tab->right, id);
+        }
     }
     return NULL;
 }
@@ -79,10 +81,12 @@ void st_delete(sym_table **tab, dynstr_t *id) {
                 return;
             } else {
                 sym_table *d = *tab;
-                if (d->left == NULL)
+                if (d->left == NULL){
                     *tab = d->right;
-                else
+                }
+                else{
                     *tab = d->left;
+                }
                 string_free(d->id);
                 list_dispose(d->data->parameters);
                 st_dispose(&d->data->local_frame);
