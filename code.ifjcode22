@@ -3,15 +3,14 @@ CREATEFRAME
 PUSHFRAME
 
 # definice funkce
+DEFVAR LF@%funkce_arg1
 JUMP funkce_end
 LABEL funkce_start
 CREATEFRAME
-DEFVAR TF@arg1
-DEFVAR TF@arg2
-DEFVAR TF@return
-POPS TF@arg1
-POPS TF@arg2
+DEFVAR TF@i
+MOVE TF@i LF@%funkce_arg1
 PUSHFRAME
+LF@i
 
 WRITE LF@arg1
 WRITE LF@arg2
@@ -25,8 +24,7 @@ LABEL funkce_end
 
 
 # volani funkce
-PUSHS int@2
-PUSHS int@3
+MOVE LF@%funkce_arg1 LF@sdfa
 CALL funkce_start
 DEFVAR LF@return
 POPS LF@return
@@ -80,3 +78,21 @@ LABEL else_end
 POPFRAME
 CLEARS
 EXIT int@0
+
+
+
+<?php
+
+
+function foo(int $i) : void {
+    return $i;
+}
+
+
+$i = 5656; (LF)
+
+foo($sdfa);
+
+
+boo($i)
+
