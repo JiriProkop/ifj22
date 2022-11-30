@@ -407,7 +407,7 @@ bool prikaz() {
         value = true;
         // <vyraz>
         get_tkn();
-        if(value && !vyraz()) {
+        if(value && !vyraz(false, *current_tkn)) {
             value = false; 
         }
         // ;
@@ -454,7 +454,7 @@ bool prikaz() {
         }
         // <vyraz>
         get_tkn();
-        if(value && !vyraz()) {
+        if(value && !vyraz(false, *current_tkn)) {
             value = false; 
         }
         // )
@@ -490,7 +490,7 @@ bool prikaz() {
         }
         // <vyraz>
         get_tkn();
-        if(value && !vyraz()) {
+        if(value && !vyraz(false, *current_tkn)) {
             value = false; 
         }
         // )
@@ -514,27 +514,33 @@ bool prikaz() {
     // rule: <prikaz> -> VAR_ID = <vyraz> ;
     } else if(current_tkn->type == token_varieble) {
         dynstr_t *id = current_tkn->attr.str;
+        token_t prev_tok = *current_tkn;
 
         value = true;
-        // =
+        // something else
         get_tkn();
         if(value && current_tkn->type != token_assign) {
-            value = false;
-        }
-
-        if(st_search(tree, id) == NULL) {
-            add_node(&tree, id, 0, NULL, 0, keyword_null, true);
-        }
-
-        // <vyraz>
-        get_tkn();
-        if(value && current_tkn->type == token_identifier) {
-            value = prikaz();
-        } else {
-            value = vyraz();
+            vyraz(true, prev_tok);
             // ;
             if(value && current_tkn->type != token_semicol) {
                 value = false;
+            }
+        // =
+        } else {
+            if(st_search(tree, id) == NULL) {
+                add_node(&tree, id, 0, NULL, 0, keyword_null, true);
+            }
+
+            // <vyraz>
+            get_tkn();
+            if(value && current_tkn->type == token_identifier) {
+                value = prikaz();
+            } else {
+                value = vyraz(false, *current_tkn);
+                // ;
+                if(value && current_tkn->type != token_semicol) {
+                    value = false;
+                }
             }
         }
     }
@@ -596,7 +602,7 @@ bool vol_parametry() {
         value = true;
         // <vyraz>
         // no get_tkn(), since the token in if -^ is also a first token from <vyraz>
-        if(value && !vyraz()) {
+        if(value && !vyraz(false, *current_tkn)) {
             value = false;
         }
         // <vol_param>
@@ -649,7 +655,7 @@ bool vol_par() {
         value = true;
         // <vyraz>
         // no get_tkn(), since the token in if -^ is also a first token from <vyraz>
-        if(value && !vyraz()) {
+        if(value && !vyraz(false, *current_tkn)) {
             value = false;
         }
         // <vol_param>
@@ -679,12 +685,15 @@ bool konec() {
     return value;
 }
 
-bool vyraz() {
-    printf("[DEBUG INFO]: currently in vyraz(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
+bool vyraz(bool second_tkn, token_t prev_tok) {
+    printf("[DEBUG INFO]: currently in vyraz(false, *current_tkn), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
 
-    printf("[DEBUG INFO]: currently in vyraz(), exiting\n");
-    return expr(*current_tkn);
+    printf("[DEBUG INFO]: currently in vyraz(false, *current_tkn), exiting\n");
+    if(second_tkn) {
+        return expr(prev_tok, current_tkn);
+    } else {
+        return expr(*current_tkn, NULL);
+    }
 }
 
 // TODO vyraz do prikazu
-// TODO rozdeleni prirazeni do promenne u = 
