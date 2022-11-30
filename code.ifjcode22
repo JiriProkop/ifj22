@@ -4,12 +4,15 @@ PUSHFRAME
 
 # definice funkce
 DEFVAR LF@%funkce_arg1
+# DEFVAR all the arg1
 JUMP funkce_end
 LABEL funkce_start
 CREATEFRAME
 DEFVAR TF@i
 MOVE TF@i LF@%funkce_arg1
 PUSHFRAME
+
+
 LF@i
 
 WRITE LF@arg1

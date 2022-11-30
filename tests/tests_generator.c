@@ -15,6 +15,9 @@
 
 int ret = 0;
 int main() {
+    // test gen header
     gen_header();
+    // tests function def
+
     return ret;
 }
