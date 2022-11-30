@@ -70,13 +70,6 @@ void stack_pop(stack *stack);
 token_t *stack_top(stack *stack);
 
 /**
- * @brief disposes of stack leaves the tokens be
- * 
- * @param stack the stack to dispose off
- */
-void stack_dispose(stack *stack);
-
-/**
  * @brief disposes of stack and the tokens in it 
  * 
  * @param stack the stack to be disposed

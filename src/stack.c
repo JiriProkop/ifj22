@@ -80,15 +80,6 @@ token_t *stack_top(stack *stack){
 	return stack->top->current;
 }
 
-void stack_dispose(stack *stack){
-	stack_node_t *tmp ;
-	while(stack->top != NULL){
-		tmp = stack->top;
-		stack->top = stack->top->next;
-		free(tmp);
-	}
-}
-
 void stack_dispose_all(stack *stack){
 	token_t *tmp_token;
 	stack_node_t *tmp_node;

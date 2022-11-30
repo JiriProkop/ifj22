@@ -234,88 +234,9 @@ int main() {
 
     stack_dispose_all(stack);
     printf("No segfault, use valgrind for details\n");
-
-    //----test stack dispose----
-    // printf("\n[stack dispose test]\n");
-    // token_t *token7 = malloc(sizeof(token_t));
-    // if(token7 == NULL){
-    //     printf("token7 malloc fail\n");
-    // }
-    // token7->line = 50;
-    // token7->type = token_none;
-    // if(stack_push(stack, token7) == MALLOC_ERROR){
-    //     printf("failed to malloc token 7 stack node\n");
-    // }
-
-    // token_t *token8 = malloc(sizeof(token_t));
-    // if(token8 == NULL){
-    //     printf("token8 malloc fail\n");
-    // }
-    // token8->line = 25;
-    // token8->type = token_division;
-    // if(stack_push(stack, token8) == MALLOC_ERROR){
-    //     printf("failed to malloc token 8 stack node\n");
-    // }
-
-    // token_t *token9 = malloc(sizeof(token_t));
-    // if(token9 == NULL){
-    //     printf("token9 malloc fail\n");
-    // }
-    // token9->line = 72;
-    // token9->type = token_identifier;
-    // if(stack_push(stack, token9) == MALLOC_ERROR){
-    //     printf("failed to malloc token 9 stack node\n");
-    // }
-
-    // stack_dispose(stack);
-    // if(token4 != NULL && token5 != NULL && token5 != NULL && stack->top == NULL){
-    //     printf("stack dispose succesfull \n");
-    // }
-
-    // free(token7);
-    // token7 = NULL;
-    // free(token8);
-    // token8 = NULL;
-    // free(token9);
-    // token9 = NULL;
-    // ----test stack top terminal----
-    printf("\n[stack top terminal]\n");
+    
     token_t *top_terminal;
-    // test no terminal
-    push_token(stack, token_parentheses_left, 4);
-    push_token(stack, token_minus, 5);
-    top_terminal = stack_top_terminal(stack);
-    print_type(top_terminal);
-    // test integer terminal
-    push_token(stack, token_integer, 6);
-    push_token(stack, token_plus, 7);
-    top_terminal = stack_top_terminal(stack);
-    print_type(top_terminal);
-    // test string terminal 
-    push_token(stack, token_string, 7);
-    top_terminal = stack_top_terminal(stack);
-    print_type(top_terminal);
-    // test float terminal
-    push_token(stack, token_float, 12);
-    push_token(stack, token_compare_neg, 8);
-    top_terminal = stack_top_terminal(stack);
-    print_type(top_terminal);
-    // test variable terminal
-    push_token(stack, token_varieble, 60);
-    top_terminal = stack_top_terminal(stack);
-    print_type(top_terminal);
-    stack_dispose_all(stack);
-    // test finds < (shift) terminal
-    push_token(stack, token_varieble, 10);
-    push_token(stack, token_expr_shift, 12);
-    push_token(stack, token_multiply, 40);
-    top_terminal = stack_top_terminal(stack);
-    print_type(top_terminal);
-    // test finds E terminal
-    push_token(stack, token_integer, 67);
-    push_token(stack, token_expr_e, 42);
-    top_terminal = stack_top_terminal(stack);
-    print_type(top_terminal);
+    fill_stack(stack);
 
     // ---- test pop and save ----
     printf("\n[stack test pop and save]\n");
