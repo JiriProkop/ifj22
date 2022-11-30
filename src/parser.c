@@ -196,6 +196,10 @@ bool program() {
         }
     }
     printf("[DEBUG INFO]: currently in program(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
@@ -283,6 +287,10 @@ bool definice() {
         }
     }
     printf("[DEBUG INFO]: currently in definice(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
@@ -312,6 +320,10 @@ bool parametry() {
         value = param();
     }
     printf("[DEBUG INFO]: currently in parametry(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
@@ -345,6 +357,10 @@ bool param() {
             value = param();
     }
     printf("[DEBUG INFO]: currently in param(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
@@ -376,6 +392,10 @@ bool prikaz_fce() {
         }
     }
     printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
@@ -519,6 +539,10 @@ bool prikaz() {
         }
     }
     printf("[DEBUG INFO]: currently in prikaz(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
@@ -552,6 +576,10 @@ bool else_rule() {
         }
     }
     printf("[DEBUG INFO]: currently in else_rule(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
@@ -583,6 +611,10 @@ bool vol_parametry() {
         value = vol_param();
     }
     printf("[DEBUG INFO]: currently in vol_parametry(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
@@ -598,6 +630,10 @@ bool vol_param() {
         value = vol_par();
     }
     printf("[DEBUG INFO]: currently in vol_param(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
@@ -622,6 +658,10 @@ bool vol_par() {
         }
     }
     printf("[DEBUG INFO]: currently in vol_par(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
@@ -632,6 +672,10 @@ bool konec() {
         value = true;
     }
     printf("[DEBUG INFO]: currently in konec(), returning: %d\n", value);
+    if(!value) {
+        error_handle(current_tkn->line, syntax_error);
+        abort();
+    }
     return value;
 }
 
