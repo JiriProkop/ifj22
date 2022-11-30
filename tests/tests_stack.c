@@ -25,7 +25,7 @@ void fill_stack(stack* stack){
     if(!stack_is_empty(stack)){
         printf("filling not empty stack \n");
     }
-    int size = 5;
+    int size = 6;
     unsigned lines[6] = {1,2,3,4,5,6};
     token_type types[6] ={token_parentheses_left, token_minus, token_integer, token_plus, token_string, token_identifier};
     for(int i = 0; i< size; i++){
