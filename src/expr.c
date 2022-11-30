@@ -84,14 +84,8 @@ bool reduction(stack *pstk) {
     token_t op = {.type = token_expr_e};
     if (op_cnt == 1) {
         token_t *tmp = stack_top_terminal(pstk);
-        if (tmp->type == token_integer) {
-            printf("%d", erule_int);
-        } else if (tmp->type == token_float) {
-            printf("%d", erule_float);
-        } else if (tmp->type == token_string) {
-            printf("%d", erule_string);
-        } else if (tmp->type == token_varieble) {
-            printf("%d", erule_id);
+        if (tmp->type == token_integer || tmp->type == token_float || tmp->type == token_string || tmp->type == token_varieble) {
+            printf("%d", erule_val);
         } else {
             error_handle(tmp->line, syntax_error);
             return false;
