@@ -295,29 +295,27 @@ int main() {
     push_token(stack, token_string, 7);
     top_terminal = stack_top_terminal(stack);
     print_type(top_terminal);
-    // test float
+    // test float terminal
     push_token(stack, token_float, 12);
     push_token(stack, token_compare_neg, 8);
     top_terminal = stack_top_terminal(stack);
     print_type(top_terminal);
-    // test variable
+    // test variable terminal
     push_token(stack, token_varieble, 60);
     top_terminal = stack_top_terminal(stack);
     print_type(top_terminal);
     stack_dispose_all(stack);
-    // test finds < (shift)
+    // test finds < (shift) terminal
     push_token(stack, token_varieble, 10);
     push_token(stack, token_expr_shift, 12);
     push_token(stack, token_multiply, 40);
     top_terminal = stack_top_terminal(stack);
     print_type(top_terminal);
-    free(top_terminal);
-    // test finds E 
+    // test finds E terminal
     push_token(stack, token_integer, 67);
     push_token(stack, token_expr_e, 42);
     top_terminal = stack_top_terminal(stack);
     print_type(top_terminal);
-    free(top_terminal);
 
     // ---- test pop and save ----
     printf("\n[stack test pop and save]\n");
@@ -337,7 +335,7 @@ int main() {
         printf("stack insert shift working\n");
     }
     free(top_terminal);
-    
+
     stack_dispose_all(stack);
     // ---- test tokens to shift ----
     printf("\n[stack test tokens to shift]\n");
