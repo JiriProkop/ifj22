@@ -175,10 +175,10 @@ bool program() {
             value = false;
         }
     // rule: <program> -> <prikaz> <program>
-    } else if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
-              current_tkn->attr.keyword == keyword_return ||
-              current_tkn->attr.keyword == keyword_if ||
-              current_tkn->attr.keyword == keyword_while) {
+    } else {// if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
+            //  current_tkn->attr.keyword == keyword_return ||
+            //  current_tkn->attr.keyword == keyword_if ||
+            //  current_tkn->attr.keyword == keyword_while) {
 
         value = true;
         // <prikaz>
@@ -543,6 +543,13 @@ bool prikaz() {
                 }
             }
         }
+    // checks expressions
+    } else {
+        value = vyraz(false, *current_tkn);
+        // check for ;
+        if(value && current_tkn->type != token_semicol) {
+            value = false;
+        }
     }
     printf("[DEBUG INFO]: currently in prikaz(), returning: %d\n", value);
     if(!value) {
@@ -695,5 +702,3 @@ bool vyraz(bool second_tkn, token_t prev_tok) {
         return expr(*current_tkn, NULL);
     }
 }
-
-// TODO vyraz do prikazu
