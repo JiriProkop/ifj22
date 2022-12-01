@@ -429,6 +429,16 @@ bool prikaz() {
     // rule: <prikaz> -> ID ( <vol_parametry> ) ;
     } else if(current_tkn->type == token_identifier) {
         dynstr_t *id = current_tkn->attr.str;
+        if(st_search(tree, id) == NULL) {
+            error_handle(current_tkn->line, func_def_error);
+            abort();
+        }
+        list_t *parameters = malloc(sizeof(list_t));
+        if(parameters == NULL) {
+            error_handle(0, compiler_error);
+            abort();
+        }
+        list_init(parameters);
 
         value = true;
         // (
@@ -438,7 +448,7 @@ bool prikaz() {
         }
         // <vol_parametry>
         get_tkn();
-        if(value && !vol_parametry()) {
+        if(value && !vol_parametry(parameters)) {
             value = false;
         }
         // )
@@ -608,7 +618,7 @@ bool else_rule() {
     return value;
 }
 
-bool vol_parametry() {
+bool vol_parametry(list_t *parameters) {
     bool value = false;
     printf("[DEBUG INFO]: currently in vol_parametry(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <vol_parametry> -> eps
@@ -624,16 +634,29 @@ bool vol_parametry() {
         if(value && !vyraz(false, *current_tkn)) {
             value = false;
         }
+        // adding the parameter to a list
+        if(value) {
+            // id is NULL, since the parameter is <vyraz> not, VAR_ID
+            list_add(parameters, keyword_void, NULL);
+        }
+
         // <vol_param>
-        if(value && !vol_param()) {
+        if(value && !vol_param(parameters)) {
             value = false;
         }
     // rule: <vol_parametry> -> VAR_ID <vol_param>
     } else if(current_tkn->type == token_varieble) {
-        // TODO ulozit hodnotu
-        string_free(current_tkn->attr.str);
+        // VAR_ID
+        if(st_search(tree, current_tkn->attr.str) != NULL) {
+            list_add(parameters, keyword_void, current_tkn->attr.str);
+        } else {
+            error_handle(current_tkn->line, func_arr_or_ret_error);
+            abort();
+        }
+
+        // <vol_param>
         get_tkn();
-        value = vol_param();
+        value = vol_param(parameters);
     }
     printf("[DEBUG INFO]: currently in vol_parametry(), returning: %d\n", value);
     if(!value) {
@@ -643,7 +666,7 @@ bool vol_parametry() {
     return value;
 }
 
-bool vol_param() {
+bool vol_param(list_t *parameters) {
     bool value = false;
     printf("[DEBUG INFO]: currently in vol_param(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <vol_param> -> eps
@@ -652,7 +675,7 @@ bool vol_param() {
     // rule: <vol_param> -> , <vol_par>
     } else if(current_tkn->type == token_comma) {
         get_tkn();
-        value = vol_par();
+        value = vol_par(parameters);
     }
     printf("[DEBUG INFO]: currently in vol_param(), returning: %d\n", value);
     if(!value) {
@@ -662,13 +685,22 @@ bool vol_param() {
     return value;
 }
 
-bool vol_par() {
+bool vol_par(list_t *parameters) {
     bool value = false;
     printf("[DEBUG INFO]: currently in vol_par(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <vol_par> -> VAR_ID <vol_param>
     if(current_tkn->type == token_varieble) {
+        // VAR_ID
+        if(st_search(tree, current_tkn->attr.str) != NULL) {
+            list_add(parameters, keyword_void, current_tkn->attr.str);
+        } else {
+            error_handle(current_tkn->line, func_arr_or_ret_error);
+            abort();
+        }
+
+        // <vol_param>
         get_tkn();
-        value = vol_param();
+        value = vol_param(parameters);
     // rule: <vol_par> -> <vyraz> <vol_param>
     } else if(current_tkn->type == token_integer) { // TODO pridat ostatni stavy vyrazu
         value = true;
@@ -677,8 +709,14 @@ bool vol_par() {
         if(value && !vyraz(false, *current_tkn)) {
             value = false;
         }
+        // adding the parameter to a list
+        if(value) {
+            // id is NULL, since the parameter is <vyraz> not, VAR_ID
+            list_add(parameters, keyword_void, NULL);
+        }
+
         // <vol_param>
-        if(value && !vol_param()) {
+        if(value && !vol_param(parameters)) {
             value = false;
         }
     }

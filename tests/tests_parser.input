@@ -11,7 +11,7 @@ function testfunc(int $testvar, float $fasdf, string $afdsf, string $fdsfaff) : 
 
 function testfuncafsdf(int $testvar) : void {
     return 43;
-    $asfdfa = testfunc();
+    $asfdfa = testfunc($asfddfa);
 testfunc();
     while(3) {
 

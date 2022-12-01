@@ -120,23 +120,26 @@ bool else_rule();
 /**
  * A function for the <vol_parametry> rule.
  * 
+ * @param parameters The list of the call parameters.
  * @return True if it was correct.
 */
-bool vol_parametry();
+bool vol_parametry(list_t *parameters);
 
 /**
  * A function for the <vol_param> rule.
  * 
+ * @param parameters The list of the call parameters.
  * @return True if it was correct.
 */
-bool vol_param();
+bool vol_param(list_t *parameters);
 
 /**
  * A function for the <vol_par> rule.
  * 
+ * @param parameters The list of the call parameters.
  * @return True if it was correct.
 */
-bool vol_par();
+bool vol_par(list_t *parameters);
 
 /**
  * A function for the <konec> rule.
