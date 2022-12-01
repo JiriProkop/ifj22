@@ -549,6 +549,7 @@ bool prikaz() {
             }
         // =
         } else {
+            // TODO kontrola jestli jsem v hlavím stromu
             if(st_search(tree, id) == NULL) {
                 add_node(&tree, id, 0, NULL, 0, keyword_null, true);
             }
@@ -647,6 +648,7 @@ bool vol_parametry(list_t *parameters) {
     // rule: <vol_parametry> -> VAR_ID <vol_param>
     } else if(current_tkn->type == token_varieble) {
         // VAR_ID
+        // TODO kontrola, jestli jsme ve spravnem ramci 
         if(st_search(tree, current_tkn->attr.str) != NULL) {
             list_add(parameters, keyword_void, current_tkn->attr.str);
         } else {
@@ -691,6 +693,7 @@ bool vol_par(list_t *parameters) {
     // rule: <vol_par> -> VAR_ID <vol_param>
     if(current_tkn->type == token_varieble) {
         // VAR_ID
+        // TODO kontrola, jestli jsme ve spravnem ramci 
         if(st_search(tree, current_tkn->attr.str) != NULL) {
             list_add(parameters, keyword_void, current_tkn->attr.str);
         } else {
