@@ -11,7 +11,7 @@
  * 
  */
 typedef struct list_node{
-    token_type type;
+    keywords type;
     bool can_be_null;
     dynstr_t *id; 
     struct list_node *next;
@@ -48,7 +48,7 @@ bool list_is_empty(list_t *list);
  * @param list 
  * @param token  
  */
-int list_add(list_t *list, token_type type, dynstr_t* id);
+int list_add(list_t *list, keywords type, dynstr_t* id);
 
 /**
  * @brief removes first node of the list, if the list is empty does nothing 

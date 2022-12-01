@@ -6,7 +6,7 @@
 #include "../src/ll.h"
 #include "../src/error.h"
 
-void print_add_node(list_t *list, token_type type, bool first, char id[]){
+void print_add_node(list_t *list, keywords type, bool first, char id[]){
     char *str = malloc(sizeof(char)* (strlen(id)+1));
     str = strcpy(str, id);
     if(list == NULL){
@@ -43,7 +43,7 @@ void print_list(list_t *list){
     printf("\n");
 }
 
-void add_node(list_t *list, char id[], token_type type){
+void add_node(list_t *list, char id[], keywords type){
     char* tmp_str = malloc(sizeof(char)*(strlen(id) + 1));
     if(tmp_str == NULL){
         printf("failed to malloc dynstr in add node tests_ll\n");
@@ -78,14 +78,14 @@ int main(){
     // ll add node foo (int hello , char there , bool Obi-wan);
     printf("\n[list add test]\n");
 
-    add_node(list, "hello", token_varieble);
-    print_add_node(list, token_varieble, true, "hello");
+    add_node(list, "hello", keyword_string);
+    print_add_node(list, keyword_string, true, "hello");
 
-    add_node(list, "there", token_string);
-    print_add_node(list, token_string, false, "there");
+    add_node(list, "there", keyword_string);
+    print_add_node(list, keyword_string, false, "there");
 
-    add_node(list, "Obi-wan", token_dot);
-    print_add_node(list,token_dot, false, "Obi-wan");
+    add_node(list, "Obi-wan", keyword_if);
+    print_add_node(list,keyword_if, false, "Obi-wan");
 
     print_list(list);
     // ll list not empty 
