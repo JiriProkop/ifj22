@@ -24,7 +24,7 @@ void gen_function_def(dynstr_t *id, list_t* parameters) {
     printf("PUSHFRAME\n");
 }
 
-void gen_function_defend(dynstr_t *id) {
+void gen_function_def_end(dynstr_t *id) {
     printf("POPFRAME\n");
     printf("RETURN\n");
     printf("LABEL %s_end\n", id->array);
