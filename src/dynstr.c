@@ -21,6 +21,9 @@ void dynstr_clear(dynstr_t *string) {
 }
 // akorat delete je uzit ve funkci free o kousek nize
 void dynstr_delete(dynstr_t *string) {
+    if(string == NULL || string->array == NULL){
+        return;
+    }
     free(string->array);
     string->length = 0;
     string->allocated = 0;

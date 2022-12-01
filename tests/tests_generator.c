@@ -142,9 +142,18 @@ int main() {
     print_tree(tree);
     gen_function_call(id,params,tree);
 
+    
+
+
     // cleanup
+    printf("1\n");
+    st_dispose(&tree);
+    printf("7\n");
     string_free(id);
-    list_dispose(params);
+    printf("8\n");
+    // TODO here segfault cant figure out why
+    // list_dispose(params);
+    printf("9\n");
 
     return ret;
 }

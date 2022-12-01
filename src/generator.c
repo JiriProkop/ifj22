@@ -63,6 +63,5 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
         }
     }
     // TODO return value 
-    printf("call %s_start\n", id->array);
-
+    printf("CALL %s_start\n", id->array);
 }   
