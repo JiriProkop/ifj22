@@ -14,7 +14,36 @@
 #include "../src/ll.h"
 #include "../src/error.h"
 #include "../src/scanner.h"
+#include "../src/symtable.h"
 
+
+
+#define COUNT 10
+
+void print_tree_actual(sym_table *tree, int space){
+    if(tree == NULL){
+        return;
+    }
+    space += COUNT;
+
+    print_tree_actual(tree->right, space);
+    printf("\n");
+    for(int i = COUNT; i <space; i++){
+        printf(" ");
+    }
+    printf("%s\n", tree->id->array);
+
+    print_tree_actual(tree->left, space);
+}
+
+void print_tree(sym_table *tree){
+    if(tree == NULL){
+        printf("tree is empty\n");
+    }
+    printf("\n");
+    print_tree_actual(tree, 0);
+    return;
+}
 
 
 void print_list(list_t *list){
@@ -27,7 +56,7 @@ void print_list(list_t *list){
     printf("\n");
 }
 
-void add_node(list_t *list, char id[], token_type type){
+void add_node(list_t *list, char id[], keywords type){
     char* tmp_str = malloc(sizeof(char)*(strlen(id) + 1));
     if(tmp_str == NULL){
         printf("failed to malloc dynstr in add node tests_generator\n");
@@ -39,8 +68,6 @@ void add_node(list_t *list, char id[], token_type type){
     list_add(list, type, tmp_dstr);
     free(tmp_str);
 }
-
-// TODO malloc, init, and fill dynstr_t
 
 dynstr_t *prep_func_id(char *id) {
     dynstr_t *str = malloc(sizeof(dynstr_t));
@@ -60,10 +87,22 @@ list_t *prep_params() {
         return list;
     }
     list_init(list);
-    add_node(list, "teststr", token_string);
-    add_node(list, "testint", token_integer);
-    add_node(list, "testfloat", token_float);
+    add_node(list, "teststr", keyword_string);
+    add_node(list, "testint", keyword_int);
+    add_node(list, "testfloat", keyword_float);
     return list;
+}
+
+void add_tree_node(sym_table **tree, char id[], keywords type, list_t* params){
+    sym_data *new_symdata = malloc(sizeof(sym_data));
+    dynstr_t *new_id = malloc(sizeof(dynstr_t));
+    dynstr_init(new_id);
+    new_symdata->type = type;
+    new_symdata->parameters = params;
+    new_symdata->local_frame = NULL;
+    dynstr_add_string(new_id, id);
+    st_insert(tree, new_id ,new_symdata);
+
 }
 
 
@@ -91,6 +130,17 @@ int main() {
     // test function def end
     printf("\n[function def end gen test]\n");
     gen_function_def_end(id);
+
+    // test function call function no casting 
+    printf("\n[function def call tests]\n");
+    sym_table *tree = malloc(sizeof(sym_table));
+    if(tree == NULL){
+        return ret;
+    }
+    st_init(&tree);
+    add_tree_node(&tree, "testfunc", keyword_int, params);
+    print_tree(tree);
+    gen_function_call(id,params,tree);
 
     // cleanup
     string_free(id);

@@ -15,7 +15,7 @@ bool list_is_empty(list_t *list){
  	return list->last == NULL;
 }
 
-int list_add(list_t *list, token_type type, dynstr_t* id){
+int list_add(list_t *list, keywords type, dynstr_t* id){
 	list_node_t *node = malloc(sizeof(list_node_t));
 	if(node == NULL){
 		error_handle(0,compiler_error);
