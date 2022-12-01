@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-function testfunc(int $testvar, float $fasdf) : void {
+function testfunc(int $testvar, float $fasdf, string $afdsf, string $fdsfaff) : void {
     return 43;
     $asfdfa = 234;
     while(3) {

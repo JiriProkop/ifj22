@@ -99,27 +99,16 @@ void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *paramete
     }
     
     st_insert(tree, id, data);
-    print_tree(*tree); // TODO debug print
 }
 
 unsigned int convert_list_to_subtree(list_t *list, sym_table **subtree) {
     unsigned int num_of_params = 0;
     list_node_t *temp = list_first(list);
     while(temp != NULL) {
-        if(subtree == NULL) {
-            printf("convert: subtree je null\n");
-        } else {
-            printf("convert: subtree neni null\n");
-        }
         add_node(subtree, temp->id, 0, NULL, 0, temp->type, temp->can_be_null);
         num_of_params++;
         temp = temp->next;
     }
-    if(subtree == NULL) {
-            printf("odchazim: subtree je null\n");
-        } else {
-            printf("odchazim: subtree neni null\n");
-        }
     return num_of_params;
 }
 
@@ -270,13 +259,7 @@ bool definice() {
             sym_table **subtree = &st_search(tree, id)->local_frame;
             st_search(tree, id)->params = convert_list_to_subtree(parameters, subtree);
             //gen_function_def(id); TODO
-            printf("---------------------------------------------------- %s\n", id->array);
-            if(subtree == NULL) {
-                printf("subtree je null\n");
-            } else {
-                printf("subtree neni null\n");
-            }
-            print_tree(*subtree);
+            print_tree(*subtree); // TODO debug printfs
             print_list(parameters);
         } else {
             error_handle(line_num, func_def_error);
@@ -308,7 +291,6 @@ bool definice() {
 
 bool parametry(dynstr_t *fun_id, list_t *parameters) {
     bool value = false;
-    bool is_type = false; // is true if there was a token of a type
 
     keywords type;
     bool can_be_null = false;
@@ -325,20 +307,22 @@ bool parametry(dynstr_t *fun_id, list_t *parameters) {
         if(current_tkn->type == token_keyword_w_null) {
             can_be_null = true;
         }
-        is_type = true;
+
+        // VAR_ID
         get_tkn();
+        if(current_tkn->type == token_varieble) {
+            // adding the parameter to the arguments list
+            list_add(parameters, type, current_tkn->attr.str);
+            parameters->last->can_be_null = can_be_null;
+
+            // <param>
+            get_tkn();
+            value = param(fun_id, parameters);
+        }   
     }
 
-    // TODO refactor
     // if the previous token was type, continues to check if the current token is VAR_ID
-    if(is_type && current_tkn->type == token_varieble) {
-        // adding the parameter to the arguments list
-        list_add(parameters, type, current_tkn->attr.str);
-        parameters->last->can_be_null = can_be_null;
-
-        get_tkn();
-        value = param(fun_id, parameters);
-    }
+    
     printf("[DEBUG INFO]: currently in parametry(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
@@ -349,7 +333,6 @@ bool parametry(dynstr_t *fun_id, list_t *parameters) {
 
 bool param(dynstr_t *fun_id, list_t *parameters) {
     bool value = false;
-    bool is_type = false;
 
     keywords type;
     bool can_be_null = false;
@@ -370,21 +353,21 @@ bool param(dynstr_t *fun_id, list_t *parameters) {
             if(current_tkn->type == token_keyword_w_null) {
                 can_be_null = true;
             }
-            is_type = true;
+            
+            // VAR_ID
             get_tkn();
+            if(current_tkn->type == token_varieble) {
+                // save the parameter to the list
+                list_add(parameters, type, current_tkn->attr.str);
+                parameters->last->can_be_null = can_be_null;
+
+                // <param>
+                get_tkn();
+                value = param(fun_id, parameters);
+            }
         }
     }
 
-    // TODO refactor
-    // if the previous token was type, continues to check if the current token is VAR_ID
-    if(is_type && current_tkn->type == token_varieble) {
-            // save the parameter to the list
-            list_add(parameters, type, current_tkn->attr.str);
-            parameters->last->can_be_null = can_be_null;
-
-            get_tkn();
-            value = param(fun_id, parameters);
-    }
     printf("[DEBUG INFO]: currently in param(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
