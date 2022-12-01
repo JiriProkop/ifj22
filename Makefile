@@ -4,7 +4,7 @@ LDLIBS = -lm
 
 TESTDIR = tests/
 SOURCES = src/
-CASES = tests_dynstr tests_scanner tests_parser tests_stack tests_expr tests_ll
+CASES = tests_dynstr tests_scanner tests_parser tests_stack tests_expr tests_ll tests_generator
 TESTS = $(addprefix $(TESTDIR), $(CASES))
 
 PARTS = $(TESTS)
@@ -29,10 +29,14 @@ test: $(TESTS)
 # expr tests
 	$(TESTDIR)tests_expr > $(TESTDIR)tests_expr.output < $(TESTDIR)tests_expr.input
 	diff -su $(TESTDIR)tests_expr.output $(TESTDIR)correct_out/tests_expr.output
+# generator tests
+	$(TESTDIR)tests_generator > $(TESTDIR)tests_generator.output
+	diff -su $(TESTDIR)tests_generator.output $(TESTDIR)correct_out/tests_generator.output
 
 # check the tests with valgrind
 valgrind: $(TESTS)
 	valgrind $(TESTDIR)tests_parser
+	valgrind $(TESTDIR)tests_generator
 
 # $(TESTDIR)name_of_test_file: list.o of.o dependencies.o
 $(TESTDIR)tests_dynstr: $(SOURCES)dynstr.o $(SOURCES)error.o
@@ -49,6 +53,8 @@ $(TESTDIR)tests_ll: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 #$(TESTDIR)tests_symtable: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)symtable.o
 #	$(CC) $(CFLAGS) $^ $@.c -o $@
+$(TESTDIR)tests_generator: $(SOURCES)dynstr.o $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)generator.o
+	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 # --------------------------------------------------
 
 # compile object files

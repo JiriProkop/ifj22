@@ -1,0 +1,27 @@
+--- [GENERATOR TESTS] ---
+
+[header gen test]
+.IFJcode22
+
+[info: parameter list]
+list from the start :  'teststr', 'testint', 'testfloat',
+
+[function def gen test]
+DEFVAR LF@%testfunc_teststr
+DEFVAR LF@%testfunc_testint
+DEFVAR LF@%testfunc_testfloat
+JUMP testfunc_end
+LABEL testfunc_start
+CREATEFRAME
+DEFVAR TF@teststr
+MOVE TF@teststr LF@%testfunc_teststr
+DEFVAR TF@testint
+MOVE TF@testint LF@%testfunc_testint
+DEFVAR TF@testfloat
+MOVE TF@testfloat LF@%testfunc_testfloat
+PUSHFRAME
+
+[function def end gen test]
+POPFRAME
+RETURN
+LABEL testfunc_end
