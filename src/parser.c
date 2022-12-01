@@ -451,6 +451,8 @@ bool prikaz() {
         if(value && !vol_parametry(parameters)) {
             value = false;
         }
+        print_list(parameters);
+
         // )
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
