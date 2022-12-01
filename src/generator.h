@@ -9,6 +9,8 @@
 #ifndef _GENERATOR_H
 #define _GENERATOR_H
 
+#include "stack.h"
+
 /**
  * Function for printing the IFJcode22 header.
 */
@@ -18,5 +20,7 @@ void gen_header();
  * Function for printing a function definition.
 */
 void gen_function_def();
+
+void gen_expression(exprll *ll);
 
 #endif

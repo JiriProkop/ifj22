@@ -7,6 +7,7 @@
 #include "symtable.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include "generator.h"
 
 #define PREC_TABLE_SIZE 8
 
@@ -81,18 +82,24 @@ bool get_colrow(unsigned *colrow, token_t *tok) {
  * @param pstk pointer to initialized stack
  * @return Returns false if error was encountered, true otherwise.
  */
-bool reduction(stack *pstk) {
+bool reduction(stack *pstk, exprll* ll) {
     unsigned op_cnt = tokens_to_shift(pstk);
     token_t op = {.type = token_expr_e};
+    int rule;
     if (op_cnt == 1) {
         token_t *tmp = stack_top_terminal(pstk);
         if (tmp->type == token_integer || tmp->type == token_float || tmp->type == token_string || tmp->type == token_varieble) {
-            printf("%d", erule_val);
+            rule = erule_val;
         } else {
             error_handle(tmp->line, syntax_error);
             return false;
         }
-        stack_pop(pstk);
+        token_t *tok = stack_save_pop(pstk);
+		if(!exprll_add(ll, rule, tok)) {
+            expll_dispose(ll);
+            stack_dispose_all(pstk);
+            abort();
+        }
         stack_pop(pstk);
         if (!allocpush_token_stack(pstk, op)) {
             return false;
@@ -104,40 +111,40 @@ bool reduction(stack *pstk) {
         stack_pop(pstk); // popping '<'
         switch (tok2->type) {
             case token_plus:
-                printf("%d", erule_plus);
+                rule = erule_plus;
                 break;
             case token_minus:
-                printf("%d", erule_minus);
+				rule = erule_minus;
                 break;
             case token_division:
-                printf("%d", erule_div);
+                rule = erule_div;
                 break;
             case token_multiply:
-                printf("%d", erule_mul);
+                rule = erule_mul;
                 break;
             case token_dot:
-                printf("%d", erule_cat);
+                rule = erule_cat;
                 break;
             case token_compare:
-                printf("%d", erule_comp);
+                rule = erule_comp;
                 break;
             case token_compare_neg:
-                printf("%d", erule_comp_neg);
+                rule = erule_comp_neg;
                 break;
             case token_greater:
-                printf("%d", erule_greater);
+                rule = erule_greater;
                 break;
             case token_greater_equal:
-                printf("%d", erule_greater_equal);
+                rule = erule_greater_equal;
                 break;
             case token_lower:
-                printf("%d", erule_lower);
+                rule = erule_lower;
                 break;
             case token_lower_equal:
-                printf("%d", erule_lower_equal);
+                rule = erule_lower_equal;
                 break;
             case token_expr_e:
-                printf("%d", erule_brackets);
+                rule = erule_brackets;
                 break;
             default:
                 error_handle(tok1->line, syntax_error);
@@ -146,10 +153,16 @@ bool reduction(stack *pstk) {
         if (!allocpush_token_stack(pstk, op)) {
             return false;
         }
+        if(!exprll_add(ll, rule, NULL)) {
+            expll_dispose(ll);
+            stack_dispose_all(pstk);
+            abort();
+        }
         free(tok1);
-        free(tok2);
+		free(tok2);
         free(tok3);
     }
+
     return true;
 }
 
@@ -217,6 +230,9 @@ bool expr(token_t first_tok, token_t* second_tok, sym_table* symtab) {
     tok = first_tok;
     char c;
     printf("Expr. parser pravy rozbor: ");
+    exprll *ll;
+    exprll_init(&ll);
+
     while (1) {
         token_t *top_term = stack_top_terminal(&stk);
         if (toread && !second_read) {
@@ -259,7 +275,7 @@ bool expr(token_t first_tok, token_t* second_tok, sym_table* symtab) {
                 toread = true;
                 break;
             case '>': // reduction
-                if (!reduction(&stk)) {
+                if (!reduction(&stk, ll)) {
                     return false;
                 }
                 toread = false;

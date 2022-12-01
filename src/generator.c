@@ -2,6 +2,9 @@
 #include "generator.h"
 #include "dynstr.h"
 #include "ll.h"
+#include "stack.h"
+#include "parser.h"
+#include "expr.h"
 
 void gen_header() {
     printf(".IFJcode22\n");
@@ -32,4 +35,37 @@ void gen_function_defend(dynstr_t *id) {
 
 void gen_function_call(dynstr_t *id, list_t* parameters){
     
+}
+
+void gen_expression(exprll* ll) {
+	// expressions can consist of expression, all operators have two operands, 
+	// can be a result of a expession
+    static int prev_rule = -1; 
+    switch (ll->rule) {
+        case erule_plus:
+            break;
+        case erule_minus:
+            break;
+        case erule_div:
+            break;
+        case erule_mul:
+            break;
+        case erule_cat:
+            break;
+        case erule_comp:
+            break;
+        case erule_comp_neg:
+            break;
+        case erule_lower:
+            break;
+        case erule_lower_equal:
+            break;
+        case erule_greater:
+            break;
+        case erule_greater_equal:
+            break;
+        case erule_brackets:
+            break;
+    } // end of rule switch
+    prev_rule = ll->rule;
 }

@@ -91,6 +91,40 @@ token_t *stack_top_terminal(stack *stack);
  */
 void stack_insert_shift(stack *stack);
 
-
+// TODO comment
 unsigned tokens_to_shift(stack *stack);
+
+/**
+ * @struct linked list structure for expression code generation
+ */
+typedef struct {
+    int rule;
+    token_t *ptok;
+    exprll *next;
+} exprll;
+
+/**
+ * @brief Initialises linked list.
+ * 
+ * @param ll pointer to linked list
+ */
+void exprll_init(exprll **ll);
+
+/**
+ * @brief Adds new element on start of given linked list
+ * 
+ * @param ll pointer to linked list
+ * @param data integer, will be put in new ll element
+ * @param ptok pointer to allocated token if data == 0, is NULL otherwise.
+ * @return false in case of malloc error, true otherwise
+ */
+bool exprll_add(exprll *ll, int data, token_t* ptok);
+
+/**
+ * @brief Deletes given linked list
+ * 
+ * @param ll pointer to linked list, will be set to NULL
+ */
+void expll_dispose(exprll *ll);
+
 #endif
