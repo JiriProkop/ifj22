@@ -8,18 +8,19 @@ void gen_header() {
 }
 
 void gen_function_def(dynstr_t *id, list_t* parameters) {
-    printf("JUMP %s_end\n", id->array);
-    list_t* i = parameters->first;
+    list_node_t* i = parameters->first;
     while(i != NULL){
-        printf("DEFVAR LF@%%s_%s", id->array, i->first->id->array);
-        i = i->first->next;
+        printf("DEFVAR LF@%%%s_%s\n", id->array, i->id->array);
+        i = i->next;
     }
+    printf("JUMP %s_end\n", id->array);
     printf("LABEL %s_start\n", id->array);
     printf("CREATEFRAME\n");
     i = parameters->first;
     while(i != NULL){
-        printf("DEFVAR TF@s", i->first->id->array);
-        printf("MOVE TF@%s LF@%%s_%s",i->first->id->array, id->array, i->first->id->array);
+        printf("DEFVAR TF@%s\n", i->id->array);
+        printf("MOVE TF@%s LF@%%%s_%s\n",i->id->array, id->array, i->id->array);
+        i = i->next;
     }
     printf("PUSHFRAME\n");
 }
