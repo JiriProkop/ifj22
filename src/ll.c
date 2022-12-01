@@ -63,6 +63,7 @@ void list_dispose(list_t *list){
 		delete_node = i;
 		i = i->next;
 		free(delete_node);
+
 		delete_node = NULL;
 	}
 	free(list);

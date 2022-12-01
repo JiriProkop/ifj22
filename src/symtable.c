@@ -103,19 +103,12 @@ void st_delete(sym_table **tab, dynstr_t *id) {
 
 void st_dispose(sym_table **tab) {
     if (*tab != NULL) {
-        printf("0\n");
         st_dispose(&(*tab)->left);
-        printf("1\n");
         st_dispose(&(*tab)->right);
-        printf("2\n");
         st_dispose(&(*tab)->data->local_frame);
-        printf("3\n");
         string_free((*tab)->id);
-        printf("4\n");
         list_dispose((*tab)->data->parameters);
-        printf("5\n");
         free((*tab)->data);
-        printf("6\n");
         free(*tab);
         *tab = NULL;
     }
