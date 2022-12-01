@@ -265,7 +265,7 @@ bool definice() {
 
         if(st_search(tree, id) == NULL) {
             add_node(&tree, id, 1, parameters, params, type, can_be_null);
-            gen_function_def(id);
+            //gen_function_def(id);
         } else {
             error_handle(line_num, func_def_error);
             abort();
