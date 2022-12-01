@@ -11,7 +11,8 @@
  * 
  */
 typedef struct list_node{
-    token_type type; 
+    token_type type;
+    bool can_be_null;
     dynstr_t *id; 
     struct list_node *next;
 } list_node_t;

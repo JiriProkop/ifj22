@@ -38,6 +38,7 @@ void free_tkn();
 
 /**
  * Function for adding a node to the tree.
+ * 
  * @param tree A tree to add the note to.
  * @param id A identifier of the function/variable.
  * @param is_function A bool value - true if it is a function, false if it is a variable.
@@ -47,6 +48,15 @@ void free_tkn();
  * @param can_be_null True if the type is nullable.
 */
 void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters, unsigned int params, keywords type, bool can_be_null);
+
+/**
+ * Function for converting the parameters list to the function subtree.
+ * 
+ * @param list The parameters list.
+ * @param subtree The subtree of the function.
+ * @return Returns the number of items in the list.
+*/
+unsigned int convert_list_to_subtree(list_t *list, sym_table *subtree);
 
 /**
  * A function for the <start> rule.
@@ -72,9 +82,10 @@ bool definice();
 /**
  * A function for the <parametry> rule.
  * 
+ * @param fun_id Identifier of the function.
  * @return True if it was correct.
 */
-bool parametry();
+bool parametry(dynstr_t *fun_id, list_t *parameters);
 
 /**
  * A function for the <param> rule.

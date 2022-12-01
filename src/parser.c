@@ -124,6 +124,17 @@ void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *paramete
     st_insert(tree, id, data);
 }
 
+unsigned int convert_list_to_subtree(list_t *list, sym_table *subtree) {
+    unsigned int num_of_params = 0;
+    list_node_t *temp = list->first;
+    while(temp != NULL) {
+        add_node(&subtree, temp->id, 0, NULL, 0, temp->type, temp->can_be_null);
+        num_of_params++;
+        temp = temp->next;
+    }
+    return num_of_params;
+}
+
 // the parser functions start here:
 bool start() {
     tree = malloc(sizeof(sym_table));
@@ -236,7 +247,7 @@ bool definice() {
         }
         // <parametry>
         get_tkn();
-        if(value && !parametry()) {
+        if(value && !parametry(id, parameters)) {
             value = false;
         }
         // )
@@ -255,6 +266,7 @@ bool definice() {
                      current_tkn->attr.keyword == keyword_int ||
                      current_tkn->attr.keyword == keyword_float ||
                      current_tkn->attr.keyword == keyword_string)) {
+
             type = current_tkn->attr.keyword;
             if(current_tkn->type == token_keyword_w_null) {
                 can_be_null = true;
@@ -265,7 +277,8 @@ bool definice() {
 
         if(st_search(tree, id) == NULL) {
             add_node(&tree, id, 1, parameters, params, type, can_be_null);
-            gen_function_def(id);
+            convert_list_to_subtree(parameters, st_search(tree, id)->local_frame);
+            //gen_function_def(id); TODO
         } else {
             error_handle(line_num, func_def_error);
             abort();
@@ -294,28 +307,35 @@ bool definice() {
     return value;
 }
 
-bool parametry() {
+bool parametry(dynstr_t *fun_id, list_t *parameters) {
     bool value = false;
     bool is_type = false; // is true if there was a token of a type
+    keywords type;
+    bool can_be_null = false;
     printf("[DEBUG INFO]: currently in parametry(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <parametry> -> eps
     if(current_tkn->type == token_parentheses_right) {
         value = true;
     // rule: <parametry> -> TYP VAR_ID <param>
-    } else if(current_tkn->attr.keyword == keyword_int) {
-        // TODO zkontrolovat ostatní typy a nekam ulozit (do stromu)
-        is_type = true;
-        get_tkn();
-    } else if(current_tkn->attr.keyword == keyword_float) {
-        // TODO zkontrolovat ostatní typy a nekam ulozit (do stromu)
+    } else if(current_tkn->attr.keyword == keyword_int ||
+              current_tkn->attr.keyword == keyword_float ||
+              current_tkn->attr.keyword == keyword_string) {
+
+        type = current_tkn->attr.keyword;
+        if(current_tkn->type == token_keyword_w_null) {
+            can_be_null = true;
+        }
         is_type = true;
         get_tkn();
     }
 
+    // TODO refactor
     // if the previous token was type, continues to check if the current token is VAR_ID
     if(is_type && current_tkn->type == token_varieble) {
-        // TODO ulozit hodnotu
-        string_free(current_tkn->attr.str);
+        // adding the parameter to the arguments list
+        list_add(parameters, type, current_tkn->attr.str);
+        parameters->last->can_be_null = can_be_null;
+
         get_tkn();
         value = param();
     }
@@ -341,9 +361,6 @@ bool param() {
         get_tkn();
         if(value && current_tkn->attr.keyword == keyword_int) {
             // TODO pridat ostatni typy
-            is_type = true;
-            get_tkn();
-        } else if(value && current_tkn->attr.keyword == keyword_float) {
             is_type = true;
             get_tkn();
         }
