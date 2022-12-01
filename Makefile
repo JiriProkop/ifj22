@@ -4,7 +4,7 @@ LDLIBS = -lm
 
 TESTDIR = tests/
 SOURCES = src/
-CASES = tests_dynstr tests_scanner tests_parser tests_stack tests_expr tests_ll
+CASES = tests_dynstr tests_scanner tests_parser tests_stack tests_expr
 TESTS = $(addprefix $(TESTDIR), $(CASES))
 
 PARTS = $(TESTS)
@@ -45,8 +45,8 @@ $(TESTDIR)tests_stack: $(SOURCES)stack.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 $(TESTDIR)tests_expr: $(SOURCES)expr.o $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)stack.o $(SOURCES)symtable.o $(SOURCES)ll.o $(SOURCES)generator.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
-#$(TESTDIR)tests_ll: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o
-#	$(CC) $(CFLAGS) $^ $@.c -o $@
+$(TESTDIR)tests_ll: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o
+	$(CC) $(CFLAGS) $^ $@.c -o $@
 #$(TESTDIR)tests_symtable: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)symtable.o
 #	$(CC) $(CFLAGS) $^ $@.c -o $@
 # --------------------------------------------------

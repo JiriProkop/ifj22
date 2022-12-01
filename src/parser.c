@@ -10,47 +10,24 @@
 
 
 
-
-
-
-
-
-
-
-/*
-
-
-void print_tree_actual(sym_table *tree, int space){
-    if(tree == NULL){
+// TODO pomocné funkce
+void print_tree(sym_table *treee) {
+    if(treee == NULL) {
+        printf("[...] - [...]\n");
         return;
+    } else {
+        printf("[%s] - [%d]\n", treee->id->array, treee->data->is_function);
+        print_tree(treee->left);
+        print_tree(treee->right);
     }
-    space += COUNT;
-
-    print_tree_actual(tree->right, space);
-    printf("\n");
-    for(int i = COUNT; i <space; i++){
-        printf(" ");
-    }
-    printf("%s\n", tree->id->array);
-
-    print_tree_actual(tree->left, space);
 }
-
-void print_tree(sym_table *tree){
-    if(tree == NULL){
-        printf("tree is empty\n");
+void print_list(list_t *list) {
+    list_node_t *temp = list->first;
+    while(temp != NULL) {
+        printf("[%s]\n", temp->id->array);
+        temp = temp->next;
     }
-    print_tree_actual(tree, 0);
-    return;
 }
-
-
-
-
-*/
-
-
-
 
 
 
@@ -122,18 +99,30 @@ void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *paramete
     }
     
     st_insert(tree, id, data);
+    print_tree(*tree); // TODO debug print
 }
 
-unsigned int convert_list_to_subtree(list_t *list, sym_table *subtree) {
+unsigned int convert_list_to_subtree(list_t *list, sym_table **subtree) {
     unsigned int num_of_params = 0;
-    list_node_t *temp = list->first;
+    list_node_t *temp = list_first(list);
     while(temp != NULL) {
-        add_node(&subtree, temp->id, 0, NULL, 0, temp->type, temp->can_be_null);
+        if(subtree == NULL) {
+            printf("convert: subtree je null\n");
+        } else {
+            printf("convert: subtree neni null\n");
+        }
+        add_node(subtree, temp->id, 0, NULL, 0, temp->type, temp->can_be_null);
         num_of_params++;
         temp = temp->next;
     }
+    if(subtree == NULL) {
+            printf("odchazim: subtree je null\n");
+        } else {
+            printf("odchazim: subtree neni null\n");
+        }
     return num_of_params;
 }
+
 
 // the parser functions start here:
 bool start() {
@@ -275,10 +264,20 @@ bool definice() {
             value = false;
         }
 
+        // adding the function to the symtable tree
         if(st_search(tree, id) == NULL) {
             add_node(&tree, id, 1, parameters, params, type, can_be_null);
-            convert_list_to_subtree(parameters, st_search(tree, id)->local_frame);
+            sym_table **subtree = &st_search(tree, id)->local_frame;
+            st_search(tree, id)->params = convert_list_to_subtree(parameters, subtree);
             //gen_function_def(id); TODO
+            printf("---------------------------------------------------- %s\n", id->array);
+            if(subtree == NULL) {
+                printf("subtree je null\n");
+            } else {
+                printf("subtree neni null\n");
+            }
+            print_tree(*subtree);
+            print_list(parameters);
         } else {
             error_handle(line_num, func_def_error);
             abort();
@@ -310,6 +309,7 @@ bool definice() {
 bool parametry(dynstr_t *fun_id, list_t *parameters) {
     bool value = false;
     bool is_type = false; // is true if there was a token of a type
+
     keywords type;
     bool can_be_null = false;
     printf("[DEBUG INFO]: currently in parametry(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
@@ -337,7 +337,7 @@ bool parametry(dynstr_t *fun_id, list_t *parameters) {
         parameters->last->can_be_null = can_be_null;
 
         get_tkn();
-        value = param();
+        value = param(fun_id, parameters);
     }
     printf("[DEBUG INFO]: currently in parametry(), returning: %d\n", value);
     if(!value) {
@@ -347,9 +347,12 @@ bool parametry(dynstr_t *fun_id, list_t *parameters) {
     return value;
 }
 
-bool param() {
+bool param(dynstr_t *fun_id, list_t *parameters) {
     bool value = false;
     bool is_type = false;
+
+    keywords type;
+    bool can_be_null = false;
     printf("[DEBUG INFO]: currently in param(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <param> -> eps
     if(current_tkn->type == token_parentheses_right) {
@@ -359,19 +362,28 @@ bool param() {
         value = true;
         // TYP
         get_tkn();
-        if(value && current_tkn->attr.keyword == keyword_int) {
-            // TODO pridat ostatni typy
+        if(value && (current_tkn->attr.keyword == keyword_int ||
+                     current_tkn->attr.keyword == keyword_float ||
+                     current_tkn->attr.keyword == keyword_string)) {
+            
+            type = current_tkn->attr.keyword;
+            if(current_tkn->type == token_keyword_w_null) {
+                can_be_null = true;
+            }
             is_type = true;
             get_tkn();
         }
     }
 
+    // TODO refactor
     // if the previous token was type, continues to check if the current token is VAR_ID
     if(is_type && current_tkn->type == token_varieble) {
-            // TODO ulozit hodnotu
-            string_free(current_tkn->attr.str);
+            // save the parameter to the list
+            list_add(parameters, type, current_tkn->attr.str);
+            parameters->last->can_be_null = can_be_null;
+
             get_tkn();
-            value = param();
+            value = param(fun_id, parameters);
     }
     printf("[DEBUG INFO]: currently in param(), returning: %d\n", value);
     if(!value) {
@@ -719,3 +731,5 @@ bool vyraz(bool second_tkn, token_t prev_tok) {
         return expr(*current_tkn, NULL);
     }
 }
+
+// TODO kontrola poctu parametru pri volani

@@ -4,7 +4,6 @@
  * @brief The implementation of a parser.
  *
  * @author Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
- * @author TODO - dopište se tady
  */
 
 #include <stdbool.h>
@@ -56,7 +55,7 @@ void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *paramete
  * @param subtree The subtree of the function.
  * @return Returns the number of items in the list.
 */
-unsigned int convert_list_to_subtree(list_t *list, sym_table *subtree);
+unsigned int convert_list_to_subtree(list_t *list, sym_table **subtree);
 
 /**
  * A function for the <start> rule.
@@ -83,6 +82,7 @@ bool definice();
  * A function for the <parametry> rule.
  * 
  * @param fun_id Identifier of the function.
+ * @param parameters A list with the parameters.
  * @return True if it was correct.
 */
 bool parametry(dynstr_t *fun_id, list_t *parameters);
@@ -90,9 +90,11 @@ bool parametry(dynstr_t *fun_id, list_t *parameters);
 /**
  * A function for the <param> rule.
  * 
+ * @param fun_id Identifier of the function.
+ * @param parameters A list with the parameters.
  * @return True if it was correct.
 */
-bool param();
+bool param(dynstr_t *fun_id, list_t *parameters);
 
 /**
  * A function for the <prikaz_fce> rule.
