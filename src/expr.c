@@ -231,7 +231,7 @@ bool expr(token_t first_tok, token_t *second_tok) {
         } else if (toread && tok.type == token_parentheses_right) {
             par_right++;
         }
-        if (tok.type == token_parentheses_right && par_right - par_left == 1 ||
+        if ((tok.type == token_parentheses_right && par_right - par_left == 1) ||
 			tok.type == token_comma) {
             // for if(expr) doesn't end with semicolon
             *current_tkn = tok;
