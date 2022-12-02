@@ -25,3 +25,12 @@ PUSHFRAME
 POPFRAME
 RETURN
 LABEL testfunc_end
+
+[function def call tests]
+
+
+testfunc
+MOVE LF@%testfunc_teststr LF@teststr
+MOVE LF@%testfunc_testint LF@testint
+MOVE LF@%testfunc_testfloat LF@testfloat
+CALL testfunc_start
