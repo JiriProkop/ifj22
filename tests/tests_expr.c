@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TEST_EXPR_COUNT 14
+#define TEST_EXPR_COUNT 17
 
 int main() {
     token_t tok;
@@ -22,7 +22,7 @@ int main() {
     current_tkn = malloc(sizeof(token_t));
     for (int i = 0; i < TEST_EXPR_COUNT; i++) {
         get_token(&tok);
-        if (i >= 12) {
+        if (i >= 12 && i < 14) {
             get_token(&tok1);
             if (expr(tok, &tok1) == true) {
                 printf("Correct!\n");

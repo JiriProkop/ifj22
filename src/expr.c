@@ -65,7 +65,7 @@ bool get_colrow(unsigned *colrow, token_t *tok) {
         *colrow = pos_right_par;
     } else if (tok->type == token_string || tok->type == token_float || tok->type == token_integer || tok->type == token_varieble) {
         *colrow = pos_val;
-    } else if (tok->type == token_expr_dollar || tok->type == token_semicol) {
+    } else if (tok->type == token_expr_dollar || tok->type == token_semicol || tok->type == token_comma) {
         *colrow = pos_dollar;
     } else {
         error_handle(tok->line, syntax_error);
@@ -208,6 +208,11 @@ bool expr(token_t first_tok, token_t* second_tok, sym_table* symtab) {
     } else {
         par_left = 0;
     }
+	if (second_tok && second_tok->type == token_parentheses_right) {
+        par_right = 1;
+    } else {
+        par_right = 0;
+    }
     tok = first_tok;
     char c;
     printf("Expr. parser pravy rozbor: ");
@@ -227,7 +232,8 @@ bool expr(token_t first_tok, token_t* second_tok, sym_table* symtab) {
         } else if (toread && tok.type == token_parentheses_right) {
             par_right++;
         }
-        if (tok.type == token_parentheses_right && par_right - par_left == 1) {
+        if (tok.type == token_parentheses_right && par_right - par_left == 1 ||
+			tok.type == token_comma) {
             // for if(expr) doesn't end with semicolon
             *current_tkn = tok;
             set = true;
@@ -259,6 +265,7 @@ bool expr(token_t first_tok, token_t* second_tok, sym_table* symtab) {
                 break;
 
             default: // when c == 0
+				printf("wtf man\n");
                 stack_dispose_all(&stk);
                 return false;
         }
