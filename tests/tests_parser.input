@@ -9,13 +9,14 @@ function testfunc(int $testvar, float $fasdf, string $afdsf, string $fdsfaff) : 
     
     }
 
+
 function testfuncafsdf(int $testvar) : void {
+    $a = 5;
+    $b = 5;
+    $c = 5;
     return 43;
-    $a = 4;
-    $b = 4;
-    $c = "dfasd";
-    $asfdfa = testfunc($a, $b, 34, $c);
-    testfunc();
+    $asfdfa = testfunc($a, 56, $a, $c);
+testfunc();
     while(3) {
 
     }

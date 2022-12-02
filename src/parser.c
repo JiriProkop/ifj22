@@ -46,6 +46,11 @@ bool tkn_already_loaded = false;
 */
 sym_table *tree;
 
+/**
+ * A global variable for the tree of current frame.
+*/
+sym_table *current_frame;
+
 int tkn_num = 0; // TODO - cislo jen na debug
 
 void abort() {
@@ -419,7 +424,7 @@ bool prikaz() {
         value = true;
         // <vyraz>
         get_tkn();
-        if(value && !vyraz(false, *current_tkn)) {
+        if(value && !vyraz(false, *current_tkn, current_frame)) {
             value = false; 
         }
         // ;
@@ -478,7 +483,7 @@ bool prikaz() {
         }
         // <vyraz>
         get_tkn();
-        if(value && !vyraz(false, *current_tkn)) {
+        if(value && !vyraz(false, *current_tkn, current_frame)) {
             value = false; 
         }
         // )
@@ -514,7 +519,7 @@ bool prikaz() {
         }
         // <vyraz>
         get_tkn();
-        if(value && !vyraz(false, *current_tkn)) {
+        if(value && !vyraz(false, *current_tkn, current_frame)) {
             value = false; 
         }
         // )
@@ -544,7 +549,7 @@ bool prikaz() {
         // something else
         get_tkn();
         if(value && current_tkn->type != token_assign) {
-            vyraz(true, prev_tok);
+            vyraz(true, prev_tok, current_frame);
             // ;
             if(value && current_tkn->type != token_semicol) {
                 value = false;
@@ -561,7 +566,7 @@ bool prikaz() {
             if(value && current_tkn->type == token_identifier) {
                 value = prikaz();
             } else {
-                value = vyraz(false, *current_tkn);
+                value = vyraz(false, *current_tkn, current_frame);
                 // ;
                 if(value && current_tkn->type != token_semicol) {
                     value = false;
@@ -570,7 +575,7 @@ bool prikaz() {
         }
     // checks expressions
     } else {
-        value = vyraz(false, *current_tkn);
+        value = vyraz(false, *current_tkn, current_frame);
         // check for ;
         if(value && current_tkn->type != token_semicol) {
             value = false;
@@ -627,26 +632,6 @@ bool vol_parametry(list_t *parameters) {
     // rule: <vol_parametry> -> eps
     if(current_tkn->type == token_parentheses_right) {
         value = true;
-    //rule: <vol_parametry> -> <vyraz> <vol_param>
-    } else if(current_tkn->type == token_integer || current_tkn->type == token_float ||
-              current_tkn->type == token_string) { // TODO zbytek moznosti na vyraz?
-
-        value = true;
-        // <vyraz>
-        // no get_tkn(), since the token in if -^ is also a first token from <vyraz>
-        if(value && !vyraz(false, *current_tkn)) {
-            value = false;
-        }
-        // adding the parameter to a list
-        if(value) {
-            // id is NULL, since the parameter is <vyraz> not, VAR_ID
-            list_add(parameters, keyword_void, NULL);
-        }
-
-        // <vol_param>
-        if(value && !vol_param(parameters)) {
-            value = false;
-        }
     // rule: <vol_parametry> -> VAR_ID <vol_param>
     } else if(current_tkn->type == token_varieble) {
         // VAR_ID
@@ -661,6 +646,24 @@ bool vol_parametry(list_t *parameters) {
         // <vol_param>
         get_tkn();
         value = vol_param(parameters);
+    //rule: <vol_parametry> -> <vyraz> <vol_param>
+    } else if(current_tkn->type == token_integer) { // TODO
+        value = true;
+        // <vyraz>
+        // no get_tkn(), since the token in if -^ is also a first token from <vyraz>
+        if(value && !vyraz(false, *current_tkn, current_frame)) {
+            value = false;
+        }
+        // adding the parameter to a list
+        if(value) {
+            // id is NULL, since the parameter is <vyraz> not, VAR_ID
+            list_add(parameters, keyword_void, NULL);
+        }
+
+        // <vol_param>
+        if(value && !vol_param(parameters)) {
+            value = false;
+        }
     }
     printf("[DEBUG INFO]: currently in vol_parametry(), returning: %d\n", value);
     if(!value) {
@@ -707,11 +710,11 @@ bool vol_par(list_t *parameters) {
         get_tkn();
         value = vol_param(parameters);
     // rule: <vol_par> -> <vyraz> <vol_param>
-    } else if(current_tkn->type == token_integer) { // TODO pridat ostatni stavy vyrazu
+    } else if(current_tkn->type == token_integer) { // TODO
         value = true;
         // <vyraz>
         // no get_tkn(), since the token in if -^ is also a first token from <vyraz>
-        if(value && !vyraz(false, *current_tkn)) {
+        if(value && !vyraz(false, *current_tkn, current_frame)) {
             value = false;
         }
         // adding the parameter to a list
@@ -747,15 +750,18 @@ bool konec() {
     return value;
 }
 
-bool vyraz(bool second_tkn, token_t prev_tok) {
+bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
     printf("[DEBUG INFO]: currently in vyraz(false, *current_tkn), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
 
     printf("[DEBUG INFO]: currently in vyraz(false, *current_tkn), exiting\n");
     if(second_tkn) {
-        return expr(prev_tok, current_tkn);
+        return expr(prev_tok, current_tkn, frame);
     } else {
-        return expr(*current_tkn, NULL);
+        return expr(*current_tkn, NULL, frame);
     }
 }
 
 // TODO kontrola poctu parametru pri volani
+
+// TODOs na probrání na schůzce:
+// $a + 5 jako parametr nezpracuje výraz -> předat to celé na zpracování výrazu? Nebo je to vůbec legal?
