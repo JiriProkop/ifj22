@@ -54,7 +54,7 @@ $(TESTDIR)tests_ll: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o
 $(TESTDIR)tests_symtable: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)symtable.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 $(TESTDIR)tests_generator: $(SOURCES)dynstr.o $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)generator.o $(SOURCES)symtable.o
-	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
+	$(CC) $(CFLAGS) $^ $@.c -o $@
 # --------------------------------------------------
 
 # compile object files

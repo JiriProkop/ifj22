@@ -133,10 +133,7 @@ int main() {
 
     // test function call function no casting 
     printf("\n[function def call tests]\n");
-    sym_table *tree = malloc(sizeof(sym_table));
-    if(tree == NULL){
-        return ret;
-    }
+    sym_table *tree;
     st_init(&tree);
     add_tree_node(&tree, "testfunc", keyword_int, params);
     print_tree(tree);
@@ -148,8 +145,7 @@ int main() {
     // cleanup
     st_dispose(&tree);
     string_free(id);
-    // TODO here segfault cant figure out why ll.c line 65 
-     list_dispose(params);
+    // no need to list_dispose(params); because it's done by st_dispose()
 
     return ret;
 }
