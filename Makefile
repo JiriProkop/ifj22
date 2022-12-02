@@ -4,7 +4,7 @@ LDLIBS = -lm
 
 TESTDIR = tests/
 SOURCES = src/
-CASES = tests_dynstr tests_scanner tests_parser tests_stack tests_expr
+CASES = tests_dynstr tests_scanner tests_parser tests_stack
 TESTS = $(addprefix $(TESTDIR), $(CASES))
 
 PARTS = $(TESTS)
@@ -27,8 +27,8 @@ test: $(TESTS)
 #	$(TESTDIR)tests_stack > $(TESTDIR)tests_stack.output
 #	diff -su $(TESTDIR)tests_stack.output $(TESTDIR)correct_out/tests_stack.output
 # expr tests
-	$(TESTDIR)tests_expr > $(TESTDIR)tests_expr.output < $(TESTDIR)tests_expr.input
-	diff -su $(TESTDIR)tests_expr.output $(TESTDIR)correct_out/tests_expr.output
+#	$(TESTDIR)tests_expr > $(TESTDIR)tests_expr.output < $(TESTDIR)tests_expr.input
+#	diff -su $(TESTDIR)tests_expr.output $(TESTDIR)correct_out/tests_expr.output
 
 # check the tests with valgrind
 valgrind: $(TESTS)
@@ -43,8 +43,8 @@ $(TESTDIR)tests_parser: $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_stack: $(SOURCES)stack.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
-$(TESTDIR)tests_expr: $(SOURCES)expr.o $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)stack.o $(SOURCES)symtable.o $(SOURCES)ll.o $(SOURCES)generator.o
-	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
+#$(TESTDIR)tests_expr: $(SOURCES)expr.o $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)stack.o $(SOURCES)symtable.o $(SOURCES)ll.o $(SOURCES)generator.o
+#	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_ll: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 #$(TESTDIR)tests_symtable: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)symtable.o

@@ -10,7 +10,9 @@
 #define _EXPR_H
 
 #include <stdbool.h>
-#include "../src/scanner.h"
+#include "scanner.h"
+#include "ll.h"
+#include "symtable.h"
 
 /**
  * @enum expression rules
@@ -37,8 +39,9 @@ expr_rules;
  *
  * @param first_tok first token of expression
  * @param second_tok second token of expression, give NULL if 2nd token is unknown
+ * @param symtam pointer to corresponding symtable (frame where given expressions is)
  * @return Returns false if invalid expression was found, true otherwise.
  */
-bool expr(token_t first_tok, token_t* second_tok);
+bool expr(token_t first_tok, token_t* second_tok, sym_table* symtab);
 
 #endif

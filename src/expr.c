@@ -3,6 +3,8 @@
 #include "parser.h"
 #include "scanner.h"
 #include "stack.h"
+#include "ll.h"
+#include "symtable.h"
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -173,7 +175,7 @@ bool final_check(stack *pstk) {
     return true;
 }
 
-bool expr(token_t first_tok, token_t *second_tok) {
+bool expr(token_t first_tok, token_t* second_tok, sym_table* symtab) {
     char prec_table[PREC_TABLE_SIZE][PREC_TABLE_SIZE] = {
         //+	   *   ===   >=   (    )    i    $
         {'>', '<', '>', '>', '<', '>', '<', '>'}, // +, -, .

@@ -24,7 +24,11 @@ void print_tree(sym_table *treee) {
 void print_list(list_t *list) {
     list_node_t *temp = list->first;
     while(temp != NULL) {
-        printf("[%s]\n", temp->id->array);
+        if(temp->id == NULL) {
+            printf("(NULL)\n");
+        } else {
+            printf("[%s]\n", temp->id->array);
+        }
         temp = temp->next;
     }
 }
@@ -45,6 +49,11 @@ bool tkn_already_loaded = false;
  * A global variable for the symtable tree.
 */
 sym_table *tree;
+
+/**
+ * A global variable for the tree of current frame.
+*/
+sym_table *current_frame;
 
 int tkn_num = 0; // TODO - cislo jen na debug
 
@@ -121,6 +130,7 @@ bool start() {
         abort();
     }
     st_init(&tree); // initialize the symtable tree
+    current_frame = tree; // the current frame is the now allocated tree
 
     bool value = false;
     get_tkn();
@@ -164,11 +174,7 @@ bool program() {
             value = false;
         }
     // rule: <program> -> <prikaz> <program>
-    } else {// if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
-            //  current_tkn->attr.keyword == keyword_return ||
-            //  current_tkn->attr.keyword == keyword_if ||
-            //  current_tkn->attr.keyword == keyword_while) {
-
+    } else {
         value = true;
         // <prikaz>
         if(value && !prikaz()) {
@@ -256,10 +262,10 @@ bool definice() {
         // adding the function to the symtable tree
         if(st_search(tree, id) == NULL) {
             add_node(&tree, id, 1, parameters, params, type, can_be_null);
-            sym_table **subtree = &st_search(tree, id)->local_frame;
-            st_search(tree, id)->params = convert_list_to_subtree(parameters, subtree);
-            //gen_function_def(id); TODO
-            print_tree(*subtree); // TODO debug printfs
+            current_frame = st_search(tree, id)->local_frame;
+            st_search(tree, id)->params = convert_list_to_subtree(parameters, &current_frame);
+
+            print_tree(current_frame); // TODO debug printfs
             print_list(parameters);
         } else {
             error_handle(line_num, func_def_error);
@@ -280,6 +286,9 @@ bool definice() {
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
+
+        // return the frame back to the main frame
+        current_frame = tree;
     }
     printf("[DEBUG INFO]: currently in definice(), returning: %d\n", value);
     if(!value) {
@@ -419,7 +428,7 @@ bool prikaz() {
         value = true;
         // <vyraz>
         get_tkn();
-        if(value && !vyraz(false, *current_tkn)) {
+        if(value && !vyraz(false, *current_tkn, current_frame)) {
             value = false; 
         }
         // ;
@@ -451,7 +460,19 @@ bool prikaz() {
         if(value && !vol_parametry(parameters)) {
             value = false;
         }
+
         print_list(parameters);
+        // check if we got the right number of parameters
+        list_node_t *temp = parameters->first;
+        unsigned int num_of_params = 0;
+        while(temp != NULL) {
+            num_of_params++;
+            temp = temp->next;
+        }
+        if(st_search(tree, id)->params != num_of_params) {
+            error_handle(current_tkn->line, func_arr_or_ret_error);
+            abort();
+        }
 
         // )
         if(value && current_tkn->type != token_parentheses_right) {
@@ -462,12 +483,6 @@ bool prikaz() {
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
-
-        if(st_search(tree, id) == NULL) {
-            error_handle(current_tkn->line, func_def_error);
-            abort();
-        }
-
     // rule: <prikaz> -> IF ( <vyraz> ) { <prikaz_fce> } <else>
     } else if(current_tkn->attr.keyword == keyword_if) {
         value = true;
@@ -478,7 +493,7 @@ bool prikaz() {
         }
         // <vyraz>
         get_tkn();
-        if(value && !vyraz(false, *current_tkn)) {
+        if(value && !vyraz(false, *current_tkn, current_frame)) {
             value = false; 
         }
         // )
@@ -514,7 +529,7 @@ bool prikaz() {
         }
         // <vyraz>
         get_tkn();
-        if(value && !vyraz(false, *current_tkn)) {
+        if(value && !vyraz(false, *current_tkn, current_frame)) {
             value = false; 
         }
         // )
@@ -544,16 +559,15 @@ bool prikaz() {
         // something else
         get_tkn();
         if(value && current_tkn->type != token_assign) {
-            vyraz(true, prev_tok);
+            vyraz(true, prev_tok, current_frame);
             // ;
             if(value && current_tkn->type != token_semicol) {
                 value = false;
             }
         // =
         } else {
-            // TODO kontrola jestli jsem v hlavím stromu
-            if(st_search(tree, id) == NULL) {
-                add_node(&tree, id, 0, NULL, 0, keyword_null, true);
+            if(st_search(current_frame, id) == NULL) {
+                add_node(&current_frame, id, 0, NULL, 0, keyword_null, true);
             }
 
             // <vyraz>
@@ -561,7 +575,7 @@ bool prikaz() {
             if(value && current_tkn->type == token_identifier) {
                 value = prikaz();
             } else {
-                value = vyraz(false, *current_tkn);
+                value = vyraz(false, *current_tkn, current_frame);
                 // ;
                 if(value && current_tkn->type != token_semicol) {
                     value = false;
@@ -570,7 +584,7 @@ bool prikaz() {
         }
     // checks expressions
     } else {
-        value = vyraz(false, *current_tkn);
+        value = vyraz(false, *current_tkn, current_frame);
         // check for ;
         if(value && current_tkn->type != token_semicol) {
             value = false;
@@ -627,14 +641,25 @@ bool vol_parametry(list_t *parameters) {
     // rule: <vol_parametry> -> eps
     if(current_tkn->type == token_parentheses_right) {
         value = true;
-    //rule: <vol_parametry> -> <vyraz> <vol_param>
-    } else if(current_tkn->type == token_integer || current_tkn->type == token_float ||
-              current_tkn->type == token_string) { // TODO zbytek moznosti na vyraz?
+    // rule: <vol_parametry> -> VAR_ID <vol_param>
+    } else if(current_tkn->type == token_varieble) {
+        // VAR_ID
+        if(st_search(current_frame, current_tkn->attr.str) != NULL) {
+            list_add(parameters, keyword_void, current_tkn->attr.str);
+        } else {
+            error_handle(current_tkn->line, func_arr_or_ret_error);
+            abort();
+        }
 
+        // <vol_param>
+        get_tkn();
+        value = vol_param(parameters);
+    //rule: <vol_parametry> -> <vyraz> <vol_param>
+    } else {
         value = true;
         // <vyraz>
         // no get_tkn(), since the token in if -^ is also a first token from <vyraz>
-        if(value && !vyraz(false, *current_tkn)) {
+        if(value && !vyraz(false, *current_tkn, current_frame)) {
             value = false;
         }
         // adding the parameter to a list
@@ -647,20 +672,6 @@ bool vol_parametry(list_t *parameters) {
         if(value && !vol_param(parameters)) {
             value = false;
         }
-    // rule: <vol_parametry> -> VAR_ID <vol_param>
-    } else if(current_tkn->type == token_varieble) {
-        // VAR_ID
-        // TODO kontrola, jestli jsme ve spravnem ramci 
-        if(st_search(tree, current_tkn->attr.str) != NULL) {
-            list_add(parameters, keyword_void, current_tkn->attr.str);
-        } else {
-            error_handle(current_tkn->line, func_arr_or_ret_error);
-            abort();
-        }
-
-        // <vol_param>
-        get_tkn();
-        value = vol_param(parameters);
     }
     printf("[DEBUG INFO]: currently in vol_parametry(), returning: %d\n", value);
     if(!value) {
@@ -695,8 +706,7 @@ bool vol_par(list_t *parameters) {
     // rule: <vol_par> -> VAR_ID <vol_param>
     if(current_tkn->type == token_varieble) {
         // VAR_ID
-        // TODO kontrola, jestli jsme ve spravnem ramci 
-        if(st_search(tree, current_tkn->attr.str) != NULL) {
+        if(st_search(current_frame, current_tkn->attr.str) != NULL) {
             list_add(parameters, keyword_void, current_tkn->attr.str);
         } else {
             error_handle(current_tkn->line, func_arr_or_ret_error);
@@ -707,11 +717,11 @@ bool vol_par(list_t *parameters) {
         get_tkn();
         value = vol_param(parameters);
     // rule: <vol_par> -> <vyraz> <vol_param>
-    } else if(current_tkn->type == token_integer) { // TODO pridat ostatni stavy vyrazu
+    } else { 
         value = true;
         // <vyraz>
         // no get_tkn(), since the token in if -^ is also a first token from <vyraz>
-        if(value && !vyraz(false, *current_tkn)) {
+        if(value && !vyraz(false, *current_tkn, current_frame)) {
             value = false;
         }
         // adding the parameter to a list
@@ -747,15 +757,16 @@ bool konec() {
     return value;
 }
 
-bool vyraz(bool second_tkn, token_t prev_tok) {
+bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
     printf("[DEBUG INFO]: currently in vyraz(false, *current_tkn), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
 
     printf("[DEBUG INFO]: currently in vyraz(false, *current_tkn), exiting\n");
     if(second_tkn) {
-        return expr(prev_tok, current_tkn);
+        return expr(prev_tok, current_tkn, frame);
     } else {
-        return expr(*current_tkn, NULL);
+        return expr(*current_tkn, NULL, frame);
     }
 }
 
-// TODO kontrola poctu parametru pri volani
+// TODOs na probrání na schůzce:
+// $a + 5 jako parametr nezpracuje výraz -> předat to celé na zpracování výrazu? Nebo je to vůbec legal?
