@@ -14,9 +14,7 @@ function testfuncafsdf(int $testvar) : void {
     $a = 5;
     $b = 5;
     $c = 5;
-    return 43;
-    $asfdfa = testfunc($a, 56, $a, $c);
-testfunc();
+    $asfdfa = testfunc($a, 56, $b, $c);
     while(3) {
 
     }
