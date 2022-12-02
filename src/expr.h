@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include "scanner.h"
 #include "ll.h"
+#include "symtable.h"
 
 /**
  * @enum expression rules

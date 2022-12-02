@@ -4,6 +4,7 @@
 #include "scanner.h"
 #include "stack.h"
 #include "ll.h"
+#include "symtable.h"
 #include <stdbool.h>
 #include <stdio.h>
 
