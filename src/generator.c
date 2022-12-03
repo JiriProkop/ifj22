@@ -106,34 +106,32 @@ void gen_def_variable(dynstr_t *variable, token_t *value, sym_table *tree_gen){
         // TODO right errror ? 
         default:
             error_handle(0, other_semantic_error);
+            abort();
     }
 
 
 }
 
-// void gen_fill_variable(){
-//     printf("MOVE LF%s %s\n", variable->array, value->array);
-//     value->attr.
-// } 
 
 void gen_while_start(){
-    // variable used to track if program went through the function 
-    printf("DEFVAR LF@%%while_condition%u\n");
-    printf("MOVE LF@%%while_condition%u int@0\n");
-    printf("DEFVAR LF@ ");
+    // variable used to track if program went through the function 0 at the start  
+    printf("DEFVAR LF@%%while%u_loop\n", gen_number_while_start);
+    printf("MOVE LF@%%while%u_loop int@0\n", gen_number_while_start);
+    // variable in which condition will be stored 
+    printf("DEFVAR LF@%%while%u_condition\n", gen_number_while_start);
     // start lable
-    printf("LABEL %%while_start%u\n", gen_number_while_start);
-    // jump to the end of definitions if it is not the first time through
-    printf("JUMPIFNEQ %%while_define_end%u LF%%@while_condition%u int@0\n", gen_number_while_start, gen_number_while_start);
+    printf("LABEL %%while%u_start\n", gen_number_while_start);
+    printf("JUMPIFNEQ %%while%u_after_defvar\n", gen_number_while_start);
     gen_number_while_start++;
+    // go back to parser to print condition 
 }
 
-
-
-void gen_while_coindition(){
-
+//%%while%u_after_defvar
+void gen_while_chceck_condition(){
+    printf("JUMPIFEQ %%while%u_end LF@ int@1\n", gen_number_while_end);
 }
 
 void gen_while_end(){
-    printf("JUMPIFEQ %%while_start%u LF@ int@1", (gen_number_while_start - 1), );
+    printf("JUMPIFEQ %%while%u_start LF@ int@1\n", gen_number_while_end);
+    printf("LABEL while%u_end\n");
 }
