@@ -10,6 +10,7 @@
 #define _GENERATOR_H
 
 #include "stack.h"
+#include "symtable.h"
 
 /**
  * Function for printing the IFJcode22 header.

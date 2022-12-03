@@ -762,9 +762,9 @@ bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
 
     printf("[DEBUG INFO]: currently in vyraz(false, *current_tkn), exiting\n");
     if(second_tkn) {
-        return expr(prev_tok, current_tkn, frame);
+        return expr(prev_tok, current_tkn);
     } else {
-        return expr(*current_tkn, NULL, frame);
+        return expr(*current_tkn, NULL);
     }
 }
 

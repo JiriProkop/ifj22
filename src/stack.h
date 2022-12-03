@@ -97,10 +97,10 @@ unsigned tokens_to_shift(stack *stack);
 /**
  * @struct linked list structure for expression code generation
  */
-typedef struct {
+typedef struct expr_linked_list{
     int rule;
-    token_t *ptok;
-    exprll *next;
+    token_t **ptok;
+    struct expr_linked_list *next;
 } exprll;
 
 /**
@@ -126,5 +126,29 @@ bool exprll_add(exprll *ll, int data, token_t* ptok);
  * @param ll pointer to linked list, will be set to NULL
  */
 void expll_dispose(exprll *ll);
+
+/**
+ * @brief Finds leftmost node with not erule_val rule in given linked list.
+ * 
+ * @param ll pointer to linked list with rules.
+ * @return Returns pointer to leftmost node with not 0 rule
+ */
+exprll *exprll_leftmost_rule(exprll *ll);
+
+/**
+ * @brief Finds, whether in previous node is erule_val or not.
+ * 
+ * @param node pointer to node of linked list
+ * @param ll pointer to linked list
+ * @return Returns true, if in previous node is erule_val, false othewise.
+ */
+bool exprll_prev_value(exprll *node, exprll *ll);
+
+/**
+ * @brief Deletes next node of given node.
+ * 
+ * @param node pointer to node of linked list
+ */
+void exprll_del_next(exprll *node);
 
 #endif
