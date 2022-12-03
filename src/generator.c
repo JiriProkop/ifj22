@@ -82,10 +82,32 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
 
 // this could be used for while as well ? 
 void gen_def_variable(dynstr_t *variable, token_t *value, sym_table *tree_gen){
+    // define if it is not already defined 
     sym_data* variable_node = st_search(tree_gen,variable);   
     if(variable_node == NULL){
         printf("DEFVAR LF@%s\n", variable->array);
     }
+    // fill the variable with the right type 
+    switch (value->type){
+        case token_integer:
+            printf("MOVE LF@%s int@%d\n", variable->array, value->attr.integer);
+            break;
+        case token_float:
+            printf("MOVE LF@%s float@%d\n", variable->array, value->attr.doub);
+            break;
+        case token_string:
+            printf("MOVE LF@%s string@%s\n", variable->array, value->attr.doub);
+            break;
+        // TODO expresion 
+        // TODO void ?
+        // case token_varieble:
+        //     printf("MOVE LF@%s float@%d\n", variable->array, value->attr.doub);
+        //     break;
+        // TODO right errror ? 
+        default:
+            error_handle(0, other_semantic_error);
+    }
+
 
 }
 
@@ -98,6 +120,7 @@ void gen_while_start(){
     // variable used to track if program went through the function 
     printf("DEFVAR LF@%%while_condition%u\n");
     printf("MOVE LF@%%while_condition%u int@0\n");
+    printf("DEFVAR LF@ ");
     // start lable
     printf("LABEL %%while_start%u\n", gen_number_while_start);
     // jump to the end of definitions if it is not the first time through
@@ -106,9 +129,11 @@ void gen_while_start(){
 }
 
 
+
 void gen_while_coindition(){
 
 }
 
 void gen_while_end(){
+    printf("JUMPIFEQ %%while_start%u LF@ int@1", (gen_number_while_start - 1), );
 }
