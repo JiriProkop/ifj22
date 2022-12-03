@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TEST_EXPR_COUNT 17
+#define TEST_EXPR_COUNT 1 //17
 
 int main() {
     token_t tok;

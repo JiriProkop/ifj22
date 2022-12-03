@@ -99,7 +99,7 @@ unsigned tokens_to_shift(stack *stack);
  */
 typedef struct expr_linked_list{
     int rule;
-    token_t **ptok;
+    token_t *ptok;
     struct expr_linked_list *next;
 } exprll;
 
@@ -118,7 +118,7 @@ void exprll_init(exprll **ll);
  * @param ptok pointer to allocated token if data == 0, is NULL otherwise.
  * @return false in case of malloc error, true otherwise
  */
-bool exprll_add(exprll *ll, int data, token_t* ptok);
+bool exprll_add(exprll **ll, int data, token_t* ptok);
 
 /**
  * @brief Deletes given linked list

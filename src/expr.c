@@ -82,7 +82,7 @@ bool get_colrow(unsigned *colrow, token_t *tok) {
  * @param pstk pointer to initialized stack
  * @return Returns false if error was encountered, true otherwise.
  */
-bool reduction(stack *pstk, exprll *ll) {
+bool reduction(stack *pstk, exprll **ll) {
     unsigned op_cnt = tokens_to_shift(pstk);
     token_t op = {.type = token_expr_e};
     int rule;
@@ -96,7 +96,7 @@ bool reduction(stack *pstk, exprll *ll) {
         }
         token_t *tok = stack_save_pop(pstk);
         if (!exprll_add(ll, rule, tok)) {
-            expll_dispose(ll);
+            expll_dispose(*ll);
             stack_dispose_all(pstk);
             abort();
         }
@@ -156,7 +156,7 @@ bool reduction(stack *pstk, exprll *ll) {
             return false;
         }
         if (to_push && !exprll_add(ll, rule, NULL)) {
-            expll_dispose(ll);
+            expll_dispose(*ll);
             stack_dispose_all(pstk);
             abort();
         }
@@ -261,7 +261,7 @@ bool expr(token_t first_tok, token_t *second_tok) {
                 *current_tkn = tok;
             }
             final_check(&stk);
-            gen_expression(&ll);
+            gen_expression(ll);
             return true;
         }
         c = prec_table[row][col];
@@ -276,7 +276,7 @@ bool expr(token_t first_tok, token_t *second_tok) {
                 toread = true;
                 break;
             case '>': // reduction
-                if (!reduction(&stk, ll)) {
+                if (!reduction(&stk, &ll)) {
                     return false;
                 }
                 toread = false;

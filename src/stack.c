@@ -183,27 +183,27 @@ void exprll_init(exprll **ll) {
     *ll = NULL;
 }
 
-bool exprll_add(exprll *ll, int data, token_t *ptok) {
-    if (!ll) {
-        ll = malloc(sizeof(exprll));
-        if (!ll) {
+bool exprll_add(exprll **ll, int data, token_t *ptok) {
+    if (!*ll) {
+        *ll = malloc(sizeof(exprll));
+        if (!*ll) {
             error_handle(0, compiler_error);
             return false;
         }
-        ll->next = NULL;
-        ll->ptok = ptok;
-        ll->rule = data;
+        (*ll)->next = NULL;
+        (*ll)->ptok = ptok;
+        (*ll)->rule = data;
         return true;
     } else {
-        exprll *tmp = ll;
-        ll = malloc(sizeof(exprll));
-        if (!ll) {
+        exprll *tmp = *ll;
+        *ll = malloc(sizeof(exprll));
+        if (!*ll) {
             error_handle(0, compiler_error);
             return false;
         }
-        ll->next = tmp;
-        ll->ptok = ptok;
-        ll->rule = data;
+        (*ll)->next = tmp;
+        (*ll)->ptok = ptok;
+        (*ll)->rule = data;
         return true;
     }
 }
@@ -244,7 +244,7 @@ bool exprll_prev_value(exprll *node, exprll *ll) {
     return false;
 }
 
-void exprll_del_next(exprll* node) {
+void exprll_del_next(exprll *node) {
     exprll *tmp = node->next->next;
     free(node->next->ptok);
     free(node->next);
