@@ -7,18 +7,25 @@
 #include "error.h"
 #include "scanner.h"
 
+unsigned gen_number_while_start = 0;
+unsigned gen_number_while_end = 0;
+
 void gen_header() {
     printf(".IFJcode22\n");
 }
 
 void gen_function_def(dynstr_t *id, list_t* parameters) {
     list_node_t* i = parameters->first;
+    // define all the arguments as temp variable for future use 
     while(i != NULL){
         printf("DEFVAR LF@%%%s_%s\n", id->array, i->id->array);
         i = i->next;
     }
+    // jump end when giong through the code 
     printf("JUMP %s_end\n", id->array);
+    // jump start for when the function is called 
     printf("LABEL %s_start\n", id->array);
+    // fill the arguments with coresponding arguments
     printf("CREATEFRAME\n");
     i = parameters->first;
     while(i != NULL){
@@ -65,3 +72,43 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
     // TODO return value 
     printf("CALL %s_start\n", id->array);
 }   
+
+
+    void gen_closure(){
+    printf("POPFRAME\n");
+    printf("CLEARS\n");
+    printf("EXIT int@0\n");
+}
+
+// this could be used for while as well ? 
+void gen_def_variable(dynstr_t *variable, token_t *value, sym_table *tree_gen){
+    sym_data* variable_node = st_search(tree_gen,variable);   
+    if(variable_node == NULL){
+        printf("DEFVAR LF@%s\n", variable->array);
+    }
+
+}
+
+// void gen_fill_variable(){
+//     printf("MOVE LF%s %s\n", variable->array, value->array);
+//     value->attr.
+// } 
+
+void gen_while_start(){
+    // variable used to track if program went through the function 
+    printf("DEFVAR LF@%%while_condition%u\n");
+    printf("MOVE LF@%%while_condition%u int@0\n");
+    // start lable
+    printf("LABEL %%while_start%u\n", gen_number_while_start);
+    // jump to the end of definitions if it is not the first time through
+    printf("JUMPIFNEQ %%while_define_end%u LF%%@while_condition%u int@0\n", gen_number_while_start, gen_number_while_start);
+    gen_number_while_start++;
+}
+
+
+void gen_while_coindition(){
+
+}
+
+void gen_while_end(){
+}
