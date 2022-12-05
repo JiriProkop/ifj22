@@ -85,6 +85,62 @@ WRITE LF@x
 
 
 
+#pretypovavani na bool
+DEFVAR GF@%cast_bool_var
+DEFVAR GF@%cast_bool_type
+JUMP %cast_bool_end
+LABEL %cast_bool
+
+POPS GF@%cast_bool_var
+TYPE GF@%cast_bool_type GF@%cast_bool_var
+
+# int
+JUMPIFNEQ %cast_bool_continue1 GF@%cast_bool_type string@int
+JUMPIFNEQ %cast_bool_continue1_1 GF@%cast_bool_var int@0
+PUSHS bool@false
+RETURN
+LABEL %cast_bool_continue1_1
+PUSHS bool@true
+RETURN
+LABEL %cast_bool_continue1
+
+# float
+JUMPIFNEQ %cast_bool_continue2 GF@%cast_bool_type string@float
+JUMPIFNEQ %cast_bool_continue2_1 GF@%cast_bool_var float@0x0p+0
+PUSHS bool@false
+RETURN
+LABEL %cast_bool_continue2_1
+PUSHS bool@true
+RETURN
+LABEL %cast_bool_continue2
+
+# string
+JUMPIFNEQ %cast_bool_continue3 GF@%cast_bool_type string@string
+JUMPIFNEQ %cast_bool_continue3_1 GF@%cast_bool_var string@
+PUSHS bool@false
+RETURN
+LABEL %cast_bool_continue3_1
+PUSHS bool@true
+RETURN
+LABEL %cast_bool_continue3
+
+PUSHS bool@false
+RETURN
+LABEL %cast_bool_end
+# pretypovani na bool konec
+
+
+# volani pretypovani na bool
+DEFVAR LF@y
+MOVE LF@y float@0x1p+0
+PUSHS LF@y
+CALL %cast_bool
+POPS LF@y
+WRITE LF@y
+
+
+
+
 
 
 # definice funkce
