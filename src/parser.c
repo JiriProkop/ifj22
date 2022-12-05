@@ -96,6 +96,110 @@ unsigned int convert_list_to_subtree(list_t *list, sym_table **subtree) {
     return num_of_params;
 }
 
+void add_prebuilt() {
+    // functions identifiers
+    char *prebuit[11] = {"reads", "readi", "readf", "write", "floatval", "intval",
+                      "strval", "strlen", "substring", "ord", "chr"};
+    
+    // functions arguments
+    list_t *args0 = NULL;
+    list_t *args1 = NULL;
+    list_t *args2 = NULL;
+    list_t *args3 = NULL;
+    list_t *args4 = malloc(sizeof(list_t));
+    if(args4 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args4);
+    dynstr_t *arg1 = malloc(sizeof(dynstr_t));
+    if(arg1 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    dynstr_init(arg1);
+    dynstr_add_string(arg1, "term");
+    list_add(args4, keyword_void, arg1);
+    list_t *args5 = args4;
+    list_t *args6 = args4;
+    list_t *args7 = malloc(sizeof(list_t));
+    if(args7 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args7);
+    dynstr_t *arg2 = malloc(sizeof(dynstr_t));
+    if(arg2 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    dynstr_init(arg2);
+    dynstr_add_string(arg2, "s");
+    list_add(args7, keyword_string, arg2);
+    list_t *args8 = malloc(sizeof(list_t));
+    if(args8 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args8);
+    dynstr_t *arg3 = malloc(sizeof(dynstr_t));
+    if(arg3 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    dynstr_init(arg3);
+    dynstr_add_string(arg3, "i");
+    dynstr_t *arg4 = malloc(sizeof(dynstr_t));
+    if(arg4 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    dynstr_init(arg4);
+    dynstr_add_string(arg4, "j");
+    list_add(args8, keyword_string, arg2);
+    list_add(args8, keyword_int, arg3);
+    list_add(args8, keyword_int, arg4);
+    list_t *args9 = malloc(sizeof(list_t));
+    if(args9 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args9);
+    dynstr_t *arg5 = malloc(sizeof(dynstr_t));
+    if(arg5 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    dynstr_init(arg5);
+    dynstr_add_string(arg5, "c");
+    list_add(args9, keyword_string, arg5);
+    list_t *args10 = malloc(sizeof(list_t));
+    if(args10 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args10);
+    list_add(args10, keyword_int, arg3);
+
+    list_t *arguments[] = {args0, args1, args2, args3, args4, args5, args6, args7, args8, args9, args10};
+
+    // function arguments number
+    unsigned int parameter_number[] = {0, 0, 0, 0, 1, 1, 1, 1, 3, 1, 1};
+
+    for(int i = 0; i < 11; i++) {
+        dynstr_t *id = malloc(sizeof(dynstr_t));
+        if(id == NULL) {
+            error_handle(0, compiler_error);
+            abort();
+        }
+        dynstr_init(id);
+        dynstr_clear(id);
+        dynstr_add_string(id, prebuit[i]);
+        // since the functions are already declared and made,
+        // we do not care about return type
+        add_node(&tree, id, 1, arguments[i], parameter_number[i], keyword_void, true);
+    }
+}
 
 // the parser functions start here:
 bool start() {
@@ -107,23 +211,7 @@ bool start() {
     st_init(&tree); // initialize the symtable tree
 
     // add all the prebuit functions to the tree
-    char *prebuit[11] = {"reads", "readi", "readf", "write", "floatval", "intval",
-                      "strval", "strlen", "substring", "ord", "chr"};
-    // TODO add arguments
-    unsigned int parameter_number[] = {0, 0, 0, 0, 1, 1, 1, 1, 3, 1, 1};
-    for(int i = 0; i < 11; i++) {
-        dynstr_t *id = malloc(sizeof(dynstr_t));
-        if(id == NULL) {
-            error_handle(0, compiler_error);
-            abort();
-        }
-        dynstr_init(id);
-        dynstr_clear(id);
-        dynstr_add_string(id, prebuit[i]);
-        // since the functions are already declared and made,
-        // we do not care abour parameters and return type
-        add_node(&tree, id, 1, NULL, parameter_number[i], keyword_void, true);
-    }
+    add_prebuilt();
 
     current_frame = tree; // the current frame is the now allocated tree
 

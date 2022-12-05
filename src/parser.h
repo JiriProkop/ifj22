@@ -63,6 +63,11 @@ void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *paramete
 unsigned int convert_list_to_subtree(list_t *list, sym_table **subtree);
 
 /**
+ * Function for adding the prebuilt functions to the symtable tree.
+*/
+void add_prebuilt();
+
+/**
  * A function for the <start> rule.
  * 
  * @return True if it was correct.
