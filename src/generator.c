@@ -9,7 +9,7 @@
 
 unsigned gen_number_while_start = 0;
 unsigned gen_number_while_end = 0;
-unsigned temp_var_counter = 1;
+// unsigned temp_var_counter = 1; TODO - delete
 
 // type_casting
 void gen_type_casting() {
