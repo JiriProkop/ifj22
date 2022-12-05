@@ -2,6 +2,82 @@
 CREATEFRAME
 PUSHFRAME
 
+
+
+
+#pretypovavani
+DEFVAR GF@%cast_var
+DEFVAR GF@%cast_type
+DEFVAR GF@%cast_null
+DEFVAR GF@%cast_type_temp
+JUMP %type_casting_end
+LABEL %type_casting
+
+POPS GF@%cast_var
+POPS GF@%cast_type
+POPS GF@%cast_null
+
+TYPE GF@%cast_type_temp GF@%cast_var
+
+# check for null
+JUMPIFNEQ %cast_continue1 GF@%cast_type_temp string@nil
+JUMPIFNEQ %cast_error GF@%cast_null bool@true
+PUSHS GF@%cast_var
+RETURN
+LABEL %cast_continue1
+
+# type should be int
+JUMPIFNEQ %cast_continue2 GF@%cast_type string@int
+JUMPIFNEQ %cast_continue2_1 GF@%cast_type_temp string@int
+PUSHS GF@%cast_var
+RETURN
+LABEL %cast_continue2_1
+JUMPIFNEQ %cast_error GF@%cast_type_temp string@float
+FLOAT2INT GF@%cast_var GF@%cast_var
+PUSHS GF@%cast_var
+RETURN
+LABEL %cast_continue2
+
+# type should be float
+JUMPIFNEQ %cast_continue3 GF@%cast_type string@float
+JUMPIFNEQ %cast_continue3_1 GF@%cast_type_temp string@float
+PUSHS GF@%cast_var
+RETURN
+LABEL %cast_continue3_1
+JUMPIFNEQ %cast_error GF@%cast_type_temp string@int
+INT2FLOAT GF@%cast_var GF@%cast_var
+PUSHS GF@%cast_var
+RETURN
+LABEL %cast_continue3
+
+# type should be string
+JUMPIFNEQ %cast_error GF@%cast_type GF@%cast_type_temp
+PUSHS GF@%cast_var
+RETURN
+
+LABEL %cast_error
+EXIT int@7
+LABEL %type_casting_end
+# konec pretypovani
+
+
+# priklad volani pretypovani
+DEFVAR LF@x
+MOVE LF@x int@435
+
+PUSHS bool@true
+PUSHS string@float
+PUSHS LF@x
+CALL %type_casting
+POPS LF@x
+WRITE LF@x
+
+
+
+
+
+
+
 # definice funkce
 DEFVAR LF@%funkce_arg1
 # DEFVAR all the arg1
