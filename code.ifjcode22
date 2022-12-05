@@ -222,21 +222,3 @@ LABEL else_end
 POPFRAME
 CLEARS
 EXIT int@0
-
-
-
-<?php
-
-
-function foo(int $i) : void {
-    return $i;
-}
-
-
-$i = 5656; (LF)
-
-foo($sdfa);
-
-
-boo($i)
-
