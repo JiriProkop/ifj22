@@ -201,7 +201,7 @@ void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit){
     }
     if(data_func->return_type != keyword_void){
         gen_cast_call(data_func->can_be_null, data_func->return_type, "GF%%", true);
-        printf("PUSH GF%%%u\n", temp_var_counter);
+        printf("PUSHS GF%%%u\n", temp_var_counter);
     }
     printf("POPFRAME");
     printf("RETURN\n");
@@ -316,3 +316,70 @@ void gen_write(list_t *parameters) {
 void gen_if_start(){
     
 }
+
+void gen_floatval() {
+    printf("DEFVAR LF@%%floatval_term\n");
+    printf("JUMP floatval_end\n");
+    printf("LABEL floatval_start\n");
+    printf("CREATEFRAME\n");
+    printf("DEFVAR TF@term\n");
+    printf("MOVE TF@term LF@%%floatval_term\n");
+    printf("PUSHFRAME\n");
+
+    printf("PUSHS bool@false\n");
+    printf("PUSHS string@float\n");
+    printf("PUSHS LF@term\n");
+    printf("CALL %%type_casting\n");
+    printf("POPS LF@term\n");
+    printf("PUSHS LG@term\n");
+
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL floatval_end\n");
+}
+
+void gen_intval() {
+    printf("DEFVAR LF@%%intval_term\n");
+    printf("JUMP intval_end\n");
+    printf("LABEL intval_start\n");
+    printf("CREATEFRAME\n");
+    printf("DEFVAR TF@term\n");
+    printf("MOVE TF@term LF@%%intval_term\n");
+    printf("PUSHFRAME\n");
+
+    printf("PUSHS bool@false\n");
+    printf("PUSHS string@int\n");
+    printf("PUSHS LF@term\n");
+    printf("CALL %%type_casting\n");
+    printf("POPS LF@term\n");
+    printf("PUSHS LG@term\n");
+
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL intval_end\n");
+}
+
+void gen_strval() {
+    printf("DEFVAR LF@%%strval_term\n");
+    printf("JUMP strval_end\n");
+    printf("LABEL strval_start\n");
+    printf("CREATEFRAME\n");
+    printf("DEFVAR TF@term\n");
+    printf("MOVE TF@term LF@%%strval_term\n");
+    printf("PUSHFRAME\n");
+
+    printf("PUSHS bool@false\n");
+    printf("PUSHS string@string\n");
+    printf("PUSHS LF@term\n");
+    printf("CALL %%type_casting\n");
+    printf("POPS LF@term\n");
+    printf("PUSHS LG@term\n");
+
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL strval_end\n");
+}
+
+// TODO u volani u parametru typova kontrola, ne konverze - ale u tech vestavenych jen u nekterych
+// TODO write null?
+// TODO funkce readX musí nějak příjímat argumenty
