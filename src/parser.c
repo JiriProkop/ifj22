@@ -734,3 +734,4 @@ bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
 // $a + 5 jako parametr nezpracuje výraz -> předat to celé na zpracování výrazu? Nebo je to vůbec legal?
 
 // TODO write funkce
+// TODO ukladat do listu %50
