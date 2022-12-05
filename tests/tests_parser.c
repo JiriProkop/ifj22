@@ -17,11 +17,7 @@
 
 int main() {
     //printf("--- [SCANNER TESTS] ---\n");
-    if(start()) {
-        printf("true\n");
-    } else {
-        printf("false\n");
-    }
+    start();
     free_tkn();
     return ret;
 }

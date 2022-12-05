@@ -4,7 +4,6 @@
  * @brief The implementation of a parser.
  *
  * @author Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
- * @author TODO - dopište se tady
  */
 
 #include <stdbool.h>
@@ -19,6 +18,11 @@
  * A global variable used for the current token.
 */
 extern token_t *current_tkn;
+
+/**
+ * A global variable used for temporary variables names.
+*/
+extern unsigned int temp_var_counter;
 
 /**
  * Function frees everything allocated in parser and aborts.
@@ -38,6 +42,7 @@ void free_tkn();
 
 /**
  * Function for adding a node to the tree.
+ * 
  * @param tree A tree to add the note to.
  * @param id A identifier of the function/variable.
  * @param is_function A bool value - true if it is a function, false if it is a variable.
@@ -47,6 +52,20 @@ void free_tkn();
  * @param can_be_null True if the type is nullable.
 */
 void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters, unsigned int params, keywords type, bool can_be_null);
+
+/**
+ * Function for converting the parameters list to the function subtree.
+ * 
+ * @param list The parameters list.
+ * @param subtree The subtree of the function.
+ * @return Returns the number of items in the list.
+*/
+unsigned int convert_list_to_subtree(list_t *list, sym_table **subtree);
+
+/**
+ * Function for adding the prebuilt functions to the symtable tree.
+*/
+void add_prebuilt();
 
 /**
  * A function for the <start> rule.
@@ -72,16 +91,20 @@ bool definice();
 /**
  * A function for the <parametry> rule.
  * 
+ * @param fun_id Identifier of the function.
+ * @param parameters A list with the parameters.
  * @return True if it was correct.
 */
-bool parametry();
+bool parametry(dynstr_t *fun_id, list_t *parameters);
 
 /**
  * A function for the <param> rule.
  * 
+ * @param fun_id Identifier of the function.
+ * @param parameters A list with the parameters.
  * @return True if it was correct.
 */
-bool param();
+bool param(dynstr_t *fun_id, list_t *parameters);
 
 /**
  * A function for the <prikaz_fce> rule.
@@ -107,23 +130,26 @@ bool else_rule();
 /**
  * A function for the <vol_parametry> rule.
  * 
+ * @param parameters The list of the call parameters.
  * @return True if it was correct.
 */
-bool vol_parametry();
+bool vol_parametry(list_t *parameters);
 
 /**
  * A function for the <vol_param> rule.
  * 
+ * @param parameters The list of the call parameters.
  * @return True if it was correct.
 */
-bool vol_param();
+bool vol_param(list_t *parameters);
 
 /**
  * A function for the <vol_par> rule.
  * 
+ * @param parameters The list of the call parameters.
  * @return True if it was correct.
 */
-bool vol_par();
+bool vol_par(list_t *parameters);
 
 /**
  * A function for the <konec> rule.
@@ -137,8 +163,9 @@ bool konec();
  * 
  * @param second_tkn True if there are two tokens for the calling of expr()
  * @param prev_tok If second_tok is true, than it is a previous token, otherwise it is undefined.
+ * @param frame Pointer to the current frame.
  * @return True if it was correct.
 */
-bool vyraz(bool second_tkn, token_t prev_tok);
+bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame);
 
 #endif
