@@ -8,6 +8,33 @@
 #include "symtable.h"
 #include "generator.h"
 
+
+
+// TODO pomocné funkce
+void print_tree(sym_table *treee) {
+    if(treee == NULL) {
+        printf("[...] - [...]\n");
+        return;
+    } else {
+        printf("[%s] - [%d]\n", treee->id->array, treee->data->is_function);
+        print_tree(treee->left);
+        print_tree(treee->right);
+    }
+}
+void print_list(list_t *list) {
+    list_node_t *temp = list->first;
+    while(temp != NULL) {
+        if(temp->id == NULL) {
+            printf("(NULL)\n");
+        } else {
+            printf("[%s]\n", temp->id->array);
+        }
+        temp = temp->next;
+    }
+}
+
+
+
 /**
  * A global variable used for the current token.
 */
@@ -28,6 +55,8 @@ sym_table *tree;
 */
 sym_table *current_frame;
 
+int tkn_num = 0; // TODO - cislo jen na debug
+
 void abort() {
 	free(current_tkn);
     st_dispose(&tree);
@@ -44,6 +73,7 @@ void get_tkn() {
     if(get_token(current_tkn) == false) { // -> error, free everything and abort
         abort();
     }
+    tkn_num++; // TODO - debug cislo
 }
 
 void free_tkn() {
@@ -104,6 +134,7 @@ bool start() {
 
     bool value = false;
     get_tkn();
+    printf("[DEBUG INFO]: currently in start(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // first it checks the token types and if then legal keywords
     if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
        current_tkn->type == token_none || current_tkn->attr.keyword == keyword_function ||
@@ -112,6 +143,7 @@ bool start() {
         
         value = program() && konec();
     }
+    printf("[DEBUG INFO]: currently in start(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -120,6 +152,7 @@ bool start() {
 }
 
 bool program() {
+    printf("[DEBUG INFO]: currently in program(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     bool value = false;
     // rule: <program> -> eps
     if(current_tkn->type == token_none) {
@@ -157,6 +190,7 @@ bool program() {
             value = false;
         }
     }
+    printf("[DEBUG INFO]: currently in program(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -166,6 +200,7 @@ bool program() {
 
 bool definice() {
     bool value = false;
+    printf("[DEBUG INFO]: currently in definice(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <definice> -> FUNCTION ID ( <parametry> ) : TYP { <prikaz_fce> }
     if(current_tkn->attr.keyword == keyword_function) {
         dynstr_t *id;
@@ -229,6 +264,9 @@ bool definice() {
             add_node(&tree, id, 1, parameters, params, type, can_be_null);
             current_frame = st_search(tree, id)->local_frame;
             st_search(tree, id)->params = convert_list_to_subtree(parameters, &current_frame);
+
+            print_tree(current_frame); // TODO debug printfs
+            print_list(parameters);
         } else {
             error_handle(line_num, func_def_error);
             abort();
@@ -252,6 +290,7 @@ bool definice() {
         // return the frame back to the main frame
         current_frame = tree;
     }
+    printf("[DEBUG INFO]: currently in definice(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -264,6 +303,7 @@ bool parametry(dynstr_t *fun_id, list_t *parameters) {
 
     keywords type;
     bool can_be_null = false;
+    printf("[DEBUG INFO]: currently in parametry(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <parametry> -> eps
     if(current_tkn->type == token_parentheses_right) {
         value = true;
@@ -290,6 +330,9 @@ bool parametry(dynstr_t *fun_id, list_t *parameters) {
         }   
     }
 
+    // if the previous token was type, continues to check if the current token is VAR_ID
+    
+    printf("[DEBUG INFO]: currently in parametry(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -302,6 +345,7 @@ bool param(dynstr_t *fun_id, list_t *parameters) {
 
     keywords type;
     bool can_be_null = false;
+    printf("[DEBUG INFO]: currently in param(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <param> -> eps
     if(current_tkn->type == token_parentheses_right) {
         value = true;
@@ -333,6 +377,7 @@ bool param(dynstr_t *fun_id, list_t *parameters) {
         }
     }
 
+    printf("[DEBUG INFO]: currently in param(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -342,6 +387,7 @@ bool param(dynstr_t *fun_id, list_t *parameters) {
 
 bool prikaz_fce() {
     bool value = false;
+    printf("[DEBUG INFO]: currently in prikaz_fce(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <prikaz_fce> -> eps
     if(current_tkn->type == token_curly_right) {
         value = true;
@@ -366,7 +412,7 @@ bool prikaz_fce() {
             value = false;
         }
     }
-
+    printf("[DEBUG INFO]: currently in prikaz_fce(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -376,6 +422,7 @@ bool prikaz_fce() {
 
 bool prikaz() {
     bool value = false;
+    printf("[DEBUG INFO]: currently in prikaz(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <prikaz> -> RETURN <vyraz> ;
     if(current_tkn->attr.keyword == keyword_return) {
         value = true;
@@ -414,6 +461,7 @@ bool prikaz() {
             value = false;
         }
 
+        print_list(parameters);
         // check if we got the right number of parameters
         list_node_t *temp = parameters->first;
         unsigned int num_of_params = 0;
@@ -542,7 +590,7 @@ bool prikaz() {
             value = false;
         }
     }
-
+    printf("[DEBUG INFO]: currently in prikaz(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -552,6 +600,7 @@ bool prikaz() {
 
 bool else_rule() {
     bool value = false;
+    printf("[DEBUG INFO]: currently in else_rule(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <else> -> eps
     if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
        current_tkn->type == token_none || current_tkn->type == token_curly_right ||
@@ -578,7 +627,7 @@ bool else_rule() {
             value = false;
         }
     }
-
+    printf("[DEBUG INFO]: currently in else_rule(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -588,6 +637,7 @@ bool else_rule() {
 
 bool vol_parametry(list_t *parameters) {
     bool value = false;
+    printf("[DEBUG INFO]: currently in vol_parametry(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <vol_parametry> -> eps
     if(current_tkn->type == token_parentheses_right) {
         value = true;
@@ -623,7 +673,7 @@ bool vol_parametry(list_t *parameters) {
             value = false;
         }
     }
-
+    printf("[DEBUG INFO]: currently in vol_parametry(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -633,6 +683,7 @@ bool vol_parametry(list_t *parameters) {
 
 bool vol_param(list_t *parameters) {
     bool value = false;
+    printf("[DEBUG INFO]: currently in vol_param(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <vol_param> -> eps
     if(current_tkn->type == token_parentheses_right) {
         value = true;
@@ -641,7 +692,7 @@ bool vol_param(list_t *parameters) {
         get_tkn();
         value = vol_par(parameters);
     }
-
+    printf("[DEBUG INFO]: currently in vol_param(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -651,6 +702,7 @@ bool vol_param(list_t *parameters) {
 
 bool vol_par(list_t *parameters) {
     bool value = false;
+    printf("[DEBUG INFO]: currently in vol_par(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     // rule: <vol_par> -> VAR_ID <vol_param>
     if(current_tkn->type == token_varieble) {
         // VAR_ID
@@ -683,7 +735,7 @@ bool vol_par(list_t *parameters) {
             value = false;
         }
     }
-
+    printf("[DEBUG INFO]: currently in vol_par(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -693,10 +745,11 @@ bool vol_par(list_t *parameters) {
 
 bool konec() {
     bool value = false;
+    printf("[DEBUG INFO]: currently in konec(), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
     if(current_tkn->type == token_none) {
         value = true;
     }
-
+    printf("[DEBUG INFO]: currently in konec(), returning: %d\n", value);
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
@@ -705,6 +758,9 @@ bool konec() {
 }
 
 bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
+    printf("[DEBUG INFO]: currently in vyraz(false, *current_tkn), token number: %d, token line: %d\n", tkn_num, current_tkn->line);
+
+    printf("[DEBUG INFO]: currently in vyraz(false, *current_tkn), exiting\n");
     if(second_tkn) {
         return expr(prev_tok, current_tkn, frame);
     } else {
