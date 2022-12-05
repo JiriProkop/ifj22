@@ -12,12 +12,116 @@ unsigned gen_number_while_end = 0;
 unsigned temp_var_counter = 1;
 
 // type_casting
+void gen_type_casting() {
+    printf("DEFVAR GF@%%cast_var\n");
+    printf("DEFVAR GF@%%cast_type\n");
+    printf("DEFVAR GF@%%cast_null\n");
+    printf("DEFVAR GF@%%cast_type_temp\n");
+    printf("JUMP %%type_casting_end\n");
+
+    printf("LABEL %%type_casting\n");
+    printf("POPS GF@%%cast_var\n");
+    printf("POPS GF@%%cast_type\n");
+    printf("POPS GF@%%cast_null\n");
+    printf("TYPE GF@%%cast_type_temp GF@%%cast_var\n");
+
+    // check for null
+    printf("JUMPIFNEQ %%cast_continue1 GF@%%cast_type_temp string@nil\n");
+    printf("JUMPIFNEQ %%cast_continue1_1 GF@%%cast_null bool@true\n");
+    printf("PUSHS GF@%%cast_var\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_continue1_1\n");
+    printf("JUMPIFNEQ %%cast_continue1_2 GF@%%cast_type string@int\n");
+    printf("PUSHS int@0\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_continue1_2\n");
+    printf("JUMPIFNEQ %%cast_continue1_3 GF@%%cast_type string@float\n");
+    printf("PUSHS float@0x0p+0\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_continue1_3\n");
+    printf("PUSHS string@\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_continue1\n");
+    // type should be int
+    printf("JUMPIFNEQ %%cast_continue2 GF@%%cast_type string@int\n");
+    printf("JUMPIFNEQ %%cast_continue2_1 GF@%%cast_type_temp string@int\n");
+    printf("PUSHS GF@%%cast_var\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_continue2_1\n");
+    printf("JUMPIFNEQ %%cast_error GF@%%cast_type_temp string@float\n");
+    printf("FLOAT2INT GF@%%cast_var GF@%%cast_var\n");
+    printf("PUSHS GF@%%cast_var\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_continue2\n");
+    // type should be float
+    printf("JUMPIFNEQ %%cast_continue3 GF@%%cast_type string@float\n");
+    printf("JUMPIFNEQ %%cast_continue3_1 GF@%%cast_type_temp string@float\n");
+    printf("PUSHS GF@%%cast_var\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_continue3_1\n");
+    printf("JUMPIFNEQ %%cast_error GF@%%cast_type_temp string@int\n");
+    printf("INT2FLOAT GF@%%cast_var GF@%%cast_var\n");
+    printf("PUSHS GF@%%cast_var\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_continue3\n");
+    // type should be string
+    printf("JUMPIFNEQ %%cast_error GF@%%cast_type GF@%%cast_type_temp\n");
+    printf("PUSHS GF@%%cast_var\n");
+    printf("RETURN\n");
+
+    printf("LABEL %%cast_error\n");
+    printf("EXIT int@7\n");
+    printf("LABEL %%type_casting_end\n");
+}
+
+void gen_cast_to_bool() {
+    printf("DEFVAR GF@%%cast_bool_var\n");
+    printf("DEFVAR GF@%%cast_bool_type\n");
+    printf("JUMP %%cast_bool_end\n");
+    printf("LABEL %%cast_bool\n");
+
+    printf("POPS GF@%%cast_bool_var\n");
+    printf("TYPE GF@%%cast_bool_type GF@%%cast_bool_var\n");
+
+    // int
+    printf("JUMPIFNEQ %%cast_bool_continue1 GF@%%cast_bool_type string@int\n");
+    printf("JUMPIFNEQ %%cast_bool_continue1_1 GF@%%cast_bool_var int@0\n");
+    printf("PUSHS bool@false\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_bool_continue1_1\n");
+    printf("PUSHS bool@true\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_bool_continue1\n");
+    // float
+    printf("JUMPIFNEQ %%cast_bool_continue2 GF@%%cast_bool_type string@float\n");
+    printf("JUMPIFNEQ %%cast_bool_continue2_1 GF@%%cast_bool_var float@0x0p+0\n");
+    printf("PUSHS bool@false\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_bool_continue2_1\n");
+    printf("PUSHS bool@true\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_bool_continue2\n");
+    // string
+    printf("JUMPIFNEQ %%cast_bool_continue3 GF@%%cast_bool_type string@string\n");
+    printf("JUMPIFNEQ %%cast_bool_continue3_1 GF@%%cast_bool_var string@\n");
+    printf("PUSHS bool@false\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_bool_continue3_1\n");
+    printf("PUSHS bool@true\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_bool_continue3\n");
+
+    printf("PUSHS bool@false\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_bool_end\n");
+}
+
 
 void gen_header() {
     printf(".IFJcode22\n");
     printf("CRATEFRAME\n");
     // universal variable for conditions 
-    printf("DEFVAR GF@%condition\n");
+    printf("DEFVAR GF@%%condition\n");
     printf("PUSHFRAME\n");
     
     gen_type_casting();
@@ -51,7 +155,7 @@ void gen_function_def_end(dynstr_t *id, sym_table *gen_tree) {
     printf("POPFRAME\n");
     sym_data *func_data = st_search(gen_tree, id);
     // if you got on the end of void function exit with error 6;
-    if(func_data->return_type != NULL){
+    if(func_data->return_type != keyword_void){
         printf("EXIT int@6\n");
     }
     // if you got on the end of void function return
@@ -211,108 +315,4 @@ void gen_write(list_t *parameters) {
 
 void gen_if_start(){
     
-}
-
-void gen_type_casting() {
-    printf("DEFVAR GF@%cast_var\n");
-    printf("DEFVAR GF@%cast_type\n");
-    printf("DEFVAR GF@%cast_null\n");
-    printf("DEFVAR GF@%cast_type_temp\n");
-    printf("JUMP %type_casting_end\n");
-
-    printf("LABEL %type_casting\n");
-    printf("POPS GF@%cast_var\n");
-    printf("POPS GF@%cast_type\n");
-    printf("POPS GF@%cast_null\n");
-    printf("TYPE GF@%cast_type_temp GF@%cast_var\n");
-
-    // check for null
-    printf("JUMPIFNEQ %cast_continue1 GF@%cast_type_temp string@nil\n");
-    printf("JUMPIFNEQ %cast_continue1_1 GF@%cast_null bool@true\n");
-    printf("PUSHS GF@%cast_var\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_continue1_1\n");
-    printf("JUMPIFNEQ %cast_continue1_2 GF@%cast_type string@int\n");
-    printf("PUSHS int@0\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_continue1_2\n");
-    printf("JUMPIFNEQ %cast_continue1_3 GF@%cast_type string@float\n");
-    printf("PUSHS float@0x0p+0\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_continue1_3\n");
-    printf("PUSHS string@\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_continue1\n");
-    // type should be int
-    printf("JUMPIFNEQ %cast_continue2 GF@%cast_type string@int\n");
-    printf("JUMPIFNEQ %cast_continue2_1 GF@%cast_type_temp string@int\n");
-    printf("PUSHS GF@%cast_var\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_continue2_1\n");
-    printf("JUMPIFNEQ %cast_error GF@%cast_type_temp string@float\n");
-    printf("FLOAT2INT GF@%cast_var GF@%cast_var\n");
-    printf("PUSHS GF@%cast_var\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_continue2\n");
-    // type should be float
-    printf("JUMPIFNEQ %cast_continue3 GF@%cast_type string@float\n");
-    printf("JUMPIFNEQ %cast_continue3_1 GF@%cast_type_temp string@float\n");
-    printf("PUSHS GF@%cast_var\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_continue3_1\n");
-    printf("JUMPIFNEQ %cast_error GF@%cast_type_temp string@int\n");
-    printf("INT2FLOAT GF@%cast_var GF@%cast_var\n");
-    printf("PUSHS GF@%cast_var\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_continue3\n");
-    // type should be string
-    printf("JUMPIFNEQ %cast_error GF@%cast_type GF@%cast_type_temp\n");
-    printf("PUSHS GF@%cast_var\n");
-    printf("RETURN\n");
-
-    printf("LABEL %cast_error\n");
-    printf("EXIT int@7\n");
-    printf("LABEL %type_casting_end\n");
-}
-
-void gen_cast_to_bool() {
-    printf("DEFVAR GF@%cast_bool_var\n");
-    printf("DEFVAR GF@%cast_bool_type\n");
-    printf("JUMP %cast_bool_end\n");
-    printf("LABEL %cast_bool\n");
-
-    printf("POPS GF@%cast_bool_var\n");
-    printf("TYPE GF@%cast_bool_type GF@%cast_bool_var\n");
-
-    // int
-    printf("JUMPIFNEQ %cast_bool_continue1 GF@%cast_bool_type string@int\n");
-    printf("JUMPIFNEQ %cast_bool_continue1_1 GF@%cast_bool_var int@0\n");
-    printf("PUSHS bool@false\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_bool_continue1_1\n");
-    printf("PUSHS bool@true\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_bool_continue1\n");
-    // float
-    printf("JUMPIFNEQ %cast_bool_continue2 GF@%cast_bool_type string@float\n");
-    printf("JUMPIFNEQ %cast_bool_continue2_1 GF@%cast_bool_var float@0x0p+0\n");
-    printf("PUSHS bool@false\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_bool_continue2_1\n");
-    printf("PUSHS bool@true\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_bool_continue2\n");
-    // string
-    printf("JUMPIFNEQ %cast_bool_continue3 GF@%cast_bool_type string@string\n");
-    printf("JUMPIFNEQ %cast_bool_continue3_1 GF@%cast_bool_var string@\n");
-    printf("PUSHS bool@false\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_bool_continue3_1\n");
-    printf("PUSHS bool@true\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_bool_continue3\n");
-
-    printf("PUSHS bool@false\n");
-    printf("RETURN\n");
-    printf("LABEL %cast_bool_end\n");
 }
