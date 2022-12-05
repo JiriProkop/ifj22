@@ -128,6 +128,10 @@ void gen_header() {
     gen_cast_to_bool();
 }
 
+void gen_check_type() {
+    printf("PUSHS string@%s\n");
+}
+
 void gen_function_def(dynstr_t *id, list_t* parameters){
     list_node_t* i = parameters->first;
     // define all the arguments as temp variable for future use 
@@ -225,7 +229,7 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
 }   
 
 
-    void gen_closure(){
+void gen_closure(){
     printf("POPFRAME\n");
     printf("CLEARS\n");
     printf("EXIT int@0\n");
@@ -381,5 +385,4 @@ void gen_strval() {
 }
 
 // TODO u volani u parametru typova kontrola, ne konverze - ale u tech vestavenych jen u nekterych
-// TODO write null?
-// TODO funkce readX musí nějak příjímat argumenty
+// TODO volani parametru/cehokoliv pomoci te globalni promenne
