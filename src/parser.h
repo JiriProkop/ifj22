@@ -20,6 +20,11 @@
 extern token_t *current_tkn;
 
 /**
+ * A global variable used for temporary variables names.
+*/
+extern unsigned int temp_var_counter;
+
+/**
  * Function frees everything allocated in parser and aborts.
 */
 void abort();

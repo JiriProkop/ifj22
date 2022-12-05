@@ -14,6 +14,11 @@
 token_t *current_tkn = NULL;
 
 /**
+ * A global variable used for temporary variables names.
+*/
+unsigned int temp_var_counter = 0;
+
+/**
  * A global variable to tell the functions that a token has already been loaded.
 */
 bool tkn_already_loaded = false;
@@ -287,7 +292,7 @@ bool parametry(dynstr_t *fun_id, list_t *parameters) {
             // <param>
             get_tkn();
             value = param(fun_id, parameters);
-        }   
+        }
     }
 
     if(!value) {
@@ -388,6 +393,8 @@ bool prikaz() {
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
+
+        temp_var_counter++;
     // rule: <prikaz> -> ID ( <vol_parametry> ) ;
     } else if(current_tkn->type == token_identifier) {
         dynstr_t *id = current_tkn->attr.str;
@@ -452,6 +459,9 @@ bool prikaz() {
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
+
+        temp_var_counter++;
+    
         // {
         get_tkn();
         if(value && current_tkn->type != token_curly_left) {
@@ -488,6 +498,9 @@ bool prikaz() {
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
+
+        temp_var_counter++;
+
         // {
         get_tkn();
         if(value && current_tkn->type != token_curly_left) {
@@ -516,6 +529,7 @@ bool prikaz() {
             if(value && current_tkn->type != token_semicol) {
                 value = false;
             }
+            temp_var_counter++;
         // =
         } else {
             if(st_search(current_frame, id) == NULL) {
@@ -533,6 +547,7 @@ bool prikaz() {
                     value = false;
                 }
             }
+            temp_var_counter++;
         }
     // checks expressions
     } else {
@@ -541,6 +556,7 @@ bool prikaz() {
         if(value && current_tkn->type != token_semicol) {
             value = false;
         }
+        temp_var_counter++;
     }
 
     if(!value) {
@@ -614,9 +630,10 @@ bool vol_parametry(list_t *parameters) {
         }
         // adding the parameter to a list
         if(value) {
-            // id is NULL, since the parameter is <vyraz> not, VAR_ID
+            // id is NULL, since the parameter is <vyraz>, not VAR_ID
             list_add(parameters, keyword_void, NULL);
         }
+        temp_var_counter++;
 
         // <vol_param>
         if(value && !vol_param(parameters)) {
@@ -677,6 +694,7 @@ bool vol_par(list_t *parameters) {
             // id is NULL, since the parameter is <vyraz> not, VAR_ID
             list_add(parameters, keyword_void, NULL);
         }
+        temp_var_counter++;
 
         // <vol_param>
         if(value && !vol_param(parameters)) {
