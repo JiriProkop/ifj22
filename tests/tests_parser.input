@@ -4,6 +4,7 @@ declare(strict_types=1);
 function testfunc(int $testvar, float $fasdf, string $afdsf, string $fdsfaff) : void {
     return 43;
     $asfdfa = 234;
+    testfunc(1,1,1,1);
     while(3) {
     }
     

@@ -630,8 +630,14 @@ bool vol_parametry(list_t *parameters) {
         }
         // adding the parameter to a list
         if(value) {
-            // id is NULL, since the parameter is <vyraz>, not VAR_ID
-            list_add(parameters, keyword_void, NULL);
+            // id is the number currently in temp_var_counter
+            dynstr_t *number = malloc(sizeof(dynstr_t));
+            dynstr_init(number);
+            dynstr_add_char(number, '%');
+            char numtostring[10] = "\0";
+            sprintf(numtostring, "%u", temp_var_counter);
+            dynstr_add_string(number, numtostring);
+            list_add(parameters, keyword_void, number);
         }
         temp_var_counter++;
 
@@ -691,8 +697,14 @@ bool vol_par(list_t *parameters) {
         }
         // adding the parameter to a list
         if(value) {
-            // id is NULL, since the parameter is <vyraz> not, VAR_ID
-            list_add(parameters, keyword_void, NULL);
+            // id is the number currently in temp_var_counter
+            dynstr_t *number = malloc(sizeof(dynstr_t));
+            dynstr_init(number);
+            dynstr_add_char(number, '%');
+            char numtostring[10] = "\0";
+            sprintf(numtostring, "%u", temp_var_counter);
+            dynstr_add_string(number, numtostring);
+            list_add(parameters, keyword_void, number);
         }
         temp_var_counter++;
 
@@ -734,4 +746,3 @@ bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
 // $a + 5 jako parametr nezpracuje výraz -> předat to celé na zpracování výrazu? Nebo je to vůbec legal?
 
 // TODO write funkce
-// TODO ukladat do listu %50
