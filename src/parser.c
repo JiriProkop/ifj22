@@ -105,6 +105,25 @@ bool start() {
         abort();
     }
     st_init(&tree); // initialize the symtable tree
+
+    // add all the prebuit functions to the tree
+    char *prebuit[11] = {"reads", "readi", "readf", "write", "floatval", "intval",
+                      "strval", "strlen", "substring", "ord", "chr"};
+    unsigned int parameter_number[] = {0, 0, 0, 0, 1, 1, 1, 1, 3, 1, 1};
+    for(int i = 0; i < 11; i++) {
+        dynstr_t *id = malloc(sizeof(dynstr_t));
+        if(id == NULL) {
+            error_handle(0, compiler_error);
+            abort();
+        }
+        dynstr_init(id);
+        dynstr_clear(id);
+        dynstr_add_string(id, prebuit[i]);
+        // since the functions are already declared and made,
+        // we do not care abour parameters and return type
+        add_node(&tree, id, 1, NULL, parameter_number[i], keyword_void, true);
+    }
+
     current_frame = tree; // the current frame is the now allocated tree
 
     bool value = false;
@@ -421,16 +440,21 @@ bool prikaz() {
             value = false;
         }
 
-        // check if we got the right number of parameters
-        list_node_t *temp = parameters->first;
-        unsigned int num_of_params = 0;
-        while(temp != NULL) {
-            num_of_params++;
-            temp = temp->next;
-        }
-        if(st_search(tree, id)->params != num_of_params) {
-            error_handle(current_tkn->line, func_arr_or_ret_error);
-            abort();
+        // if the function is write, then we do not care about the number of parameters
+        if(dynstr_compare(id, "write") == 1) {
+            printf("funkce write\n"); // TODO gen write
+        // else check if we got the right number of parameters
+        } else {
+            list_node_t *temp = parameters->first;
+            unsigned int num_of_params = 0;
+            while(temp != NULL) {
+                num_of_params++;
+                temp = temp->next;
+            }
+            if(st_search(tree, id)->params != num_of_params) {
+                error_handle(current_tkn->line, func_arr_or_ret_error);
+                abort();
+            }
         }
 
         // )
@@ -632,6 +656,10 @@ bool vol_parametry(list_t *parameters) {
         if(value) {
             // id is the number currently in temp_var_counter
             dynstr_t *number = malloc(sizeof(dynstr_t));
+            if(number == NULL) {
+                error_handle(current_tkn->line, compiler_error);
+                abort();
+            }
             dynstr_init(number);
             dynstr_add_char(number, '%');
             char numtostring[10] = "\0";
@@ -699,6 +727,10 @@ bool vol_par(list_t *parameters) {
         if(value) {
             // id is the number currently in temp_var_counter
             dynstr_t *number = malloc(sizeof(dynstr_t));
+            if(number == NULL) {
+                error_handle(current_tkn->line, compiler_error);
+                abort();
+            }
             dynstr_init(number);
             dynstr_add_char(number, '%');
             char numtostring[10] = "\0";
@@ -744,5 +776,3 @@ bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
 
 // TODOs na probrání na schůzce:
 // $a + 5 jako parametr nezpracuje výraz -> předat to celé na zpracování výrazu? Nebo je to vůbec legal?
-
-// TODO write funkce

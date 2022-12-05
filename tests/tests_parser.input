@@ -19,6 +19,7 @@ function testfuncafsdf(int $testvar) : void {
     while(3) {
 
     }
+    write($a, 3424);
 
 }
 
