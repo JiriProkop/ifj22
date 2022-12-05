@@ -28,7 +28,7 @@ void gen_function_def(dynstr_t *id, list_t *parameters);
  * 
  * @param id Function identifier
  */
-void gen_function_def_end(dynstr_t *id);
+void gen_function_def_end(dynstr_t *id, sym_table *gen_tree);
 
 /**
  * @brief Function for printing the call of function 
