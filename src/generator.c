@@ -139,3 +139,51 @@ void gen_while_end(){
     printf("JUMPIFEQ %%while%u_start LF@ int@1\n", gen_number_while_end);
     printf("LABEL while%u_end\n");
 }
+
+void gen_reads() {
+    printf("JUMP reads_end\n");
+    printf("LABEL reads_start\n");
+    printf("CREATEFRAME\n");
+    printf("DEFVAR TF@%%reads\n");
+    printf("PUSHFRAME\n");
+    printf("READ LF@%%reads string\n");
+    printf("PUSHS LF@%%reads\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL reads_end\n");
+}
+
+void gen_readi() {
+    printf("JUMP readi_end\n");
+    printf("LABEL readi_start\n");
+    printf("CREATEFRAME\n");
+    printf("DEFVAR TF@%%readi\n");
+    printf("PUSHFRAME\n");
+    printf("READ LF@%%readi int\n");
+    printf("PUSHS LF@%%readi\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL readi_end\n");
+}
+
+void gen_readf() {
+    printf("JUMP readf_end\n");
+    printf("LABEL readf_start\n");
+    printf("CREATEFRAME\n");
+    printf("DEFVAR TF@%%readf\n");
+    printf("PUSHFRAME\n");
+    printf("READ LF@%%readf float\n");
+    printf("PUSHS LF@%%readf\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL readf_end\n");
+}
+
+void gen_write(list_t *parameters) {
+    list_node_t *towrite = parameters->first;
+    while (towrite != NULL)
+    {
+        printf("WRITE LF@%s\n", towrite->id->array);
+        towrite = towrite->next;
+    }
+}
