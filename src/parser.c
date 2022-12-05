@@ -109,6 +109,7 @@ bool start() {
     // add all the prebuit functions to the tree
     char *prebuit[11] = {"reads", "readi", "readf", "write", "floatval", "intval",
                       "strval", "strlen", "substring", "ord", "chr"};
+    // TODO add arguments
     unsigned int parameter_number[] = {0, 0, 0, 0, 1, 1, 1, 1, 3, 1, 1};
     for(int i = 0; i < 11; i++) {
         dynstr_t *id = malloc(sizeof(dynstr_t));
