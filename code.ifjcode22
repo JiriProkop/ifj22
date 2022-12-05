@@ -4,7 +4,6 @@ PUSHFRAME
 
 
 
-
 #pretypovavani
 DEFVAR GF@%cast_var
 DEFVAR GF@%cast_type
@@ -21,8 +20,19 @@ TYPE GF@%cast_type_temp GF@%cast_var
 
 # check for null
 JUMPIFNEQ %cast_continue1 GF@%cast_type_temp string@nil
-JUMPIFNEQ %cast_error GF@%cast_null bool@true
+JUMPIFNEQ %cast_continue1_1 GF@%cast_null bool@true
 PUSHS GF@%cast_var
+RETURN
+LABEL %cast_continue1_1
+JUMPIFNEQ %cast_continue1_2 GF@%cast_type string@int
+PUSHS int@0
+RETURN
+LABEL %cast_continue1_2
+JUMPIFNEQ %cast_continue1_3 GF@%cast_type string@float
+PUSHS float@0x0p+0
+RETURN
+LABEL %cast_continue1_3
+PUSHS string@
 RETURN
 LABEL %cast_continue1
 
@@ -71,7 +81,6 @@ PUSHS LF@x
 CALL %type_casting
 POPS LF@x
 WRITE LF@x
-
 
 
 

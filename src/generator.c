@@ -9,16 +9,20 @@
 
 unsigned gen_number_while_start = 0;
 unsigned gen_number_while_end = 0;
+unsigned temp_var_counter = 1;
+
+// type_casting
 
 void gen_header() {
     printf(".IFJcode22\n");
     printf("CRATEFRAME\n");
     // universal variable for conditions 
-    printf("DEFVAR GF@%condition");
+    printf("DEFVAR GF@%condition\n");
     printf("PUSHFRAME\n");
+    // TODO typecasting 
 }
 
-void gen_function_def(dynstr_t *id, list_t* parameters) {
+void gen_function_def(dynstr_t *id, list_t* parameters){
     list_node_t* i = parameters->first;
     // define all the arguments as temp variable for future use 
     while(i != NULL){
@@ -40,23 +44,61 @@ void gen_function_def(dynstr_t *id, list_t* parameters) {
     printf("PUSHFRAME\n");
 }
 
-void gen_function_def_end(dynstr_t *id) {
+
+void gen_function_def_end(dynstr_t *id, sym_table *gen_tree) {
     printf("POPFRAME\n");
+    sym_data *func_data = st_search(gen_tree, id);
+    // if you got on the end of void function exit with error 6;
+    if(func_data->return_type != NULL){
+        printf("EXIT int@6\n");
+    }
+    // if you got on the end of void function return
     printf("RETURN\n");
     printf("LABEL %s_end\n", id->array);
 }
 
-void gen_change_type(keywords new_type, keywords old_type, char *id,  char *cast_var, char *value){
-    if(new_type == keyword_int && old_type == keyword_float){   // float to int 
-        printf("FLOAT2INT LF@%%%s_%s LF@%s\n", id, cast_var, value);  // the variable that was defined at the gen_start_function with
+void gen_cast_call(bool can_be_null, keywords casted_type, char* id, bool global){
+    // push can be null 
+    if(can_be_null){
+        printf("PUSH bool@true\n");
+    } else{
+        printf("PUSH bool@false\n");
     }
-    if(new_type == keyword_float && old_type == keyword_int){   // int to float 
-        printf("INT2FLOAT LF@%%%s_%s LF@%s\n", id, cast_var, value);
-    } 
-    // if any other cast shut it down
-    error_handle(0 ,func_arr_or_ret_error);
-    // TODO check if I chose the right error
-    abort();
+    // push type 
+    switch (casted_type)
+    {
+    case keyword_int:
+        printf("PUSH string@int\n");
+        break;
+    case keyword_float:
+        printf("PUSH string@float\n");
+        break;
+    case keyword_string: 
+        printf("PUSH string@string\n");
+        break;
+    default:
+        break;
+    }
+    // push id
+    if(global){
+        printf("PUSH GF@%%%u\n", temp_var_counter);
+    }else {
+        printf("PUSH %s\n", id);
+    }
+}
+
+void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit){
+    sym_data *data_func = st_search(gen_tree, id_function);
+    if(exit){
+        printf("EXIT GF%%%u\n");
+        return;
+    }
+    if(data_func->return_type != keyword_void){
+        gen_cast_call(data_func->can_be_null, data_func->return_type, "GF%%", true);
+        printf("PUSH GF%%%u\n", temp_var_counter);
+    }
+    printf("POPFRAME");
+    printf("RETURN\n");
 }
 
 void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
@@ -73,7 +115,6 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
         expected_parameters_i = expected_parameters_i->next;
         }
     }
-    // TODO return value 
     printf("CALL %s_start\n", id->array);
 }   
 
@@ -84,7 +125,6 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
     printf("EXIT int@0\n");
 }
 
-// this could be used for while as well ? 
 void gen_def_variable(dynstr_t *variable, sym_table *tree_gen){
     // define if it is not already defined 
     sym_data* variable_node = st_search(tree_gen,variable);   
@@ -94,35 +134,15 @@ void gen_def_variable(dynstr_t *variable, sym_table *tree_gen){
     }
 }
 
-    // // fill the variable with the right type 
-    // switch (value->type){
-    //     case token_integer:
-    //         printf("MOVE LF@%s int@%d\n", variable->array, value->attr.integer);
-    //         break;
-    //     case token_float:
-    //         printf("MOVE LF@%s float@%d\n", variable->array, value->attr.doub);
-    //         break;
-    //     case token_string:
-    //         printf("MOVE LF@%s string@%s\n", variable->array, value->attr.doub);
-    //         break;
-    //     // TODO expresion 
-    //     // TODO void ?
-    //     // case token_varieble:
-    //     //     printf("MOVE LF@%s float@%d\n", variable->array, value->attr.doub);
-    //     //     break;
-    //     // TODO right errror ? 
-    //     default:
-    //         error_handle(0, other_semantic_error);
-    //         abort();
-    // }
-
+void gen_fill_variable(dynstr_t *varible){
+    printf("MOVE %s GF@%%%u\n", varible->array, temp_var_counter);
+}
 
 void gen_while_start(){
     // variable used to track if program went through the function 0 at the start  
     printf("DEFVAR LF@%%while%u_loop\n", gen_number_while_start);
     printf("MOVE LF@%%while%u_loop int@0\n", gen_number_while_start);
     // variable in which condition will be stored 
-    printf("DEFVAR LF@%%while%u_condition\n", gen_number_while_start);
     // start lable
     printf("LABEL %%while%u_start\n", gen_number_while_start);
     printf("JUMPIFNEQ %%while%u_after_defvar int@0\n", gen_number_while_start);
@@ -130,7 +150,6 @@ void gen_while_start(){
     // go back to parser to print condition 
 }
 
-//%%while%u_after_defvar
 void gen_while_chceck_condition(){
     printf("JUMPIFEQ %%while%u_end LF@ int@1\n", gen_number_while_end);
 }
@@ -186,4 +205,8 @@ void gen_write(list_t *parameters) {
         printf("WRITE LF@%s\n", towrite->id->array);
         towrite = towrite->next;
     }
+}
+
+void gen_if_start(){
+    
 }
