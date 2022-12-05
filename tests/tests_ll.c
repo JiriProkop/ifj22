@@ -57,112 +57,112 @@ void add_node(list_t *list, char id[], keywords type){
 }
 
 int main(){
-    printf("--- [LINKED LIST TEST] ---\n");
-    list_t *list = malloc(sizeof(list_t));
-    if(list == NULL){
-        error_handle(0, compiler_error);
-        return 1;
-    }
+    // printf("--- [LINKED LIST TEST] ---\n");
+    // list_t *list = malloc(sizeof(list_t));
+    // if(list == NULL){
+    //     error_handle(0, compiler_error);
+    //     return 1;
+    // }
 
-    // ll initialization 
-    printf("\n[list init test]\n");
-    list_init(list);
-    if(list->last == NULL){
-        printf("initialization succesful \n");
-    }
-    // ll empty 
-    printf("\n[list is empty test]\n");
-    if(list_is_empty(list)){
-        printf("list is empty\n");
-    }
-    // ll add node foo (int hello , char there , bool Obi-wan);
-    printf("\n[list add test]\n");
+    // // ll initialization 
+    // printf("\n[list init test]\n");
+    // list_init(list);
+    // if(list->last == NULL){
+    //     printf("initialization succesful \n");
+    // }
+    // // ll empty 
+    // printf("\n[list is empty test]\n");
+    // if(list_is_empty(list)){
+    //     printf("list is empty\n");
+    // }
+    // // ll add node foo (int hello , char there , bool Obi-wan);
+    // printf("\n[list add test]\n");
 
-    add_node(list, "hello", keyword_string);
-    print_add_node(list, keyword_string, true, "hello");
+    // add_node(list, "hello", token_varieble);
+    // print_add_node(list, token_varieble, true, "hello");
 
-    add_node(list, "there", keyword_string);
-    print_add_node(list, keyword_string, false, "there");
+    // add_node(list, "there", token_string);
+    // print_add_node(list, token_string, false, "there");
 
-    add_node(list, "Obi-wan", keyword_if);
-    print_add_node(list,keyword_if, false, "Obi-wan");
+    // add_node(list, "Obi-wan", token_dot);
+    // print_add_node(list,token_dot, false, "Obi-wan");
 
-    print_list(list);
-    // ll list not empty 
-    printf("\n[list not empty test]\n");
-    if(!list_is_empty(list)){
-        printf("list is not empty \n");
-    }
+    // print_list(list);
+    // // ll list not empty 
+    // printf("\n[list not empty test]\n");
+    // if(!list_is_empty(list)){
+    //     printf("list is not empty \n");
+    // }
 
-    // test delete all (use valgrind)
-    list_dispose(list);
-    // test list first
-    printf("\n[list first]\n");
-    list_node_t *first_n;
-    list = malloc(sizeof(list_t));
-    list_init(list);
+    // // test delete all (use valgrind)
+    // list_dispose(list);
+    // // test list first
+    // printf("\n[list first]\n");
+    // list_node_t *first_n;
+    // list = malloc(sizeof(list_t));
+    // list_init(list);
 
-    add_node(list, "I am first", token_dot);
-    first_n = list_first(list);
-    printf(" '%s' \n,", first_n->id->array);
-    printf("adding node");
-    add_node(list, "I am second", token_assign);
-    first_n = list_first(list);
-    printf(" '%s' \n,", first_n->id->array);
+    // add_node(list, "I am first", token_dot);
+    // first_n = list_first(list);
+    // printf(" '%s' \n,", first_n->id->array);
+    // printf("adding node");
+    // add_node(list, "I am second", token_assign);
+    // first_n = list_first(list);
+    // printf(" '%s' \n,", first_n->id->array);
 
-    // test delete first 
-    printf("\n[list delete first]\n");
-    add_node(list, "I am third", token_keyword_w_null);
+    // // test delete first 
+    // printf("\n[list delete first]\n");
+    // add_node(list, "I am third", token_keyword_w_null);
     
-    while(list->first != NULL){
-        printf(" '%s',", list->first->id->array);
-        list_delete_first(list);
-        first_n = list_first(list);
-    }
-    list_delete_first(list);
-    first_n = list_first(list);
-    if(first_n == NULL){
-        printf(" no node to delelete");
-    }    
+    // while(list->first != NULL){
+    //     printf(" '%s',", list->first->id->array);
+    //     list_delete_first(list);
+    //     first_n = list_first(list);
+    // }
+    // list_delete_first(list);
+    // first_n = list_first(list);
+    // if(first_n == NULL){
+    //     printf(" no node to delelete");
+    // }    
 
-    //test ll search
-    list_node_t *returned_node, *searched_node;
-    printf("\n[test list search]\n");
-    add_node(list, "1", token_assign);
-    add_node(list, "2", token_assign);
-    add_node(list, "3", token_assign);
-    add_node(list, "4", token_assign);
-    add_node(list, "5", token_assign);
-    add_node(list, "6", token_assign);
+    // //test ll search
+    // list_node_t *returned_node, *searched_node;
+    // printf("\n[test list search]\n");
+    // add_node(list, "1", token_assign);
+    // add_node(list, "2", token_assign);
+    // add_node(list, "3", token_assign);
+    // add_node(list, "4", token_assign);
+    // add_node(list, "5", token_assign);
+    // add_node(list, "6", token_assign);
 
-    print_list(list);
+    // print_list(list);
 
-    printf("searching for 1\n");
-    searched_node = list->first;
-    returned_node = list_search(list, searched_node->id);
-    if(dynstr_compare(returned_node->id, searched_node->id->array)){
-        printf("one found\n");
-    }
+    // printf("searching for 1\n");
+    // searched_node = list->first;
+    // returned_node = list_search(list, searched_node->id);
+    // if(dynstr_compare(returned_node->id, searched_node->id->array)){
+    //     printf("one found\n");
+    // }
 
 
-    printf("searching for 3\n");
-    searched_node = searched_node->next;
-    searched_node = searched_node->next;
-    returned_node = list_search(list, searched_node->id);
-    if(dynstr_compare(returned_node->id, searched_node->id->array)){
-        printf("three found\n");
-    }
+    // printf("searching for 3\n");
+    // searched_node = searched_node->next;
+    // searched_node = searched_node->next;
+    // returned_node = list_search(list, searched_node->id);
+    // if(dynstr_compare(returned_node->id, searched_node->id->array)){
+    //     printf("three found\n");
+    // }
 
-    printf("searching for 6\n");
-    searched_node = searched_node->next;
-    searched_node = searched_node->next;
-    searched_node = searched_node->next;
-    returned_node = list_search(list, searched_node->id);
-    if(dynstr_compare(returned_node->id, searched_node->id->array)){
-        printf("six found\n");
-    }
-    list_dispose(list);
-    printf("\n --- [LINKED LIST END TEST] ---\n");
+    // printf("searching for 6\n");
+    // searched_node = searched_node->next;
+    // searched_node = searched_node->next;
+    // searched_node = searched_node->next;
+    // returned_node = list_search(list, searched_node->id);
+    // if(dynstr_compare(returned_node->id, searched_node->id->array)){
+    //     printf("six found\n");
+    // }
+    // list_dispose(list);
+    // printf("\n --- [LINKED LIST END TEST] ---\n");
     return ret;
 }
 
