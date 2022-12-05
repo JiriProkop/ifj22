@@ -565,6 +565,7 @@ bool prikaz() {
             get_tkn();
             if(value && current_tkn->type == token_identifier) {
                 value = prikaz();
+		    // TODO gen funkce
             } else {
                 value = vyraz(false, *current_tkn, current_frame);
                 // ;
