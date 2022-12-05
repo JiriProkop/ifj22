@@ -116,6 +116,34 @@ void gen_cast_to_bool() {
     printf("LABEL %%cast_bool_end\n");
 }
 
+void gen_check_type() {
+    printf("DEFVAR GF@%%check_type_var\n");
+    printf("DEFVAR GF@%%check_type_type\n");
+    printf("DEFVAR GF@%%check_type_bool\n");
+    printf("DEFVAR GF@%%check_type_temp\n");
+    printf("JUMP %%check_type_end\n");
+    printf("LABEL %%check_type\n");
+
+    printf("POPS GF@%%check_type_var\n");
+    printf("POPS GF@%%check_type_type\n");
+    printf("POPS GF@%%check_type_bool\n");
+
+    printf("TYPE GF@%%check_type_temp GF@%%check_type_var\n");
+
+    // the variable is null
+    printf("JUMPIFNEQ %%check_type_continue GF@%%check_type_temp string@nil\n");
+    printf("JUMPIFEQ %%check_type_error GF@%%check_type_bool bool@false\n");
+    printf("RETURN\n");
+    printf("LABEL %%check_type_continue\n");
+    // other than null
+    printf("JUMPIFNEQ %%check_type_error GF@%%check_type_type GF@%%check_type_temp\n");
+    printf("RETURN\n");
+
+    printf("LABEL %%check_type_error\n");
+    printf("EXIT int@7\n");
+    printf("LABEL %%check_type_end\n");
+}
+
 
 void gen_header() {
     printf(".IFJcode22\n");
@@ -126,10 +154,7 @@ void gen_header() {
     
     gen_type_casting();
     gen_cast_to_bool();
-}
-
-void gen_check_type() {
-    printf("PUSHS string@%s\n");
+    gen_check_type();
 }
 
 void gen_function_def(dynstr_t *id, list_t* parameters){
@@ -216,14 +241,24 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
     sym_data *fce_data = st_search(tree, id);   // search for the function in tree
     list_node_t *expected_parameters_i = fce_data->parameters->first;
 
-    while(recieve_parameters_i != NULL && expected_parameters_i != NULL){   // cast the parameter if necessary should also fill it
-        if(recieve_parameters_i->type != expected_parameters_i->type){
-            gen_change_type(recieve_parameters_i->type ,expected_parameters_i->type, id->array, expected_parameters_i->id->array, recieve_parameters_i->id->array);
-        } else{                                                             // or just fill it 
+    while(recieve_parameters_i != NULL && expected_parameters_i != NULL){
+        if(expected_parameters_i->can_be_null) {
+            printf("PUSHS bool@true\n");
+        } else {
+            printf("PUSHS bool@false\n");
+        }
+        if(expected_parameters_i->type == keyword_int) {
+            printf("PUSHS string@int\n");
+        } else if(expected_parameters_i->type == keyword_float) {
+            printf("PUSHS string@float\n");
+        } else if(expected_parameters_i->type == keyword_string) {
+            printf("PUSHS string@string\n");
+        }
+        printf("PUSHS LF@%s\n", recieve_parameters_i->id->array);
+        printf("CALL %%check_type\n");
         printf("MOVE LF@%%%s_%s LF@%s\n", id->array, expected_parameters_i->id->array, recieve_parameters_i->id->array);
         recieve_parameters_i = recieve_parameters_i->next;
         expected_parameters_i = expected_parameters_i->next;
-        }
     }
     printf("CALL %s_start\n", id->array);
 }   

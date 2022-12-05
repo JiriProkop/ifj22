@@ -4,6 +4,49 @@ PUSHFRAME
 
 
 
+
+#kontrola typu
+DEFVAR GF@%check_type_var
+DEFVAR GF@%check_type_type
+DEFVAR GF@%check_type_bool
+DEFVAR GF@%check_type_temp
+JUMP %check_type_end
+LABEL %check_type
+
+POPS GF@%check_type_var
+POPS GF@%check_type_type
+POPS GF@%check_type_bool
+
+TYPE GF@%check_type_temp GF@%check_type_var
+
+# prisel null
+JUMPIFNEQ %check_type_continue1 GF@%check_type_temp string@nil
+JUMPIFEQ %check_type_error GF@%check_type_bool bool@false
+RETURN
+LABEL %check_type_continue1
+
+JUMPIFNEQ %check_type_error GF@%check_type_type GF@%check_type_temp
+RETURN
+
+LABEL %check_type_error
+EXIT int@7
+LABEL %check_type_end
+# kontrola typu konec
+
+
+#priklad volani kontroly typu
+DEFVAR LF@xx
+MOVE LF@xx string@fasdfil
+PUSHS bool@false
+PUSHS string@string
+PUSHS LF@xx
+CALL %check_type
+
+
+
+
+
+
 #pretypovavani
 DEFVAR GF@%cast_var
 DEFVAR GF@%cast_type
