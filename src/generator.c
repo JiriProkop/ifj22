@@ -1,5 +1,6 @@
 #include "generator.h"
 #include "dynstr.h"
+#include "error.h"
 #include "expr.h"
 #include "ll.h"
 #include "parser.h"
@@ -50,10 +51,216 @@ bool gen_expr_different_place(exprll *rule_node, exprll *ll) {
     return false;
 }
 
-// TODO check types
-// TODO implicitni konverze
-// TODO DEFVAR right and left result on the start of codegen or something
-// TODO DEFVAR var1 and var2, type result on the start of codegen or something
+void var_or_val(token_t *tok2, bool save_to_right, unsigned *num, const char *operation) {
+    // tok1 represents result of smaller expression
+    if (tok2->type == token_varieble) {
+        // TODO is tok2 defined?
+        // tmp = var
+        printf("MOVE GF@$tmp GF@%s\n", tok2->attr.str->array);
+        printf("TYPE GF@$type1 GF@$left_result\n");
+        printf("TYPE GF@$type2 GF@%s\n", tok2->attr.str->array);
+        // is left_result int or float?
+        printf("EQ GF@$cond1 GF@$left_result string@int\n");
+        printf("EQ GF@$cond2 GF@$left_result string@float\n");
+        printf("OR GF@$cond1 GF@$cond1 GF@$cond2\n");
+        printf("JUMPIFEQ %s_BAD_%u GF@$cond1 bool@true", operation, *num);
+        // is varieble int or float?
+        printf("EQ GF@$cond1 GF@%s string@int\n", tok2->attr.str->array);
+        printf("EQ GF@$cond2 GF@%s string@float\n", tok2->attr.str->array);
+        printf("OR GF@$cond1 GF@$cond1 GF@$cond2\n");
+        printf("JUMPIFEQ %s_BAD_%u GF@$cond1 bool@true\n", operation, *num);
+        // if(type1 == int)
+        printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
+        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+        //		type2 is float, need to convert left_result to float
+        printf("PUSHS bool@true\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        printf("JUMP %s_DONE_%u\n", operation, *num);
+        // else -> type1 is float
+        printf("LABEL %s_FLOAT_%u\n", operation, *num);
+        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@float\n", operation, *num);
+        // 		type2 is int, need to convert it to float
+        printf("PUSHS bool@true\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@%s\n", tok2->attr.str->array);
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@%s\n", tok2->attr.str->array);
+        printf("JUMP %s_DONE_%u\n", operation, *num);
+
+        printf("LABEL %s_BAD_%u\n", operation, *num);
+        printf("EXIT int@7\n");
+
+        printf("LABEL %s_DONE_%u\n", operation, *num);
+        if (save_to_right) {
+            printf("%s GF@$right_result GF@$left_result GF@%s\n", operation, tok2->attr.str->array);
+        } else {
+            printf("%s GF@$left_result GF@$left_result GF@$%s\n", operation, tok2->attr.str->array);
+        }
+        printf("MOVE GF@%s GF@$tmp", tok2->attr.str->array);
+        (*num)++;
+    } else { // tok2 is a value and is stored in var1
+        if (tok2->type == token_integer) {
+            printf("MOVE GF@$val1 int@%d\n", tok2->attr.integer);
+        } else if (tok2->type == token_float) {
+            printf("MOVE GF@$val1 float@%a\n", (double)tok2->attr.doub);
+        } else {
+            error_handle(tok2->line, expr_type_error);
+            abort();
+        } // tok2 type is already checked
+        printf("TYPE GF@$type1 GF@$left_result\n");
+        printf("TYPE GF@$type2 GF@$val1\n");
+        // is left_result int or float?
+        printf("EQ GF@$cond1 GF@$left_result string@int\n");
+        printf("EQ GF@$cond2 GF@$left_result string@float\n");
+        printf("OR GF@$cond1 GF@$cond1 GF@$cond2\n");
+        printf("JUMPIFEQ %s_BAD_%u GF@$cond1 bool@true", operation, *num);
+        // if(type1 == int)
+        printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
+        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+        //		type2 is float, need to convert left_result to float
+        printf("PUSHS bool@true\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        printf("JUMP %s_DONE_%u\n", operation, *num);
+        // else -> type1 is float
+        printf("LABEL %s_FLOAT_%u\n", operation, *num);
+        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@float\n", operation, *num);
+        // 		type2 is int, need to convert it to float
+        printf("PUSHS bool@true\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val1\n");
+        printf("JUMP %s_DONE_%u\n", operation, *num);
+
+        printf("LABEL %s_BAD_%u\n", operation, *num);
+        printf("EXIT int@7\n");
+
+        printf("LABEL %s_DONE_%u\n", operation, *num);
+        if (save_to_right) {
+            printf("%s GF@$right_result GF@$left_result GF@$val1\n", operation);
+        } else {
+            printf("%s GF@$left_result GF@$left_result GF@$val1\n", operation);
+        }
+        (*num)++;
+    }
+}
+
+void plus_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned *num, const char *operation) {
+    if (tok1 == NULL && tok2 == NULL) {
+        // both represent results of smaller expressions
+        printf("TYPE GF@$type1 GF@$left_result\n");
+        printf("TYPE GF@$type2 GF@$right_result\n");
+        // is left_result int or float?
+        printf("EQ GF@$cond1 GF@$left_result string@int\n");
+        printf("EQ GF@$cond2 GF@$left_result string@float\n");
+        printf("OR GF@$cond1 GF@$cond1 GF@$cond2\n");
+        printf("JUMPIFEQ %s_BAD_%u GF@$cond1 bool@true", operation, *num);
+        // is varieble int or float?
+        printf("EQ GF@$cond1 GF@$right_result string@int\n");
+        printf("EQ GF@$cond2 GF@$right_result string@float\n");
+        printf("OR GF@$cond1 GF@$cond1 GF@$cond2\n");
+        printf("JUMPIFEQ %s_BAD_%u GF@$cond1 bool@true\n", operation, *num);
+        // if(type1 == int)
+        printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
+        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+        //		type2 is float, need to convert left_result to float
+        printf("PUSHS bool@true\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        printf("JUMP %s_DONE_%u\n", operation, *num);
+        // else -> type1 is float
+        printf("LABEL %s_FLOAT_%u\n", operation, *num);
+        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@float\n", operation, *num);
+        // 		type2 is int, need to convert it to float
+        printf("PUSHS bool@true\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$right_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$right_result\n");
+        printf("JUMP %s_DONE_%u\n", operation, *num);
+
+        printf("LABEL %s_BAD_%u\n", operation, *num);
+        printf("EXIT int@7 \n");
+
+        printf("LABEL %s_DONE_%u\n", operation, *num);
+        if (save_to_right) {
+            printf("%s GF@$right_result GF@$left_result GF@$right_result\n", operation);
+        } else {
+            printf("%s GF@$left_result GF@$left_result GF@$right_result\n", operation);
+        }
+        (*num)++;
+    } else if (tok1 == NULL) {
+        var_or_val(tok2, save_to_right, num, operation);
+    } else if (tok2 == NULL) {
+        // tok2 represents result of smaller expression
+        // TODO is tok1 defined?
+        var_or_val(tok1, save_to_right, num, operation);
+    } else {
+        // both toks are values or variebles
+        // TODO are both defined?
+        if (tok1->type == token_integer) {
+            printf("MOVE GF@$val1 int@%d\n", tok1->attr.integer);
+        } else if (tok1->type == token_float) {
+            printf("MOVE GF@$val1 float@%a\n", (double)tok1->attr.doub);
+        } else {
+            error_handle(tok1->line, expr_type_error);
+            abort();
+        }
+        if (tok2->type == token_integer) {
+            printf("MOVE GF@$val2 int@%d\n", tok2->attr.integer);
+        } else if (tok2->type == token_float) {
+            printf("MOVE GF@$val2 float@%a\n", (double)tok2->attr.doub);
+        } else {
+            error_handle(tok2->line, expr_type_error);
+            abort();
+        }
+        printf("TYPE GF@$type1 GF@$val1\n");
+        printf("TYPE GF@$type2 GF@$val2\n");
+        // if(type1 == int)
+        printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
+        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+        //		type2 is float, need to convert val1 to float
+        printf("PUSHS bool@true\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val1\n");
+        printf("JUMP %s_DONE_%u\n", operation, *num);
+        // else -> type1 is float
+        printf("LABEL %s_FLOAT_%u\n", operation, *num);
+        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@float\n", operation, *num);
+        // 		type2 is int, need to convert it to float
+        printf("PUSHS bool@true\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$val2\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val2\n");
+        printf("JUMP %s_DONE_%u\n", operation, *num);
+
+        printf("LABEL %s_BAD_%u\n", operation, *num);
+        printf("EXIT int@7\n");
+
+        printf("LABEL %s_DONE_%u\n", operation, *num);
+        if (save_to_right) {
+            printf("%s GF@$right_result GF@$val1 GF@$val2\n", operation);
+        } else {
+            printf("%s GF@$left_result GF@$val1 GF@$val2\n", operation);
+        }
+        (*num)++;
+    }
+}
+
+// TODO DEFVAR right and left result + type on the start of codegen or something
+// TODO DEFVAR GF@$val1 a GF@$val2
+// TODO DEFVAR GF@$type GF@$type1 GF@$type2, GF@$tmp, GF@$cond1, GF@$cond2
 /**
  * @brief Generates code for operation plus.
  *
@@ -62,88 +269,45 @@ bool gen_expr_different_place(exprll *rule_node, exprll *ll) {
  * @param save_to_right Bool - is true, if the result is to be stored in right_result(otherwise in left_result).
  */
 void gen_plus(token_t *tok1, token_t *tok2, bool save_to_right) {
-    if (tok1 == NULL && tok2 == NULL) {
-        // both represent results of smaller expressions
-        if (save_to_right) {
-            printf("ADD GF@$right_result GF@$left_result GF@$right_result\n");
-        } else {
-            printf("ADD GF@$left_result GF@$left_result GF@$right_result\n");
-        }
-    } else if (tok1 == NULL) {
-        // tok1 represents result of smaller expression
-        // TODO is tok2 defined?
-        if (save_to_right) {
-            printf("ADD GF@$right_result GF@$left_result GF@$var1\n");
-        } else {
-            printf("ADD GF@$left_result GF@$left_result GF@$var1\n");
-        }
-    } else if (tok2 == NULL) {
-        // tok2 represents result of smaller expression
-        // TODO is tok1 defined?
-        if (save_to_right) {
-            printf("ADD GF@$right_result GF@$left_result GF@$var1\n");
-        } else {
-            printf("ADD GF@$left_result GF@$left_result GF@$var1\n");
-        }
-    } else {
-        // both toks are values or variebles
-        // TODO are both defined?
-        if (save_to_right) {
-            printf("ADD GF@$right_result GF@$var1 GF@$var2\n");
-        } else {
-            printf("ADD GF@$left_result GF@$var1 GF@$var2\n");
-        }
-    }
+    static unsigned unique_num_plus = 0;
+    plus_check(tok1, tok2, save_to_right, &unique_num_plus, "ADD");
 }
 
 void gen_minus(token_t *tok1, token_t *tok2, bool save_to_right) {
-    if (tok1 == NULL && tok2 == NULL) {
-        // both represent results of smaller expressions
-        if (save_to_right) {
-            // save the result to the GF@$right_result
-        } else {
-            // save the result to the GF@$left_result
-        }
-    } else if (tok1 == NULL) {
-        // tok1 represents result of smaller expression(is in left_result)
-        // TODO is tok2 defined?
-        if (save_to_right) {
+    static unsigned unique_num_minus = 0;
+    plus_check(tok1, tok2, save_to_right, &unique_num_minus, "SUB");
+}
 
-        } else {
-        }
-    } else if (tok2 == NULL) {
-        // tok2 represents result of smaller expression
-        // TODO is tok1 defined?
-        if (save_to_right) {
+void gen_mul(token_t *tok1, token_t *tok2, bool save_to_right) {
+    static unsigned unique_num_mul = 0;
+    plus_check(tok1, tok2, save_to_right, &unique_num_mul, "MUL");
+}
 
-        } else {
-        }
-    } else {
-        // both toks are values or variebles
-        // TODO are both defined?
-        if (save_to_right) {
-
-        } else {
-        }
-    }
+void gen_div(token_t *tok1, token_t *tok2, bool save_to_right) {
+    static unsigned unique_num_div = 0;
+	// TODO tok2 cannot be 0
+    plus_check(tok1, tok2, save_to_right, &unique_num_div, "DIV");
 }
 
 void gen_expression(exprll *ll) {
     while (1) {
         exprll *rule_node = exprll_leftmost_rule(ll);
         if (rule_node == NULL) {
+            // left_result to temp_var_count
             return;
         }
-        printf("Operation: %d\n", rule_node->rule);
         switch (rule_node->rule) {
             case erule_plus:
                 gen_plus(rule_node->next->next->ptok, rule_node->next->ptok, gen_expr_different_place(rule_node, ll));
                 break;
             case erule_minus:
+                gen_minus(rule_node->next->next->ptok, rule_node->next->ptok, gen_expr_different_place(rule_node, ll));
                 break;
             case erule_div:
+				gen_div(rule_node->next->next->ptok, rule_node->next->ptok, gen_expr_different_place(rule_node, ll));
                 break;
             case erule_mul:
+				gen_mul(rule_node->next->next->ptok, rule_node->next->ptok, gen_expr_different_place(rule_node, ll));
                 break;
             case erule_cat:
                 break;

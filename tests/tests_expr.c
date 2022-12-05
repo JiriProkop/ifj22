@@ -14,28 +14,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define TEST_EXPR_COUNT 1 //17
+#define TEST_EXPR_COUNT 1 // 17
 
 int main() {
     token_t tok;
     token_t tok1;
+    printf(".IFJcode22\nDEFVAR GF@$left_result\nDEFVAR GF@$right_result\nDEFVAR GF@$type1\nDEFVAR GF@$type2\nDEFVAR GF@$type\n");
+    printf("DEFVAR GF@$tmp\nDEFVAR GF@$val1\nDEFVAR GF@$val2\nDEFVAR GF@$cond1\nDEFVAR GF@$cond2\n");
+    printf("DEFVAR GF");
     current_tkn = malloc(sizeof(token_t));
     for (int i = 0; i < TEST_EXPR_COUNT; i++) {
         get_token(&tok);
         if (i >= 12 && i < 14) {
             get_token(&tok1);
-            if (expr(tok, &tok1) == true) {
-                printf("Correct!\n");
-            } else {
-                printf("False!\n");
-            }
+            expr(tok, &tok1);
         } else {
-            if (expr(tok, NULL) == true) {
-                printf("Correct!\n");
-            } else {
-                printf("False!\n");
-            }
+            expr(tok, NULL);
         }
     }
-    return ret;
+    printf("WRITE GF@$left_result\nLABEL %%TYPE_CASTING\nWRITE string@END\n");
+    return 0;
 }
