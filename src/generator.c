@@ -45,7 +45,7 @@
  * @return Returns true, if result should be stored in right_result. False otherwise.
  */
 bool gen_expr_different_place(exprll *rule_node, exprll *ll) {
-    if (rule_node->next->rule == erule_val && rule_node->next->ptok == NULL && exprll_prev_value(rule_node, ll)) {
+    if (rule_node->next->next->next != NULL && rule_node->next->next->next->rule == erule_val && rule_node->next->next->next->ptok == NULL && !exprll_prev_value(rule_node, ll)) {
         return true;
     }
     return false;
@@ -343,5 +343,6 @@ void gen_expression(exprll *ll) {
         exprll_del_next(rule_node);
         exprll_del_next(rule_node);
         rule_node->rule = erule_val;
+        rule_node->ptok = NULL;
     }
 }
