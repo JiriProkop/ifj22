@@ -549,7 +549,7 @@ void gen_while_start(){
 
 void gen_while_check_condition(){
     // cast current expression result to bool
-    printf("PUSHS GF%%%u\n", temp_var_counter);
+    printf("PUSHS GF@%%%u\n", temp_var_counter);
     printf("CALL %%cast_bool\n");
     printf("POPS GF@%%%u\n", temp_var_counter);
     // start if 
@@ -564,7 +564,7 @@ void gen_while_end(){
 
 void gen_if_start(){
     // cast current expression result to bool
-    printf("PUSHS GF%%%u\n", temp_var_counter);
+    printf("PUSHS GF@%%%u\n", temp_var_counter);
     printf("CALL %%cast_bool\n");
     printf("POPS GF@%%%u\n", temp_var_counter);
     // start if 
