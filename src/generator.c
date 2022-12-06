@@ -147,7 +147,7 @@ void gen_check_type() {
 
 void gen_header() {
     printf(".IFJcode22\n");
-    printf("CRATEFRAME\n");
+    printf("CREATEFRAME\n");
     // universal variable for conditions 
     printf("DEFVAR GF@%%condition\n");
     printf("PUSHFRAME\n");
@@ -225,12 +225,12 @@ void gen_cast_call(bool can_be_null, keywords casted_type, char* id, bool global
 void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit){
     sym_data *data_func = st_search(gen_tree, id_function);
     if(exit){
-        printf("EXIT GF%%%u\n");
+        printf("EXIT GF@%%%u\n", temp_var_counter);
         return;
     }
     if(data_func->return_type != keyword_void){
         gen_cast_call(data_func->can_be_null, data_func->return_type, "GF%%", true);
-        printf("PUSHS GF%%%u\n", temp_var_counter);
+        printf("PUSHS GF@%%%u\n", temp_var_counter);
     }
     printf("POPFRAME");
     printf("RETURN\n");
@@ -301,15 +301,19 @@ void gen_while_chceck_condition(){
 
 void gen_while_end(){
     printf("JUMPIFEQ %%while%u_start LF@ int@1\n", gen_number_while_end);
-    printf("LABEL while%u_end\n");
+    printf("LABEL %%while%u_end\n", gen_number_while_end);
+}
+
+void gen_if_start(){
+    
 }
 
 void gen_reads() {
     printf("JUMP reads_end\n");
     printf("LABEL reads_start\n");
     printf("CREATEFRAME\n");
-    printf("DEFVAR TF@%%reads\n");
     printf("PUSHFRAME\n");
+    printf("DEFVAR LF@%%reads\n");
     printf("READ LF@%%reads string\n");
     printf("PUSHS LF@%%reads\n");
     printf("POPFRAME\n");
@@ -321,8 +325,8 @@ void gen_readi() {
     printf("JUMP readi_end\n");
     printf("LABEL readi_start\n");
     printf("CREATEFRAME\n");
-    printf("DEFVAR TF@%%readi\n");
     printf("PUSHFRAME\n");
+    printf("DEFVAR LF@%%readi\n");
     printf("READ LF@%%readi int\n");
     printf("PUSHS LF@%%readi\n");
     printf("POPFRAME\n");
@@ -334,8 +338,8 @@ void gen_readf() {
     printf("JUMP readf_end\n");
     printf("LABEL readf_start\n");
     printf("CREATEFRAME\n");
-    printf("DEFVAR TF@%%readf\n");
     printf("PUSHFRAME\n");
+    printf("DEFVAR LF@%%readf\n");
     printf("READ LF@%%readf float\n");
     printf("PUSHS LF@%%readf\n");
     printf("POPFRAME\n");
@@ -352,10 +356,6 @@ void gen_write(list_t *parameters) {
     }
 }
 
-void gen_if_start(){
-    
-}
-
 void gen_floatval() {
     printf("DEFVAR LF@%%floatval_term\n");
     printf("JUMP floatval_end\n");
@@ -370,7 +370,7 @@ void gen_floatval() {
     printf("PUSHS LF@term\n");
     printf("CALL %%type_casting\n");
     printf("POPS LF@term\n");
-    printf("PUSHS LG@term\n");
+    printf("PUSHS LF@term\n");
 
     printf("POPFRAME\n");
     printf("RETURN\n");
@@ -391,7 +391,7 @@ void gen_intval() {
     printf("PUSHS LF@term\n");
     printf("CALL %%type_casting\n");
     printf("POPS LF@term\n");
-    printf("PUSHS LG@term\n");
+    printf("PUSHS LF@term\n");
 
     printf("POPFRAME\n");
     printf("RETURN\n");
@@ -412,11 +412,103 @@ void gen_strval() {
     printf("PUSHS LF@term\n");
     printf("CALL %%type_casting\n");
     printf("POPS LF@term\n");
-    printf("PUSHS LG@term\n");
+    printf("PUSHS LF@term\n");
 
     printf("POPFRAME\n");
     printf("RETURN\n");
     printf("LABEL strval_end\n");
+}
+
+void gen_strlen() {
+    printf("DEFVAR LF@%%strlen_s\n");
+    printf("JUMP strlen_end\n");
+    printf("LABEL strlen_start\n");
+    printf("CREATEFRAME\n");
+    printf("DEFVAR TF@s\n");
+    printf("MOVE TF@s LF@%%strlen_s\n");
+    printf("PUSHFRAME\n");
+    printf("DEFVAR LF@len\n");
+    printf("STRLEN LF@len LF@s\n");
+    printf("PUSHS LF@len\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL strlen_end\n");
+}
+
+void gen_substring() {
+    printf("DEFVAR LF@%%substring_s\n");
+    printf("DEFVAR LF@%%substring_i\n");
+    printf("DEFVAR LF@%%substring_j\n");
+    printf("JUMP substring_end\n");
+    printf("LABEL substring_start\n");
+    printf("CREATEFRAME\n");
+    printf("DEFVAR TF@s\n");
+    printf("DEFVAR TF@i\n");
+    printf("DEFVAR TF@j\n");
+    printf("MOVE TF@s LF@%%substring_s\n");
+    printf("MOVE TF@i LF@%%substring_i\n");
+    printf("MOVE TF@j LF@%%substring_j\n");
+    printf("PUSHFRAME\n");
+
+    printf("DEFVAR LF@chk\n");
+    printf("LT LF@chk LF@i int@0\n");
+    printf("JUMPIFEQ substring_error LF@chk bool@true\n");
+    printf("LT LF@chk LF@j int@0\n");
+    printf("JUMPIFEQ substring_error LF@chk bool@true\n");
+    printf("GT LF@chk LF@i LF@j\n");
+    printf("JUMPIFEQ substring_error LF@chk bool@true\n");
+    printf("DEFVAR LF@len\n");
+    printf("STRLEN LF@len LF@s\n");
+    printf("LT LF@chk LF@i LF@len\n");
+    printf("JUMPIFNEQ substring_error LF@chk bool@true\n");
+    printf("GT LF@chk LF@j LF@len\n");
+    printf("JUMPIFEQ substring_error LF@chk bool@true\n");
+
+    printf("DEFVAR LF@c\n");
+    printf("DEFVAR LF@substr\n");
+    printf("MOVE LF@substr string@\n");
+    printf("JUMPIFEQ substring_loop_end LF@i LF@j\n");
+    printf("LABEL substring_loop\n");
+    printf("GETCHAR LF@c LF@s LF@i\n");
+    printf("CONCAT LF@substr LF@substr LF@c\n");
+    printf("ADD LF@i LF@i int@1\n");
+    printf("JUMPIFNEQ substring_loop LF@i LF@j\n");
+    printf("LABEL substring_loop_end\n");
+
+    printf("PUSHS LF@substr\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+
+    printf("LABEL substring_error\n");
+    printf("PUSHS nil@nil\n");
+    printf("POPFRAME\n");
+    printf("RETURN\n");
+    printf("LABEL substring_end\n");
+}
+
+void gen_ord() {
+    printf("DEFVAR LF@%%ord_c\n");
+    printf("JUMP ord_end\n");
+    printf("LABEL ord_start\n");
+    printf("JUMPIFEQ ord_empty LF@c string@\n");
+    printf("PUSHS LF@%%ord_c\n");
+    printf("PUSHS int@0\n");
+    printf("STRI2INTS\n");
+    printf("RETURN\n");
+    printf("LABEL ord_empty\n");
+    printf("PUSHS int@0\n");
+    printf("RETURN\n");
+    printf("LABEL ord_end\n");
+}
+
+void gen_chr() {
+    printf("DEFVAR LF@%%chr_i\n");
+    printf("JUMP chr_end\n");
+    printf("LABEL chr_start\n");
+    printf("PUSHS LF@%%chr_i\n");
+    printf("INT2CHARS\n");
+    printf("RETURN\n");
+    printf("LABEL chr_end\n");
 }
 
 // TODO u volani u parametru typova kontrola, ne konverze - ale u tech vestavenych jen u nekterych
