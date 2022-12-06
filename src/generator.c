@@ -193,12 +193,12 @@ void gen_write(list_t *parameters) {
 }
 
 void gen_floatval() {
-    printf("DEFVAR LF@%%floatval_term\n");
+    printf("DEFVAR GF@%%floatval_term\n");
     printf("JUMP floatval_end\n");
     printf("LABEL floatval_start\n");
     printf("CREATEFRAME\n");
     printf("DEFVAR TF@term\n");
-    printf("MOVE TF@term LF@%%floatval_term\n");
+    printf("MOVE TF@term GF@%%floatval_term\n");
     printf("PUSHFRAME\n");
 
     printf("PUSHS bool@false\n");
@@ -214,12 +214,12 @@ void gen_floatval() {
 }
 
 void gen_intval() {
-    printf("DEFVAR LF@%%intval_term\n");
+    printf("DEFVAR GF@%%intval_term\n");
     printf("JUMP intval_end\n");
     printf("LABEL intval_start\n");
     printf("CREATEFRAME\n");
     printf("DEFVAR TF@term\n");
-    printf("MOVE TF@term LF@%%intval_term\n");
+    printf("MOVE TF@term GF@%%intval_term\n");
     printf("PUSHFRAME\n");
 
     printf("PUSHS bool@false\n");
@@ -235,12 +235,12 @@ void gen_intval() {
 }
 
 void gen_strval() {
-    printf("DEFVAR LF@%%strval_term\n");
+    printf("DEFVAR GF@%%strval_term\n");
     printf("JUMP strval_end\n");
     printf("LABEL strval_start\n");
     printf("CREATEFRAME\n");
     printf("DEFVAR TF@term\n");
-    printf("MOVE TF@term LF@%%strval_term\n");
+    printf("MOVE TF@term GF@%%strval_term\n");
     printf("PUSHFRAME\n");
 
     printf("PUSHS bool@false\n");
@@ -256,12 +256,12 @@ void gen_strval() {
 }
 
 void gen_strlen() {
-    printf("DEFVAR LF@%%strlen_s\n");
+    printf("DEFVAR GF@%%strlen_s\n");
     printf("JUMP strlen_end\n");
     printf("LABEL strlen_start\n");
     printf("CREATEFRAME\n");
     printf("DEFVAR TF@s\n");
-    printf("MOVE TF@s LF@%%strlen_s\n");
+    printf("MOVE TF@s GF@%%strlen_s\n");
     printf("PUSHFRAME\n");
     printf("DEFVAR LF@len\n");
     printf("STRLEN LF@len LF@s\n");
@@ -272,18 +272,18 @@ void gen_strlen() {
 }
 
 void gen_substring() {
-    printf("DEFVAR LF@%%substring_s\n");
-    printf("DEFVAR LF@%%substring_i\n");
-    printf("DEFVAR LF@%%substring_j\n");
+    printf("DEFVAR GF@%%substring_s\n");
+    printf("DEFVAR GF@%%substring_i\n");
+    printf("DEFVAR GF@%%substring_j\n");
     printf("JUMP substring_end\n");
     printf("LABEL substring_start\n");
     printf("CREATEFRAME\n");
     printf("DEFVAR TF@s\n");
     printf("DEFVAR TF@i\n");
     printf("DEFVAR TF@j\n");
-    printf("MOVE TF@s LF@%%substring_s\n");
-    printf("MOVE TF@i LF@%%substring_i\n");
-    printf("MOVE TF@j LF@%%substring_j\n");
+    printf("MOVE TF@s GF@%%substring_s\n");
+    printf("MOVE TF@i GF@%%substring_i\n");
+    printf("MOVE TF@j GF@%%substring_j\n");
     printf("PUSHFRAME\n");
 
     printf("DEFVAR LF@chk\n");
@@ -323,11 +323,11 @@ void gen_substring() {
 }
 
 void gen_ord() {
-    printf("DEFVAR LF@%%ord_c\n");
+    printf("DEFVAR GF@%%ord_c\n");
     printf("JUMP ord_end\n");
     printf("LABEL ord_start\n");
-    printf("JUMPIFEQ ord_empty LF@%%ord_c string@\n");
-    printf("PUSHS LF@%%ord_c\n");
+    printf("JUMPIFEQ ord_empty GF@%%ord_c string@\n");
+    printf("PUSHS GF@%%ord_c\n");
     printf("PUSHS int@0\n");
     printf("STRI2INTS\n");
     printf("RETURN\n");
@@ -338,10 +338,10 @@ void gen_ord() {
 }
 
 void gen_chr() {
-    printf("DEFVAR LF@%%chr_i\n");
+    printf("DEFVAR GF@%%chr_i\n");
     printf("JUMP chr_end\n");
     printf("LABEL chr_start\n");
-    printf("PUSHS LF@%%chr_i\n");
+    printf("PUSHS GF@%%chr_i\n");
     printf("INT2CHARS\n");
     printf("RETURN\n");
     printf("LABEL chr_end\n");
@@ -363,7 +363,7 @@ void gen_header() {
     gen_floatval();
     gen_intval();
     gen_strval();
-    gen_srtlen();
+    gen_strlen();
     gen_substring();
     gen_ord();
     gen_chr();
