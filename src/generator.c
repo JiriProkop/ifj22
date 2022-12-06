@@ -72,7 +72,7 @@ void gen_type_casting() {
     printf("RETURN\n");
 
     printf("LABEL %%cast_error\n");
-    printf("DPRINT string@Type\032compability\032error\032in\032arithmetic\032string\032or\032relation\032exppression\n");
+    printf("DPRINT string@Type\\032compability\\032error\\032in\\032arithmetic\\032string\\032or\\032relation\\032expression\\010\n");
     printf("EXIT int@7\n");
     printf("LABEL %%type_casting_end\n");
 }
@@ -143,7 +143,7 @@ void gen_check_type() {
     printf("RETURN\n");
 
     printf("LABEL %%check_type_error\n");
-    printf("DPRINT string@Wrong\032function\032argument\032type\032and\032or\032count\032or\032wrong\032return\032type\n");
+    printf("DPRINT string@Wrong\\032function\\032argument\\032type\\032and\\032or\\032count\\032or\\032wrong\\032return\\032type\\010\n");
     printf("EXIT int@4\n");
     printf("LABEL %%check_type_end\n");
 }
@@ -406,7 +406,7 @@ void gen_function_def_end(dynstr_t *id, sym_table *gen_tree) {
     sym_data *func_data = st_search(gen_tree, id);
     // if you got on the end of void function exit with error 4
     if(func_data->return_type != keyword_void){
-        printf("DPRINT string@Wrong\032function\032argument\032type\032and\032or\032count\032or\032wrong\032return\032type\n");
+        printf("DPRINT string@Wrong\\032function\\032argument\\032type\\032and\\032or\\032count\\032or\\032wrong\\032return\\032type\\010\n");
         printf("EXIT int@4\n");
     }
     // if you got on the end of void function return
