@@ -8,7 +8,7 @@
 #include "scanner.h"
 
 unsigned gen_number_while_start = 0;
-unsigned gen_number_while_end = 0;
+unsigned gen_number_while_open = 0;
 
 unsigned gen_number_if = 0;
 unsigned gen_number_open_if = 0;
@@ -523,24 +523,24 @@ void gen_fill_variable(dynstr_t *variable){
 }
 
 void gen_while_start(){
-    // variable used to track if program went through the function 0 at the start  
-    printf("DEFVAR LF@%%while%u_loop\n", gen_number_while_start);
-    printf("MOVE LF@%%while%u_loop int@0\n", gen_number_while_start);
-    // variable in which condition will be stored 
-    // start lable
     printf("LABEL %%while%u_start\n", gen_number_while_start);
-    printf("JUMPIFNEQ %%while%u_after_defvar int@0\n", gen_number_while_start);
     gen_number_while_start++;
-    // go back to parser to print condition 
+    gen_number_while_open++;
 }
 
 void gen_while_check_condition(){
-    printf("JUMPIFEQ %%while%u_end LF@ int@1\n", temp_var_counter);
+    // cast current expression result to bool
+    printf("PUSHS GF%%%u\n", temp_var_counter);
+    printf("CALL %%cast_bool\n");
+    printf("POPS GF@%%%u\n", temp_var_counter);
+    // start if 
+    printf("JUMPIFEQ %%while%u_end GF@%%%u int@1\n", gen_number_while_start - gen_number_while_open, temp_var_counter);
 }
 
 void gen_while_end(){
-    printf("JUMPIFEQ %%while%u_start LF@ int@1\n", temp_var_counter);
+    printf("JUMPIFEQ %%while%u_start GF@%%%u int@1\n", gen_number_while_start - gen_number_while_open, temp_var_counter);
     printf("LABEL %%while%u_end\n", temp_var_counter);
+    gen_number_while_open--;
 }
 
 void gen_if_start(){
