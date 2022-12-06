@@ -363,7 +363,7 @@ void gen_header() {
     gen_floatval();
     gen_intval();
     gen_strval();
-    gen_srtlen();
+    gen_strlen();
     gen_substring();
     gen_ord();
     gen_chr();
