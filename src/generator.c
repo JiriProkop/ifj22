@@ -347,7 +347,7 @@ void gen_chr() {
     printf("PUSHS GF@%%chr_i\n");
     printf("INT2CHARS\n");
     printf("RETURN\n");
-    printf("LABEL chr_end\n");
+    printf("LABEL chr_end\n\n");
 }
 
 void gen_header() {
