@@ -224,7 +224,7 @@ void gen_cast_call(bool can_be_null, keywords casted_type, char* id, bool global
 void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit){
     sym_data *data_func = st_search(gen_tree, id_function);
     if(exit){
-        printf("EXIT GF%%%u\n");
+        printf("EXIT GF%%%u\n", temp_var_counter);
         return;
     }
     if(data_func->return_type != keyword_void){
@@ -300,7 +300,7 @@ void gen_while_chceck_condition(){
 
 void gen_while_end(){
     printf("JUMPIFEQ %%while%u_start LF@ int@1\n", gen_number_while_end);
-    printf("LABEL while%u_end\n");
+    printf("LABEL while%u_end\n",gen_number_while_end);
 }
 
 void gen_reads() {
