@@ -501,10 +501,10 @@ bool prikaz(dynstr_t *current_function_id) {
         get_tkn();
         // check if the return type is correct (return; is only valid in void functions)
         if(current_tkn->type == token_semicol && st_search(tree, current_function_id)->return_type != keyword_void) {
-            error_handle(current_tkn->line, func_arr_or_ret_error);
+            error_handle(current_tkn->line, ret_expr_cnt_error);
             abort();
         } else if(current_tkn->type != token_semicol && st_search(tree, current_function_id)->return_type == keyword_void) {
-            error_handle(current_tkn->line, func_arr_or_ret_error);
+            error_handle(current_tkn->line, ret_expr_cnt_error);
             abort();
         }
 
