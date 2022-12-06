@@ -30,7 +30,7 @@ test: $(TESTS)
 #	$(TESTDIR)tests_expr > $(TESTDIR)tests_expr.output < $(TESTDIR)tests_expr.input
 #	diff -su $(TESTDIR)tests_expr.output $(TESTDIR)correct_out/tests_expr.output
 # generator tests
-	$(TESTDIR)tests_generator > $(TESTDIR)tests_generator.output
+#	$(TESTDIR)tests_generator > $(TESTDIR)tests_generator.output
 #	diff -su $(TESTDIR)tests_generator.output $(TESTDIR)correct_out/tests_generator.output
 
 # check the tests with valgrind
@@ -53,8 +53,8 @@ $(TESTDIR)tests_ll: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 $(TESTDIR)tests_symtable: $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)symtable.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
-$(TESTDIR)tests_generator: $(SOURCES)dynstr.o $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)generator.o $(SOURCES)symtable.o $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)expr.o $(SOURCES)stack.o
-	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
+#$(TESTDIR)tests_generator: $(SOURCES)dynstr.o $(SOURCES)ll.o $(SOURCES)error.o $(SOURCES)generator.o $(SOURCES)symtable.o
+#	$(CC) $(CFLAGS) $^ $@.c -o $@
 # --------------------------------------------------
 
 # compile object files

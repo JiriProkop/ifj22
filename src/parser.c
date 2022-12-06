@@ -209,11 +209,12 @@ bool start() {
         abort();
     }
     st_init(&tree); // initialize the symtable tree
+    current_frame = tree; // the current frame is the now created tree
 
     // add all the prebuit functions to the tree
     add_prebuilt();
 
-    current_frame = tree; // the current frame is the now allocated tree
+    gen_header(); // generate the header of the code
 
     bool value = false;
     get_tkn();
@@ -342,6 +343,8 @@ bool definice() {
             add_node(&tree, id, 1, parameters, params, type, can_be_null);
             current_frame = st_search(tree, id)->local_frame;
             st_search(tree, id)->params = convert_list_to_subtree(parameters, &current_frame);
+
+            gen_function_def(id, parameters); // generate the start of function definition
         } else {
             error_handle(line_num, func_def_error);
             abort();
@@ -361,6 +364,8 @@ bool definice() {
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
+
+        gen_function_def_end(id, tree); // generate function definition end
 
         // return the frame back to the main frame
         current_frame = tree;
@@ -866,3 +871,7 @@ bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
 
 // TODOs na probrání na schůzce:
 // $a + 5 jako parametr nezpracuje výraz -> předat to celé na zpracování výrazu? Nebo je to vůbec legal?
+// zadne else neni legalni... pouze v rozsireni bool
+
+// TODO uklidit v konci
+// TODO zkontrolovat errory
