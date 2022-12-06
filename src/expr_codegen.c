@@ -188,7 +188,7 @@ void cmp_varval(token_t *tok2, bool save_to_right, unsigned *num) {
     if (tok2->type == token_varieble) {
         printf("TYPE GF@$type1 GF@$left_result\n");
         printf("TYPE GF@$type2 LF@%s\n", tok2->attr.str->array);
-		// neither operand can be bool
+        // neither operand can be bool
         printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type1 string@bool\n", *num);
         printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type2 string@bool\n", *num);
         printf("EXIT int@7\n");
@@ -230,7 +230,7 @@ void cmp_varval(token_t *tok2, bool save_to_right, unsigned *num) {
 
         printf("TYPE GF@$type1 GF@$left_result\n");
         printf("TYPE GF@$type2 GF@$val1\n");
-		// neither operand can be bool
+        // neither operand can be bool
         printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type1 string@bool\n", *num);
         printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type2 string@bool\n", *num);
         printf("EXIT int@7\n");
@@ -258,6 +258,189 @@ void cmp_varval(token_t *tok2, bool save_to_right, unsigned *num) {
             printf("MOVE GF@$left_result bool@true\n");
         }
         printf("LABEL CMP_DONE_%u\n", *num);
+    }
+}
+
+void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
+    if (tok2->type == token_varieble) {
+		printf("MOVE GF@$tmp LF@%s\n", tok2->attr.str->array);
+		printf("TYPE GF@$type1 GF@$left_result\n");
+        printf("TYPE GF@$type2 LF@%s\n", tok2->attr.str->array);
+        // neither can be bool
+        printf("JUMPIFNEQ LESS_NOTBOOL_%u string@bool GF@$type1\n", *num);
+        printf("JUMPIFNEQ LESS_NOTBOOL_%u string@bool GF@$type2\n", *num);
+        printf("EXIT int@7\n");
+        printf("LABEL LESS_NOTBOOL_%u\n", *num);
+        // if(1st op == int)
+        printf("JUMPIFNEQ LESS_NOTINT_%u GF@$type1 string@int\n", *num);
+        printf("JUMPIFNEQ LESS_INNOTINT_%u GF@$type2 string@int\n", *num);
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        } else {
+            printf("LT GF@$left_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        }
+        printf("JUMP LESS_DONE_%u\n", *num);
+        printf("LABEL LESS_INNOTINT%u\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        } else {
+            printf("LT GF@$left_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        }
+        printf("JUMP LESS_DONE_%u\n", *num);
+        printf("LABEL LESS_NOTINT_%u\n", *num);
+        // if(1st op == float)
+        printf("JUMPIFNEQ LESS_NOTFLOAT_%u GF@$type1 string@float\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS LF@%s\n", tok2->attr.str->array);
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS LF@%s\n", tok2->attr.str->array);
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        } else {
+            printf("LT GF@$left_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        }
+        printf("JUMP LESS_DONE_%u\n", *num);
+        // if(1st op == string)
+        printf("JUMPIFNEQ LESS_NOTSTR_%u GF@$type1 string@string\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS LF@%s\n", tok2->attr.str->array);
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS LF@%s\n", tok2->attr.str->array);
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        } else {
+            printf("LT GF@$left_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        }
+        printf("JUMP LESS_DONE_%u\n", *num);
+        // else
+        printf("JUMPIFNEQ LESS_TOBOOL_%u GF@$type2 string@string\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        } else {
+            printf("LT GF@$left_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        }
+        printf("JUMP LESS_DONE_%u\n", *num);
+        printf("LABEL LESS_TOBOOL_%u\n", *num);
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$left_result\n");
+
+        printf("PUSHS LF@%s\n", tok2->attr.str->array);
+        printf("CALL %%cast_bool\n");
+        printf("POPS LF@%s\n", tok2->attr.str->array);
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        } else {
+            printf("LT GF@$left_result GF@$left_result LF@%s\n", tok2->attr.str->array);
+        }
+        printf("LABEL LESS_DONE_%u\n", *num);
+		printf("MOVE LF@%s GF@$tmp\n", tok2->attr.str->array);
+    } else {
+		if (tok2->type == token_string) {
+            printf("MOVE GF@$val1 string@%s\n", tok2->attr.str->array);
+        } else if (tok2->type == token_integer) {
+            printf("MOVE GF@$val1 int@%d\n", tok2->attr.integer);
+        } else if (tok2->type == token_float) {
+            printf("MOVE GF@$val1 float@%a\n", (double)tok2->attr.doub);
+        } else {
+            error_handle(tok2->line, expr_type_error);
+            abort();
+        }
+
+		printf("TYPE GF@$type1 GF@$left_result\n");
+        printf("TYPE GF@$type2 GF@$val1\n");
+        // neither can be bool
+        printf("JUMPIFNEQ LESS_NOTBOOL_%u string@bool GF@$type1\n", *num);
+        printf("JUMPIFNEQ LESS_NOTBOOL_%u string@bool GF@$type2\n", *num);
+        printf("EXIT int@7\n");
+        printf("LABEL LESS_NOTBOOL_%u\n", *num);
+        // if(1st op == int)
+        printf("JUMPIFNEQ LESS_NOTINT_%u GF@$type1 string@int\n", *num);
+        printf("JUMPIFNEQ LESS_INNOTINT_%u GF@$type2 string@int\n", *num);
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$val1\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$val1\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", *num);
+        printf("LABEL LESS_INNOTINT%u\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$val1\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$val1\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", *num);
+        printf("LABEL LESS_NOTINT_%u\n", *num);
+        // if(1st op == float)
+        printf("JUMPIFNEQ LESS_NOTFLOAT_%u GF@$type1 string@float\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val1\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$val1\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$val1\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", *num);
+        // if(1st op == string)
+        printf("JUMPIFNEQ LESS_NOTSTR_%u GF@$type1 string@string\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val1\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$val1\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$val1\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", *num);
+        // else
+        printf("JUMPIFNEQ LESS_TOBOOL_%u GF@$type2 string@string\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$val1\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$val1\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", *num);
+        printf("LABEL LESS_TOBOOL_%u\n", *num);
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$left_result\n");
+
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$val1\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$val1\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$val1\n");
+        }
+        printf("LABEL LESS_DONE_%u\n", *num);
     }
 }
 
@@ -499,7 +682,7 @@ void gen_cmp(token_t *tok1, token_t *tok2, bool save_to_right) {
     if (tok1 == NULL && tok2 == NULL) {
         printf("TYPE GF@$type1 GF@$left_result\n");
         printf("TYPE GF@$type2 GF@$right_result\n");
-		// neither operand can be bool
+        // neither operand can be bool
         printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type1 string@bool\n", unique_num_cmp);
         printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type2 string@bool\n", unique_num_cmp);
         printf("EXIT int@7\n");
@@ -560,7 +743,7 @@ void gen_cmp(token_t *tok1, token_t *tok2, bool save_to_right) {
 
         printf("TYPE GF@$type1 GF@$val1\n");
         printf("TYPE GF@$type2 GF@$val2\n");
-		// neither operand can be bool
+        // neither operand can be bool
         printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type1 string@bool\n", unique_num_cmp);
         printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type2 string@bool\n", unique_num_cmp);
         printf("EXIT int@7\n");
@@ -590,6 +773,208 @@ void gen_cmp(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("LABEL CMP_DONE_%u\n", unique_num_cmp);
     }
     unique_num_cmp++;
+}
+
+void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
+    static unsigned unique_num_less = 0;
+    if (tok1 == NULL && tok2 == NULL) {
+        printf("TYPE GF@$type1 GF@$left_result\n");
+        printf("TYPE GF@$type2 GF@$right_result\n");
+        // neither can be bool
+        printf("JUMPIFNEQ LESS_NOTBOOL_%u string@bool GF@$type1\n", unique_num_less);
+        printf("JUMPIFNEQ LESS_NOTBOOL_%u string@bool GF@$type2\n", unique_num_less);
+        printf("EXIT int@7\n");
+        printf("LABEL LESS_NOTBOOL_%u\n", unique_num_less);
+        // if(1st op == int)
+        printf("JUMPIFNEQ LESS_NOTINT_%u GF@$type1 string@int\n", unique_num_less);
+        printf("JUMPIFNEQ LESS_INNOTINT_%u GF@$type2 string@int\n", unique_num_less);
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$right_result\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$right_result\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", unique_num_less);
+        printf("LABEL LESS_INNOTINT%u\n", unique_num_less);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$right_result\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$right_result\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", unique_num_less);
+        printf("LABEL LESS_NOTINT_%u\n", unique_num_less);
+        // if(1st op == float)
+        printf("JUMPIFNEQ LESS_NOTFLOAT_%u GF@$type1 string@float\n", unique_num_less);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$right_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$right_result\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$right_result\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$right_result\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", unique_num_less);
+        // if(1st op == string)
+        printf("JUMPIFNEQ LESS_NOTSTR_%u GF@$type1 string@string\n", unique_num_less);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$right_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$right_result\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$right_result\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$right_result\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", unique_num_less);
+        // else
+        printf("JUMPIFNEQ LESS_TOBOOL_%u GF@$type2 string@string\n", unique_num_less);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$right_result\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$right_result\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", unique_num_less);
+        printf("LABEL LESS_TOBOOL_%u\n", unique_num_less);
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$left_result\n");
+
+        printf("PUSHS GF@$right_result\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$right_result\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$left_result GF@$right_result\n");
+        } else {
+            printf("LT GF@$left_result GF@$left_result GF@$right_result\n");
+        }
+        printf("LABEL LESS_DONE_%u\n", unique_num_less);
+    } else if (tok1 == NULL) {
+        cmp_varval(tok2, save_to_right, &unique_num_less);
+    } else if (tok2 == NULL) {
+		cmp_varval(tok1, save_to_right, &unique_num_less);
+    } else {
+		if (tok1->type == token_string) {
+            printf("MOVE GF@$val1 string@%s\n", tok1->attr.str->array);
+        } else if (tok1->type == token_varieble) {
+            printf("MOVE GF@$val1 LF@%s\n", tok1->attr.str->array);
+        } else if (tok1->type == token_integer) {
+            printf("MOVE GF@$val1 int@%d\n", tok1->attr.integer);
+        } else if (tok1->type == token_float) {
+            printf("MOVE GF@$val1 float@%a\n", (double)tok1->attr.doub);
+        } else {
+            error_handle(tok1->line, expr_type_error);
+            abort();
+        }
+
+        if (tok2->type == token_string) {
+            printf("MOVE GF@$val2 string@%s\n", tok2->attr.str->array);
+        } else if (tok2->type == token_varieble) {
+            printf("MOVE GF@$val2 LF@%s\n", tok2->attr.str->array);
+        } else if (tok2->type == token_integer) {
+            printf("MOVE GF@$val2 int@%d\n", tok2->attr.integer);
+        } else if (tok2->type == token_float) {
+            printf("MOVE GF@$val2 float@%a\n", (double)tok2->attr.doub);
+        } else {
+            error_handle(tok2->line, expr_type_error);
+            abort();
+        }
+
+		printf("TYPE GF@$type1 GF@$val1\n");
+        printf("TYPE GF@$type2 GF@$val2\n");
+        // neither can be bool
+        printf("JUMPIFNEQ LESS_NOTBOOL_%u string@bool GF@$type1\n", unique_num_less);
+        printf("JUMPIFNEQ LESS_NOTBOOL_%u string@bool GF@$type2\n", unique_num_less);
+        printf("EXIT int@7\n");
+        printf("LABEL LESS_NOTBOOL_%u\n", unique_num_less);
+        // if(1st op == int)
+        printf("JUMPIFNEQ LESS_NOTINT_%u GF@$type1 string@int\n", unique_num_less);
+        printf("JUMPIFNEQ LESS_INNOTINT_%u GF@$type2 string@int\n", unique_num_less);
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$val1 GF@$val2\n");
+        } else {
+            printf("LT GF@$left_result GF@$val1 GF@$val2\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", unique_num_less);
+        printf("LABEL LESS_INNOTINT%u\n", unique_num_less);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val1\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$val1 GF@$val2\n");
+        } else {
+            printf("LT GF@$left_result GF@$val1 GF@$val2\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", unique_num_less);
+        printf("LABEL LESS_NOTINT_%u\n", unique_num_less);
+        // if(1st op == float)
+        printf("JUMPIFNEQ LESS_NOTFLOAT_%u GF@$type1 string@float\n", unique_num_less);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$val2\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val2\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$val1 GF@$val2\n");
+        } else {
+            printf("LT GF@$left_result GF@$val1 GF@$val2\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", unique_num_less);
+        // if(1st op == string)
+        printf("JUMPIFNEQ LESS_NOTSTR_%u GF@$type1 string@string\n", unique_num_less);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$val2\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val2\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$val1 GF@$val2\n");
+        } else {
+            printf("LT GF@$left_result GF@$val1 GF@$val2\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", unique_num_less);
+        // else
+        printf("JUMPIFNEQ LESS_TOBOOL_%u GF@$type2 string@string\n", unique_num_less);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val1\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$val1 GF@$val2\n");
+        } else {
+            printf("LT GF@$left_result GF@$val1 GF@$val2\n");
+        }
+        printf("JUMP LESS_DONE_%u\n", unique_num_less);
+        printf("LABEL LESS_TOBOOL_%u\n", unique_num_less);
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$val1\n");
+
+        printf("PUSHS GF@$val2\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$val2\n");
+        if (save_to_right) {
+            printf("LT GF@$right_result GF@$val1 GF@$val2\n");
+        } else {
+            printf("LT GF@$left_result GF@$val1 GF@$val2\n");
+        }
+        printf("LABEL LESS_DONE_%u\n", unique_num_less);
+    }
+    unique_num_less++;
 }
 
 void gen_expression(exprll *ll) {
@@ -628,6 +1013,7 @@ void gen_expression(exprll *ll) {
                 }
                 break;
             case erule_lower:
+				gen_less(rule_node->next->next->ptok, rule_node->next->ptok, gen_expr_different_place(rule_node, ll));
                 break;
             case erule_lower_equal:
                 break;
