@@ -1,7 +1,7 @@
 /**
  * Project: compiler of IFJ22 programming language
  *
- * @brief scanner implementation.
+ * @brief  Implementation of stack
  *
  * @author Štěpán Czajkowski xczajk01 <xczajk01@stud.fit.vutbr.cz>
  */
@@ -15,14 +15,32 @@
 #include "dynstr.h"
 #include "parser.h"
 
+/**
+ * @brief Function for initialization of stack
+ * 
+ * @param stack The stack to be inicialize
+ */
 void stack_init(stack *stack){
 	stack->top = NULL;
 }
 
+/**
+ * @brief Function for founding out if stack is empty 
+ * 
+ * @param stack the stack to be tested
+ * @return true stack is empty 
+ * @return false stack is not empty 
+ */
 bool stack_is_empty(stack *stack){
 	return stack->top == NULL;
 }
 
+/**
+ * @brief Function that pushes node on stack 
+ * 
+ * @param stack the stack on which the node is to be pushed
+ * @param token the token which to be pushed 
+ */
 void stack_push(stack*stack, token_t *token){
 	stack_node_t *tmp = malloc(sizeof(stack_node_t));
 	if(tmp == NULL){
@@ -39,6 +57,12 @@ void stack_push(stack*stack, token_t *token){
 	stack->top = tmp;
 }
 
+/**
+ * @brief Function that pops first node and returns token in the node, if the stack is empty returns NULL
+ * 
+ * @param stack stack from which to pop
+ * @param return_token poped token is returned or NULL if empty stack
+ */
 token_t *stack_save_pop(stack *stack){
 	stack_node_t *tmp_node;
 	token_t *tmp_token;
@@ -53,6 +77,11 @@ token_t *stack_save_pop(stack *stack){
 	return tmp_token;
 }
 
+/**
+ * @brief Function that pops token from stack, if the stack is empty does nothing 
+ * 
+ * @param stack the stack from which to pop
+ */
 void stack_pop(stack *stack){
 	token_t *tmp_token;
 	stack_node_t *tmp_node;
@@ -73,6 +102,12 @@ void stack_pop(stack *stack){
 	tmp_node = NULL;
 }
 
+/**
+ * @brief Function that returns the first token in stack without removing it 
+ * 
+ * @param stack the stack to from which the first node will be 
+ * @param return_token pointer to the first token in stack 
+ */
 token_t *stack_top(stack *stack){
 	if(stack->top == NULL){
 		return NULL;
@@ -80,6 +115,11 @@ token_t *stack_top(stack *stack){
 	return stack->top->current;
 }
 
+/**
+ * @brief Function that frees the stack and the tokens in it 
+ * 
+ * @param stack the stack to be disposed
+ */
 void stack_dispose_all(stack *stack){
 	token_t *tmp_token;
 	stack_node_t *tmp_node;
@@ -99,6 +139,12 @@ void stack_dispose_all(stack *stack){
 	}
 }
 
+/**
+ * @brief Function that returns topmost token after all shifts(<) and E on top of the stack 
+ * 
+ * @param stack the stack to be searched
+ * @return token_t* top terminal 
+ */
 token_t *stack_top_terminal(stack *stack){
     stack_node_t *i = stack->top;
     while (i != NULL) {
@@ -115,6 +161,11 @@ token_t *stack_top_terminal(stack *stack){
     return i->current;
 }
 
+/**
+ * @brief Function thath pushes shift (<) to stack. If the on top of stack is token_expr_e, insert it after it instead.
+ * 
+ * @param stack the stack on which to push 
+ */
 void stack_insert_shift(stack *stack){
 	if(stack == NULL){
 		return;
@@ -153,6 +204,12 @@ void stack_insert_shift(stack *stack){
 	i->next = new_node;
 }
 
+/**
+ * @brief Function that retuns number tokens to nearest shift(<)
+ * 
+ * @param stack the stack to be searched 
+ * @return unsigned number of tokens to nearest shift (<)
+ */
 unsigned tokens_to_shift(stack *stack){
 	if(stack == NULL){
 		return NO_SHIFT;
