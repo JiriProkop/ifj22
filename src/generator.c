@@ -438,20 +438,37 @@ void gen_cast_call(bool can_be_null, keywords casted_type, char* id, bool global
     printf("CALL %%type_casting\n");
 }
 
-void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit){
-    sym_data *data_func = st_search(gen_tree, id_function);
-    // if not in function 
-    if(exit){
+void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit) {
+    // if the return is from the "main" function
+    if(exit) {
+        printf("CLEARS\n");
         printf("EXIT GF@%%%u\n", temp_var_counter);
         return;
-    }
-    // if function returns something else than void
-    if(data_func->return_type != keyword_void){
-        gen_cast_call(data_func->can_be_null, data_func->return_type, "GF%%", true);
-        printf("PUSHS GF@%%%u\n", temp_var_counter);
-    }
-    printf("POPFRAME\n");
-    printf("RETURN\n");
+    } else {
+        sym_data *data_func = st_search(gen_tree, id_function);
+        // only push to the stack if the function is not void
+        if(data_func->return_type != keyword_void) {
+            if(data_func->can_be_null) {
+                printf("PUSHS bool@true\n");
+            } else {
+                printf("PUSHS bool@false\n");
+            }
+            if(data_func->return_type == keyword_int) {
+                printf("PUSHS string@int\n");
+            } else if(data_func->return_type == keyword_float) {
+                printf("PUSHS string@float\n");
+            } else if(data_func->return_type == keyword_string) {
+                printf("PUSHS string@string\n");
+            }
+            printf("PUSHS GF@%%%u\n", temp_var_counter);
+            printf("CALL %%check_type\n"); // calling the check type function
+
+            // push the return value to stack
+            printf("PUSHS GF@%%%u\n", temp_var_counter);
+        }
+        printf("POPFRAME\n");
+        printf("RETURN\n");
+    }   
 }
 
 void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
