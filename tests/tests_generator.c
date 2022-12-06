@@ -56,7 +56,7 @@ void print_list(list_t *list){
     printf("\n");
 }
 
-void add_node(list_t *list, char id[], keywords type){
+void add_list_node(list_t *list, char id[], keywords type){
     char* tmp_str = malloc(sizeof(char)*(strlen(id) + 1));
     if(tmp_str == NULL){
         printf("failed to malloc dynstr in add node tests_generator\n");
@@ -87,9 +87,9 @@ list_t *prep_params() {
         return list;
     }
     list_init(list);
-    add_node(list, "teststr", keyword_string);
-    add_node(list, "testint", keyword_int);
-    add_node(list, "testfloat", keyword_float);
+    add_list_node(list, "teststr", keyword_string);
+    add_list_node(list, "testint", keyword_int);
+    add_list_node(list, "testfloat", keyword_float);
     return list;
 }
 
@@ -127,16 +127,17 @@ int main() {
     printf("\n[function def gen test]\n");
     gen_function_def(id, params);
 
-    // test function def end
-    printf("\n[function def end gen test]\n");
-    gen_function_def_end(id);
-
-    // test function call function no casting 
-    printf("\n[function def call tests]\n");
     sym_table *tree;
     st_init(&tree);
     add_tree_node(&tree, "testfunc", keyword_int, params);
     print_tree(tree);
+
+    // test function def end
+    printf("\n[function def end gen test]\n");
+    gen_function_def_end(id, tree);
+
+    // test function call function no casting 
+    printf("\n[function def call tests]\n");
     gen_function_call(id,params,tree);
 
     
