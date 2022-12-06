@@ -1,8 +1,16 @@
 <?php
 declare(strict_types=1);
 
-$i = 3;
-
-while($i) {
-    write($i);
+function foo(int $a) : void {
+    if($a) {
+        $a = 3;
+    } else {
+        $a = 4;
+    }
+    write($a);
 }
+
+$a = 2;
+foo($a);
+
+write($a);
