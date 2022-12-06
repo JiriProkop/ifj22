@@ -25,7 +25,7 @@ extern token_t *current_tkn;
 extern unsigned int temp_var_counter;
 
 /**
- * Function frees everything allocated in parser and aborts.
+ * Function frees everything allocated in parser and exits program.
 */
 void abort();
 

@@ -107,7 +107,7 @@ void st_dispose(sym_table **tab) {
         st_dispose(&(*tab)->right);
         st_dispose(&(*tab)->data->local_frame);
         string_free((*tab)->id);
-        list_dispose((*tab)->data->parameters);
+        //list_dispose((*tab)->data->parameters);
         free((*tab)->data);
         free(*tab);
         *tab = NULL;

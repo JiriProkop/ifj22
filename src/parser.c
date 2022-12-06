@@ -499,7 +499,11 @@ bool prikaz(dynstr_t *current_function_id) {
         value = true;
         // <vyraz>
         get_tkn();
-        if(value && current_tkn->type == token_semicol && st_search(tree, current_function_id)->return_type != keyword_void) {
+        // check if the return type is correct (return; is only valid in void functions)
+        if(current_tkn->type == token_semicol && st_search(tree, current_function_id)->return_type != keyword_void) {
+            error_handle(current_tkn->line, func_arr_or_ret_error);
+            abort();
+        } else if(current_tkn->type != token_semicol && st_search(tree, current_function_id)->return_type == keyword_void) {
             error_handle(current_tkn->line, func_arr_or_ret_error);
             abort();
         }
@@ -878,14 +882,12 @@ bool vol_par(list_t *parameters) {
 }
 
 bool konec() {
-    bool value = true;
     if(current_tkn->type != token_none) {
         error_handle(current_tkn->line, syntax_error);
         abort();
-        value = false;
     }
     gen_closure();
-    return value;
+    abort(); // end the parser
 }
 
 bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
@@ -899,5 +901,4 @@ bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
 // TODOs na probrání na schůzce:
 // $a + 5 jako parametr nezpracuje výraz -> předat to celé na zpracování výrazu? Nebo je to vůbec legal?
 
-// TODO uklidit v konci - abort()
 // TODO zkontrolovat errory

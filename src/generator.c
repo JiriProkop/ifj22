@@ -553,7 +553,7 @@ void gen_while_check_condition(){
     printf("CALL %%cast_bool\n");
     printf("POPS GF@%%%u\n", temp_var_counter);
     // start if 
-    printf("JUMPIFEQ %%while%u_end GF@%%%u int@1\n", gen_number_while_start - gen_number_while_open, temp_var_counter);
+    printf("JUMPIFEQ %%while%u_end GF@%%%u bool@true\n", gen_number_while_start - gen_number_while_open, temp_var_counter);
 }
 
 void gen_while_end(){
