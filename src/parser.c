@@ -67,7 +67,7 @@ void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *paramete
     if(is_function) {
         sym_table *subtree = malloc(sizeof(sym_data));
         if(subtree == NULL) {
-            error_handle(0,compiler_error);
+            error_handle(0, compiler_error);
             abort();
         }
         st_init(&subtree);
@@ -765,7 +765,7 @@ bool vol_parametry(list_t *parameters) {
         if(st_search(current_frame, current_tkn->attr.str) != NULL) {
             list_add(parameters, keyword_void, current_tkn->attr.str);
         } else {
-            error_handle(current_tkn->line, func_arr_or_ret_error);
+            error_handle(current_tkn->line, undefied_identifier_error);
             abort();
         }
 
@@ -836,7 +836,7 @@ bool vol_par(list_t *parameters) {
         if(st_search(current_frame, current_tkn->attr.str) != NULL) {
             list_add(parameters, keyword_void, current_tkn->attr.str);
         } else {
-            error_handle(current_tkn->line, func_arr_or_ret_error);
+            error_handle(current_tkn->line, undefied_identifier_error);
             abort();
         }
 
@@ -897,8 +897,3 @@ bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
         return expr(*current_tkn, NULL, frame);
     }
 }
-
-// TODOs na probrání na schůzce:
-// $a + 5 jako parametr nezpracuje výraz -> předat to celé na zpracování výrazu? Nebo je to vůbec legal?
-
-// TODO zkontrolovat errory
