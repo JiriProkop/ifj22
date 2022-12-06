@@ -56,13 +56,14 @@ void free_tkn() {
     current_tkn = NULL;
 } 
 
-void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters, unsigned int params, keywords type, bool can_be_null) {
+void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters,
+              unsigned int params, keywords type, bool can_be_null, bool defined) {
     sym_data *data = malloc(sizeof(sym_data));
     if(data == NULL) {
         error_handle(0,compiler_error);
         abort();
     }
-    data->defined = false;
+    data->defined = defined;
     if(is_function) {
         sym_table *subtree = malloc(sizeof(sym_data));
         if(subtree == NULL) {
@@ -89,7 +90,7 @@ unsigned int convert_list_to_subtree(list_t *list, sym_table **subtree) {
     unsigned int num_of_params = 0;
     list_node_t *temp = list_first(list);
     while(temp != NULL) {
-        add_node(subtree, temp->id, 0, NULL, 0, temp->type, temp->can_be_null);
+        add_node(subtree, temp->id, 0, NULL, 0, temp->type, temp->can_be_null, 1);
         num_of_params++;
         temp = temp->next;
     }
@@ -197,7 +198,7 @@ void add_prebuilt() {
         dynstr_add_string(id, prebuit[i]);
         // since the functions are already declared and made,
         // we do not care about return type
-        add_node(&tree, id, 1, arguments[i], parameter_number[i], keyword_void, true);
+        add_node(&tree, id, 1, arguments[i], parameter_number[i], keyword_void, true, 0);
     }
 }
 
@@ -340,7 +341,7 @@ bool definice() {
 
         // adding the function to the symtable tree
         if(st_search(tree, id) == NULL) {
-            add_node(&tree, id, 1, parameters, params, type, can_be_null);
+            add_node(&tree, id, 1, parameters, params, type, can_be_null, 0);
             current_frame = st_search(tree, id)->local_frame;
             st_search(tree, id)->params = convert_list_to_subtree(parameters, &current_frame);
 
@@ -559,6 +560,8 @@ bool prikaz(dynstr_t *current_function_id) {
             if(st_search(tree, id)->params != num_of_params) {
                 error_handle(current_tkn->line, func_arr_or_ret_error);
                 abort();
+            } else {
+                gen_function_call(id, parameters, tree);
             }
         }
 
@@ -588,7 +591,8 @@ bool prikaz(dynstr_t *current_function_id) {
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
-
+        
+        gen_if_start(); // generate start of if statement
         temp_var_counter++;
     
         // {
@@ -605,11 +609,16 @@ bool prikaz(dynstr_t *current_function_id) {
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
+
+        gen_if_start_else(); // generate the start of else statement
+
         // <else>
         get_tkn();
         if(value && !else_rule(current_function_id)) {
             value = false;
         }
+
+        gen_if_end(); // generate end of if-else statement
     // rule: <prikaz>-> WHILE ( <vyraz> ) { <prikaz_fce> }
     } else if(current_tkn->attr.keyword == keyword_while) {
         value = true;
@@ -662,8 +671,10 @@ bool prikaz(dynstr_t *current_function_id) {
         // =
         } else {
             if(st_search(current_frame, id) == NULL) {
-                add_node(&current_frame, id, 0, NULL, 0, keyword_null, true);
+                add_node(&current_frame, id, 0, NULL, 0, keyword_null, 0, 0);
             }
+            // generates the definition of a variable, if it was not already defined
+            gen_def_variable(id, current_frame);
 
             // <vyraz>
             get_tkn();
@@ -676,8 +687,9 @@ bool prikaz(dynstr_t *current_function_id) {
                 if(value && current_tkn->type != token_semicol) {
                     value = false;
                 }
+                gen_fill_variable(id);
+                temp_var_counter++;
             }
-            temp_var_counter++;
         }
     // checks expressions
     } else {
@@ -860,15 +872,13 @@ bool vol_par(list_t *parameters) {
 }
 
 bool konec() {
-    bool value = false;
-    if(current_tkn->type == token_none) {
-        value = true;
-    }
-
-    if(!value) {
+    bool value = true;
+    if(current_tkn->type != token_none) {
         error_handle(current_tkn->line, syntax_error);
         abort();
+        value = false;
     }
+    gen_closure();
     return value;
 }
 
