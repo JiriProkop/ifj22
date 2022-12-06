@@ -357,8 +357,7 @@ void gen_header() {
     printf("DEFVAR GF@%%condition\n");
 
     // jump to the temporary variable definitions
-    printf("JUMP %%temp_var_definitions\n");
-    printf("LABEL %%temp_var_definitions_back\n");
+    printf("CALL %%temp_var_definitions\n");
 
     printf("PUSHFRAME\n");
     
@@ -516,7 +515,7 @@ void gen_temp_var_definitions() {
         printf("DEFVAR GF@%%%u\n", i);
     }
 
-    printf("JUMP %%temp_var_definitions_back\n");
+    printf("RETURN\n");
     printf("LABEL %%temp_var_definitions_end\n");
 }
 
