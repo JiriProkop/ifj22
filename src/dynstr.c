@@ -19,7 +19,7 @@ void dynstr_clear(dynstr_t *string) {
     string->array[0] = '\0';
     string->length = 0;
 }
-// akorat delete je uzit ve funkci free o kousek nize
+
 void dynstr_delete(dynstr_t *string) {
     if(string == NULL || string->array == NULL){
         return;
