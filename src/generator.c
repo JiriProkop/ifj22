@@ -72,6 +72,7 @@ void gen_type_casting() {
     printf("RETURN\n");
 
     printf("LABEL %%cast_error\n");
+    printf("DPRINT string@Type\\032compability\\032error\\032in\\032arithmetic\\032string\\032or\\032relation\\032expression\\010\n");
     printf("EXIT int@7\n");
     printf("LABEL %%type_casting_end\n");
 }
@@ -142,6 +143,7 @@ void gen_check_type() {
     printf("RETURN\n");
 
     printf("LABEL %%check_type_error\n");
+    printf("DPRINT string@Wrong\\032function\\032argument\\032type\\032and\\032or\\032count\\032or\\032wrong\\032return\\032type\\010\n");
     printf("EXIT int@4\n");
     printf("LABEL %%check_type_end\n");
 }
@@ -347,18 +349,18 @@ void gen_chr() {
     printf("PUSHS GF@%%chr_i\n");
     printf("INT2CHARS\n");
     printf("RETURN\n");
-    printf("LABEL chr_end\n");
+    printf("LABEL chr_end\n\n");
 }
 
 void gen_header() {
     printf(".IFJcode22\n");
     printf("CREATEFRAME\n");
-    // universal variable for conditions 
+    // universal variable for conditions and assignments
     printf("DEFVAR GF@%%condition\n");
+    printf("DEFVAR GF@%%assignment\n");
 
     // jump to the temporary variable definitions
-    printf("JUMP %%temp_var_definitions\n");
-    printf("LABEL %%temp_var_definitions_back\n");
+    printf("CALL %%temp_var_definitions\n");
 
     printf("PUSHFRAME\n");
     
@@ -403,9 +405,10 @@ void gen_function_def(dynstr_t *id, list_t* parameters){
 void gen_function_def_end(dynstr_t *id, sym_table *gen_tree) {
     printf("POPFRAME\n");
     sym_data *func_data = st_search(gen_tree, id);
-    // if you got on the end of void function exit with error 6;
+    // if you got on the end of void function exit with error 4
     if(func_data->return_type != keyword_void){
-        printf("EXIT int@6\n");
+        printf("DPRINT string@Wrong\\032function\\032argument\\032type\\032and\\032or\\032count\\032or\\032wrong\\032return\\032type\\010\n");
+        printf("EXIT int@4\n");
     }
     // if you got on the end of void function return
     printf("RETURN\n");
@@ -447,7 +450,7 @@ void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit) {
     // if the return is from the "main" function
     if(exit) {
         printf("CLEARS\n");
-        printf("EXIT GF@%%%u\n", temp_var_counter);
+        printf("EXIT int@0\n");
         return;
     } else {
         sym_data *data_func = st_search(gen_tree, id_function);
@@ -516,7 +519,7 @@ void gen_temp_var_definitions() {
         printf("DEFVAR GF@%%%u\n", i);
     }
 
-    printf("JUMP %%temp_var_definitions_back\n");
+    printf("RETURN\n");
     printf("LABEL %%temp_var_definitions_end\n");
 }
 
@@ -541,6 +544,10 @@ void gen_fill_variable(dynstr_t *variable){
     printf("MOVE LF@%s GF@%%%u\n", variable->array, temp_var_counter);
 }
 
+void gen_assign_value(dynstr_t *variable) {
+    printf("POPS LF@%s\n", variable->array);
+}
+
 void gen_while_start(){
     printf("LABEL %%while%u_start\n", gen_number_while_start);
     gen_number_while_start++;
@@ -558,7 +565,7 @@ void gen_while_check_condition(){
 
 void gen_while_end(){
     printf("JUMP %%while%u_start\n", gen_number_while_start - gen_number_while_open);
-    printf("LABEL %%while%u_end\n", temp_var_counter);
+    printf("LABEL %%while%u_end\n", gen_number_while_start - gen_number_while_open);
     gen_number_while_open--;
 }
 

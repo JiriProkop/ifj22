@@ -1,3 +1,11 @@
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @brief Implementation of linked list usef for storing parameters.
+ *
+ * @author Štěpán Czajkowski <xczajk01@stud.fit.vutbr.cz>
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -11,6 +19,7 @@ void list_init(list_t *list){
 	list->first = NULL;
 }
 
+
 bool list_is_empty(list_t *list){
  	return list->last == NULL;
 }
@@ -22,7 +31,7 @@ int list_add(list_t *list, keywords type, dynstr_t* id){
 	}
 	node->id = id;
 	node->type = type;
-
+	// if the only node in the list
 	if(list->first == NULL){
 		node->next = NULL;
 		list->last = node;

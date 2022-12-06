@@ -1,7 +1,7 @@
 /**
  * Project: compiler of IFJ22 programming language
  *
- * @brief scanner implementation.
+ * @brief  Implementation of stack
  *
  * @author Štěpán Czajkowski xczajk01 <xczajk01@stud.fit.vutbr.cz>
  */

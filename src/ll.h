@@ -1,3 +1,11 @@
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @brief Header file of linked list usef for storing parameters.
+ *
+ * @author Štěpán Czajkowski <xczajk01@stud.fit.vutbr.cz>
+ */
+
 #ifndef _ll_H
 #define _ll_H
 
@@ -28,14 +36,14 @@ typedef struct{
 }list_t;
 
 /**
- * @brief inicialize list 
+ * @brief Function for initialization of list 
  * 
  * @param list the list to be inicialize
  */
 void list_init(list_t *list);
 
 /**
- * @brief returns 1 if list is empty 0 if it is not 
+ * @brief Function for finding out if list is empty
  * 
  * @param list 
  * @return true is empty 
@@ -44,7 +52,7 @@ void list_init(list_t *list);
 bool list_is_empty(list_t *list);
 
 /**
- * @brief adds node on the end of the list 
+ * @brief Function that adds node on the end of the list 
  * 
  * @param list 
  * @param token  
@@ -52,29 +60,35 @@ bool list_is_empty(list_t *list);
 int list_add(list_t *list, keywords type, dynstr_t* id);
 
 /**
- * @brief removes first node of the list, if the list is empty does nothing 
+ * @brief Function that removes first node of the list, if the list is empty does nothing 
  * 
  * @param list list from which to delete
  */
 void list_delete_first(list_t *list);
 
 /**
- * @brief returns the first node in the list
+ * @brief Function that returns the first node in the list
  * 
- * @param list the list to from which the first node will be 
- * @return first node or NULL if the list is empty 
+ * @param list the list to from which the first node will be taken  
+ * @return First node or NULL if the list is empty 
  */
 list_node_t *list_first(list_t *list);
 
 
 /**
- * @brief disposes of the list 
+ * @brief Function that disposes of the list 
  * 
  * @param list the list to be disposed
  */
 void list_dispose(list_t *list);
 
-
+/**
+ * @brief Function that searches the list for a key
+ * 
+ * @param list the list to be searched 
+ * @param searched_str the key 
+ * @return list_node_t* the searched node or NULL if not found 
+ */
 list_node_t *list_search(list_t *list, dynstr_t *searched_str);
 
 

@@ -2,35 +2,378 @@
 
 [header gen test]
 .IFJcode22
+CREATEFRAME
+DEFVAR GF@%condition
+CALL %temp_var_definitions
+PUSHFRAME
+DEFVAR GF@%cast_var%
+DEFVAR GF@%cast_type%
+DEFVAR GF@%cast_null%
+DEFVAR GF@%cast_type_temp%
+JUMP %type_casting_end
+LABEL %type_casting
+POPS GF@%cast_var%
+POPS GF@%cast_type%
+POPS GF@%cast_null%
+TYPE GF@%cast_type_temp% GF@%cast_var%
+JUMPIFNEQ %cast_continue1 GF@%cast_type_temp% string@nil
+JUMPIFNEQ %cast_continue1_1 GF@%cast_null% bool@true
+PUSHS GF@%cast_var%
+RETURN
+LABEL %cast_continue1_1
+JUMPIFNEQ %cast_continue1_2 GF@%cast_type% string@int
+PUSHS int@0
+RETURN
+LABEL %cast_continue1_2
+JUMPIFNEQ %cast_continue1_3 GF@%cast_type% string@float
+PUSHS float@0x0p+0
+RETURN
+LABEL %cast_continue1_3
+PUSHS string@
+RETURN
+LABEL %cast_continue1
+JUMPIFNEQ %cast_continue2 GF@%cast_type% string@int
+JUMPIFNEQ %cast_continue2_1 GF@%cast_type_temp% string@int
+PUSHS GF@%cast_var%
+RETURN
+LABEL %cast_continue2_1
+JUMPIFNEQ %cast_error GF@%cast_type_temp% string@float
+FLOAT2INT GF@%cast_var% GF@%cast_var%
+PUSHS GF@%cast_var%
+RETURN
+LABEL %cast_continue2
+JUMPIFNEQ %cast_continue3 GF@%cast_type% string@float
+JUMPIFNEQ %cast_continue3_1 GF@%cast_type_temp% string@float
+PUSHS GF@%cast_var%
+RETURN
+LABEL %cast_continue3_1
+JUMPIFNEQ %cast_error GF@%cast_type_temp% string@int
+INT2FLOAT GF@%cast_var% GF@%cast_var%
+PUSHS GF@%cast_var%
+RETURN
+LABEL %cast_continue3
+JUMPIFNEQ %cast_error GF@%cast_type% GF@%cast_type_temp%
+PUSHS GF@%cast_var%
+RETURN
+LABEL %cast_error
+EXIT int@7
+LABEL %type_casting_end
+DEFVAR GF@%cast_bool_var%
+DEFVAR GF@%cast_bool_type%
+JUMP %cast_bool_end
+LABEL %cast_bool
+POPS GF@%cast_bool_var%
+TYPE GF@%cast_bool_type% GF@%cast_bool_var%
+JUMPIFNEQ %cast_bool_continue1 GF@%cast_bool_type% string@int
+JUMPIFNEQ %cast_bool_continue1_1 GF@%cast_bool_var% int@0
+PUSHS bool@false
+RETURN
+LABEL %cast_bool_continue1_1
+PUSHS bool@true
+RETURN
+LABEL %cast_bool_continue1
+JUMPIFNEQ %cast_bool_continue2 GF@%cast_bool_type% string@float
+JUMPIFNEQ %cast_bool_continue2_1 GF@%cast_bool_var% float@0x0p+0
+PUSHS bool@false
+RETURN
+LABEL %cast_bool_continue2_1
+PUSHS bool@true
+RETURN
+LABEL %cast_bool_continue2
+JUMPIFNEQ %cast_bool_continue3 GF@%cast_bool_type% string@string
+JUMPIFNEQ %cast_bool_continue3_1 GF@%cast_bool_var% string@
+PUSHS bool@false
+RETURN
+LABEL %cast_bool_continue3_1
+PUSHS bool@true
+RETURN
+LABEL %cast_bool_continue3
+PUSHS bool@false
+RETURN
+LABEL %cast_bool_end
+DEFVAR GF@%check_type_var%
+DEFVAR GF@%check_type_type%
+DEFVAR GF@%check_type_bool%
+DEFVAR GF@%check_type_temp%
+JUMP %check_type_end
+LABEL %check_type
+POPS GF@%check_type_var%
+POPS GF@%check_type_type%
+POPS GF@%check_type_bool%
+TYPE GF@%check_type_temp% GF@%check_type_var%
+JUMPIFNEQ %check_type_continue GF@%check_type_temp% string@nil
+JUMPIFEQ %check_type_error GF@%check_type_bool% bool@false
+RETURN
+LABEL %check_type_continue
+JUMPIFNEQ %check_type_error GF@%check_type_type% GF@%check_type_temp%
+RETURN
+LABEL %check_type_error
+EXIT int@4
+LABEL %check_type_end
+JUMP reads_end
+LABEL reads_start
+CREATEFRAME
+PUSHFRAME
+DEFVAR LF@%reads
+READ LF@%reads string
+PUSHS LF@%reads
+POPFRAME
+RETURN
+LABEL reads_end
+JUMP readi_end
+LABEL readi_start
+CREATEFRAME
+PUSHFRAME
+DEFVAR LF@%readi
+READ LF@%readi int
+PUSHS LF@%readi
+POPFRAME
+RETURN
+LABEL readi_end
+JUMP readf_end
+LABEL readf_start
+CREATEFRAME
+PUSHFRAME
+DEFVAR LF@%readf
+READ LF@%readf float
+PUSHS LF@%readf
+POPFRAME
+RETURN
+LABEL readf_end
+DEFVAR GF@%floatval_term
+JUMP floatval_end
+LABEL floatval_start
+CREATEFRAME
+DEFVAR TF@term
+MOVE TF@term GF@%floatval_term
+PUSHFRAME
+PUSHS bool@false
+PUSHS string@float
+PUSHS LF@term
+CALL %type_casting
+POPS LF@term
+PUSHS LF@term
+POPFRAME
+RETURN
+LABEL floatval_end
+DEFVAR GF@%intval_term
+JUMP intval_end
+LABEL intval_start
+CREATEFRAME
+DEFVAR TF@term
+MOVE TF@term GF@%intval_term
+PUSHFRAME
+PUSHS bool@false
+PUSHS string@int
+PUSHS LF@term
+CALL %type_casting
+POPS LF@term
+PUSHS LF@term
+POPFRAME
+RETURN
+LABEL intval_end
+DEFVAR GF@%strval_term
+JUMP strval_end
+LABEL strval_start
+CREATEFRAME
+DEFVAR TF@term
+MOVE TF@term GF@%strval_term
+PUSHFRAME
+PUSHS bool@false
+PUSHS string@string
+PUSHS LF@term
+CALL %type_casting
+POPS LF@term
+PUSHS LF@term
+POPFRAME
+RETURN
+LABEL strval_end
+DEFVAR GF@%strlen_s
+JUMP strlen_end
+LABEL strlen_start
+CREATEFRAME
+DEFVAR TF@s
+MOVE TF@s GF@%strlen_s
+PUSHFRAME
+DEFVAR LF@len
+STRLEN LF@len LF@s
+PUSHS LF@len
+POPFRAME
+RETURN
+LABEL strlen_end
+DEFVAR GF@%substring_s
+DEFVAR GF@%substring_i
+DEFVAR GF@%substring_j
+JUMP substring_end
+LABEL substring_start
+CREATEFRAME
+DEFVAR TF@s
+DEFVAR TF@i
+DEFVAR TF@j
+MOVE TF@s GF@%substring_s
+MOVE TF@i GF@%substring_i
+MOVE TF@j GF@%substring_j
+PUSHFRAME
+DEFVAR LF@chk
+LT LF@chk LF@i int@0
+JUMPIFEQ substring_error LF@chk bool@true
+LT LF@chk LF@j int@0
+JUMPIFEQ substring_error LF@chk bool@true
+GT LF@chk LF@i LF@j
+JUMPIFEQ substring_error LF@chk bool@true
+DEFVAR LF@len
+STRLEN LF@len LF@s
+LT LF@chk LF@i LF@len
+JUMPIFNEQ substring_error LF@chk bool@true
+GT LF@chk LF@j LF@len
+JUMPIFEQ substring_error LF@chk bool@true
+DEFVAR LF@c
+DEFVAR LF@substr
+MOVE LF@substr string@
+JUMPIFEQ substring_loop_end LF@i LF@j
+LABEL substring_loop
+GETCHAR LF@c LF@s LF@i
+CONCAT LF@substr LF@substr LF@c
+ADD LF@i LF@i int@1
+JUMPIFNEQ substring_loop LF@i LF@j
+LABEL substring_loop_end
+PUSHS LF@substr
+POPFRAME
+RETURN
+LABEL substring_error
+PUSHS nil@nil
+POPFRAME
+RETURN
+LABEL substring_end
+DEFVAR GF@%ord_c
+JUMP ord_end
+LABEL ord_start
+JUMPIFEQ ord_empty GF@%ord_c string@
+PUSHS GF@%ord_c
+PUSHS int@0
+STRI2INTS
+RETURN
+LABEL ord_empty
+PUSHS int@0
+RETURN
+LABEL ord_end
+DEFVAR GF@%chr_i
+JUMP chr_end
+LABEL chr_start
+PUSHS GF@%chr_i
+INT2CHARS
+RETURN
+LABEL chr_end
+
 
 [info: parameter list]
 list from the start :  'teststr', 'testint', 'testfloat',
 
 [function def gen test]
-DEFVAR LF@%testfunc_teststr
-DEFVAR LF@%testfunc_testint
-DEFVAR LF@%testfunc_testfloat
+DEFVAR GF@%testfunc_teststr
+DEFVAR GF@%testfunc_testint
+DEFVAR GF@%testfunc_testfloat
 JUMP testfunc_end
 LABEL testfunc_start
 CREATEFRAME
 DEFVAR TF@teststr
-MOVE TF@teststr LF@%testfunc_teststr
+MOVE TF@teststr GF@%testfunc_teststr
 DEFVAR TF@testint
-MOVE TF@testint LF@%testfunc_testint
+MOVE TF@testint GF@%testfunc_testint
 DEFVAR TF@testfloat
-MOVE TF@testfloat LF@%testfunc_testfloat
+MOVE TF@testfloat GF@%testfunc_testfloat
 PUSHFRAME
+
+[info: current tree]
+
+
+testfunc
 
 [function def end gen test]
 POPFRAME
+EXIT int@6
 RETURN
 LABEL testfunc_end
 
 [function def call tests]
+PUSHS bool@false
+PUSHS string@string
+PUSHS LF@teststr
+CALL %check_type
+MOVE GF@%testfunc_teststr LF@teststr
+PUSHS bool@false
+PUSHS string@int
+PUSHS LF@testint
+CALL %check_type
+MOVE GF@%testfunc_testint LF@testint
+PUSHS bool@false
+PUSHS string@float
+PUSHS LF@testfloat
+CALL %check_type
+MOVE GF@%testfunc_testfloat LF@testfloat
+CALL testfunc_start
 
+[write gen tests]
+WRITE LF@teststr
+WRITE LF@testint
+WRITE LF@testfloat
+
+[return gen tests - no exit]
+PUSHS bool@false
+PUSHS string@int
+PUSHS GF@%0
+CALL %check_type
+PUSHS GF@%0
+POPFRAME
+RETURN
+
+[return gen tests - exit]
+CLEARS
+EXIT GF@%1
+
+[info: current tree]
+
+
+          testvar
 
 testfunc
-MOVE LF@%testfunc_teststr LF@teststr
-MOVE LF@%testfunc_testint LF@testint
-MOVE LF@%testfunc_testfloat LF@testfloat
-CALL testfunc_start
+
+[variable def gen tests - variable not defined]
+DEFVAR LF@testvar
+
+[variable def gen tests - variable defined]
+
+[fill variable gen tests]
+MOVE LF@testvar GF@%2
+
+[while gen tests]
+LABEL %while0_start
+PUSHS GF@%3
+CALL %cast_bool
+POPS GF@%3
+JUMPIFEQ %while0_end GF@%3 bool@true
+JUMP %while0_start
+LABEL %while0_end
+
+[if gen tests]
+PUSHS GF@%4
+CALL %cast_bool
+POPS GF@%4
+JUMPIFEQ if0_else GF@%4 bool@false
+JUMP if0_end
+LABEL if0_else
+LABEL if0_end
+
+[closure gen tests]
+POPFRAME
+CLEARS
+EXIT int@0
+JUMP %temp_var_definitions_end
+LABEL %temp_var_definitions
+DEFVAR GF@%0
+DEFVAR GF@%1
+DEFVAR GF@%2
+DEFVAR GF@%3
+DEFVAR GF@%4
+RETURN
+LABEL %temp_var_definitions_end
