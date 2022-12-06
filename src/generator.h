@@ -4,6 +4,8 @@
  * @brief The implementation of a code generator.
  *
  * @author Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
+ * @author Štěpán Czajkowski <xczajk01@stud.fit.vutbr.cz>
+ * @author Marek Chalupka <xchalu18@stud.fit.vut.cz>
  */
 
 #ifndef _GENERATOR_H
@@ -72,20 +74,59 @@ void gen_if_start_else();
  */
 void gen_if_end();
 
+/**
+ * @brief Function for printing definition of variable
+ * 
+ * @param variable Variable to be printed
+ * @param tree_gen Tree to search if variable was already printed 
+ */
 void gen_def_variable(dynstr_t *variable, sym_table *tree_gen);
 
+/**
+ * @brief Function for printing for moving value into variable. It takes value from stack 
+ * 
+ * @param variable Variable to move the value into 
+ */
 void gen_fill_variable(dynstr_t *variable);
 
+/**
+ * @brief Function for printing for while start
+ * 
+ */
 void gen_while_start();
 
+/**
+ * @brief Function for printing while condition check 
+ * 
+ */
 void gen_while_check_condition();
 
+/**
+ * @brief Function for printing  the end of condition 
+ * 
+ */
 void gen_while_end();
 
+/**
+ * @brief Function for printing file closure
+ * 
+ */
 void gen_closure();
 
+/**
+ * @brief Function for printing build in function WRITE
+ * 
+ * @param parameters to be written out 
+ */
 void gen_write(list_t *parameters);
 
+/**
+ * @brief Function for printing return 
+ * 
+ * @param id_function Id of the function for searching function_data
+ * @param gen_tree Tree for checking if the function should return something 
+ * @param exit true for return outside function
+ */
 void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit);
 
 /**
