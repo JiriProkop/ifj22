@@ -8,6 +8,7 @@
 #include "symtable.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
 // void gen_header() {
 //     printf(".IFJcode22\n");
@@ -71,7 +72,15 @@ void var_or_val(token_t *tok2, bool save_to_right, unsigned *num, const char *op
         printf("JUMPIFNEQ %s_BAD_%u GF@$cond1 bool@true\n", operation, *num);
         // if(type1 == int)
         printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
-        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+		if (!strcmp(operation, "DIV")) {
+            printf("PUSHS bool@true\n");
+            printf("PUSHS string@float\n");
+            printf("PUSHS GF@%s\n", tok2->attr.str->array);
+            printf("CALL %%TYPE_CASTING\n");
+            printf("POPS GF@%s\n", tok2->attr.str->array);
+        } else {
+            printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+        }
         //		type2 is float, need to convert left_result to float
         printf("PUSHS bool@true\n");
         printf("PUSHS string@float\n");
@@ -119,7 +128,15 @@ void var_or_val(token_t *tok2, bool save_to_right, unsigned *num, const char *op
         printf("JUMPIFNEQ %s_BAD_%u GF@$cond1 bool@true\n", operation, *num);
         // if(type1 == int)
         printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
-        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+        if (!strcmp(operation, "DIV")) {
+            printf("PUSHS bool@true\n");
+            printf("PUSHS string@float\n");
+            printf("PUSHS GF@$val1\n");
+            printf("CALL %%TYPE_CASTING\n");
+            printf("POPS GF@$val1\n");
+        } else {
+            printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+        }
         //		type2 is float, need to convert left_result to float
         printf("PUSHS bool@true\n");
         printf("PUSHS string@float\n");
@@ -168,7 +185,15 @@ void plus_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned *num,
         printf("JUMPIFNEQ %s_BAD_%u GF@$cond1 bool@true\n", operation, *num);
         // if(type1 == int)
         printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
-        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+        if (!strcmp(operation, "DIV")) {
+            printf("PUSHS bool@true\n");
+            printf("PUSHS string@float\n");
+            printf("PUSHS GF@$right_result\n");
+            printf("CALL %%TYPE_CASTING\n");
+            printf("POPS GF@$right_result\n");
+        } else {
+            printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+        }
         //		type2 is float, need to convert left_result to float
         printf("PUSHS bool@true\n");
         printf("PUSHS string@float\n");
@@ -204,8 +229,8 @@ void plus_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned *num,
         // TODO is tok1 defined?
         var_or_val(tok1, save_to_right, num, operation);
     } else {
-        // both toks are values or variebles
-        // TODO are both defined?
+        // both toks can be value or varieble
+        // TODO are both defined(if variebles)?
         if (tok1->type == token_integer) {
             printf("MOVE GF@$val1 int@%d\n", tok1->attr.integer);
         } else if (tok1->type == token_float) {
@@ -215,8 +240,8 @@ void plus_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned *num,
             printf("JUMPIFEQ %s_TOVAR1_%u GF@$type STRING@int\n", operation, *num);
             printf("JUMPIFEQ %s_TOVAR1_%u GF@$type STRING@float\n", operation, *num);
             printf("EXIT int@7\n");
-			printf("LABEL %s_TOVAR1_%u\n", operation, *num);
-			printf("MOVE GF@$val1 GF@%s\n", tok1->attr.str->array);
+            printf("LABEL %s_TOVAR1_%u\n", operation, *num);
+            printf("MOVE GF@$val1 GF@%s\n", tok1->attr.str->array);
         } else {
             error_handle(tok1->line, expr_type_error);
             abort();
@@ -230,8 +255,8 @@ void plus_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned *num,
             printf("JUMPIFEQ %s_TOVAR2_%u GF@$type STRING@int\n", operation, *num);
             printf("JUMPIFEQ %s_TOVAR2_%u GF@$type STRING@float\n", operation, *num);
             printf("EXIT int@7\n");
-			printf("LABEL %s_TOVAR2_%u\n", operation, *num);
-			printf("MOVE GF@$val2 GF@%s\n", tok2->attr.str->array);
+            printf("LABEL %s_TOVAR2_%u\n", operation, *num);
+            printf("MOVE GF@$val2 GF@%s\n", tok2->attr.str->array);
         } else {
             error_handle(tok2->line, expr_type_error);
             abort();
@@ -240,7 +265,15 @@ void plus_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned *num,
         printf("TYPE GF@$type2 GF@$val2\n");
         // if(type1 == int)
         printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
-        printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+		if (!strcmp(operation, "DIV")) {
+            printf("PUSHS bool@true\n");
+            printf("PUSHS string@float\n");
+            printf("PUSHS GF@$val2\n");
+            printf("CALL %%TYPE_CASTING\n");
+            printf("POPS GF@$val2\n");
+        } else {
+            printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
+        }
         //		type2 is float, need to convert val1 to float
         printf("PUSHS bool@true\n");
         printf("PUSHS string@float\n");
@@ -300,7 +333,7 @@ void gen_mul(token_t *tok1, token_t *tok2, bool save_to_right) {
 void gen_div(token_t *tok1, token_t *tok2, bool save_to_right) {
     static unsigned unique_num_div = 0;
     // TODO tok2 cannot be 0
-    // both operands have to be float!
+    plus_check(tok1, tok2, save_to_right, &unique_num_div, "DIV");
 }
 
 void gen_expression(exprll *ll) {
