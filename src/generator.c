@@ -10,6 +10,9 @@
 unsigned gen_number_while_start = 0;
 unsigned gen_number_while_end = 0;
 
+unsigned gen_number_if = 0;
+unsigned gen_number_open_if = 0;
+
 // type_casting
 void gen_type_casting() {
     printf("DEFVAR GF@%%cast_var%%\n");
