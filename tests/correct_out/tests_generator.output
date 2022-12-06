@@ -353,7 +353,7 @@ CALL %cast_bool
 POPS GF@%3
 JUMPIFEQ %while0_end GF@%3 bool@true
 JUMP %while0_start
-LABEL %while3_end
+LABEL %while0_end
 
 [if gen tests]
 PUSHS GF@%4
