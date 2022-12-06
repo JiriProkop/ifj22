@@ -538,6 +538,7 @@ void gen_if_start(){
 }
 
 void gen_if_start_else(){
+    // start else
     printf("JUMP if%u_end\n", gen_number_if - gen_number_open_if);
     printf("LABEL if%u_else\n", gen_number_if - gen_number_open_if);
 }
