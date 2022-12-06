@@ -121,8 +121,20 @@ void add_prebuilt() {
     dynstr_init(arg1);
     dynstr_add_string(arg1, "term");
     list_add(args4, keyword_void, arg1);
-    list_t *args5 = args4;
-    list_t *args6 = args4;
+    list_t *args5 = malloc(sizeof(list_t));
+    if(args5 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args5);
+    list_add(args5, keyword_void, arg1);
+    list_t *args6 = malloc(sizeof(list_t));
+    if(args6 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args6);
+    list_add(args6, keyword_void, arg1);
     list_t *args7 = malloc(sizeof(list_t));
     if(args7 == NULL) {
         error_handle(0, compiler_error);

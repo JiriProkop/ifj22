@@ -11,6 +11,7 @@
 
 #include "scanner.h"
 #include "ll.h"
+#include "dynstr.h"
 #include "error.h"
 
 
@@ -68,7 +69,12 @@ void list_dispose(list_t *list){
 	}
 	list_node_t *delete_node, *i = list->first;
 	while(i != NULL){
-		string_free(i->id);
+		if(i->id != NULL && i->id->array != NULL) {
+			dynstr_delete(i->id);
+			free(i->id);
+			i->id->array = NULL;
+		}
+
 		delete_node = i;
 		i = i->next;
 		free(delete_node);
