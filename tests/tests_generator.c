@@ -96,6 +96,16 @@ list_t *prep_params() {
     return list;
 }
 
+list_t *prep_no_params() {
+    list_t *list = malloc(sizeof(list_t));
+    if (list == NULL) {
+        error_handle(0, compiler_error);
+        return list;
+    }
+    list_init(list);
+    return list;
+}
+
 void add_tree_node(sym_table **tree, char id[], keywords type, list_t* params, bool is_func, bool nullable){
     sym_data *new_symdata = malloc(sizeof(sym_data));
     dynstr_t *new_id = malloc(sizeof(dynstr_t));
@@ -131,70 +141,99 @@ int main() {
         return ret;
     printf("\n[info: parameter list]\n");
     print_list(params); // print parameter list
+    dynstr_t *voidfunc = prep_id("voidfunc");
+    if (voidfunc == NULL)
+        return ret;
+    list_t *no_params = prep_no_params();
+    if (no_params == NULL)
+        return ret;
 
-    // test function def
-    printf("\n[function def gen test]\n");
+    // test gen function def
+    printf("\n[function def gen test - non-void function with 3 parameters]\n");
     gen_function_def(id, params);
+    printf("\n[function def gen test - void function without parameters]\n");
+    gen_function_def(voidfunc, no_params);
 
     sym_table *tree;
     st_init(&tree);
     add_tree_node(&tree, "testfunc", keyword_int, params, true, false);
+    add_tree_node(&tree, "voidfunc", keyword_void, no_params, true, false);
     printf("\n[info: current tree]\n");
     print_tree(tree);
 
-    // test function def end
-    printf("\n[function def end gen test]\n");
+    // test gen function def end
+    printf("\n[function def end gen test - non-void function with 3 parameters]\n");
     gen_function_def_end(id, tree);
+    printf("\n[function def end gen test - void function without parameters]\n");
+    gen_function_def_end(voidfunc, tree);
 
-    // test function call function no casting 
-    printf("\n[function def call tests]\n");
+    // test gen function call function no casting 
+    printf("\n[function def call test - non-void function with 3 parameters]\n");
     gen_function_call(id,params,tree);
+    printf("\n[function def call test - void function without parameters]\n");
+    gen_function_call(voidfunc,no_params,tree);
 
-    // test write
-    printf("\n[write gen tests]\n");
+    // test gen write
+    printf("\n[write gen test]\n");
     gen_write(params);
 
-    // TODO test cast call?
+    // TODO test gen cast call?
 
-    // test return
-    printf("\n[return gen tests - no exit]\n");
+    // test gen return
+    printf("\n[return gen test - non-void function with 3 parameters - no exit]\n");
     gen_return(id, tree, false);
     temp_var_counter++;
-    printf("\n[return gen tests - exit]\n");
+    printf("\n[return gen test - non-void function with 3 parameters - exit]\n");
     gen_return(id, tree, true);
     temp_var_counter++;
+    printf("\n[return gen test - void function without parameters - no exit]\n");
+    gen_return(voidfunc, tree, false);
+    temp_var_counter++;
+    printf("\n[return gen test - void function without parameters - exit]\n");
+    gen_return(voidfunc, tree, true);
+    temp_var_counter++;
 
+    // test gen def variable
     dynstr_t *testvar = prep_id("testvar");
     add_tree_node(&tree, testvar->array, keyword_string, NULL, false, false);
     printf("\n[info: current tree]\n");
     print_tree(tree);
-    printf("\n[variable def gen tests - variable not defined]\n");
+    printf("\n[variable def gen test - variable not defined]\n");
     gen_def_variable(testvar, tree);
-    printf("\n[variable def gen tests - variable defined]\n");
+    printf("\n[variable def gen test - variable defined]\n");
     gen_def_variable(testvar, tree);
 
-    printf("\n[fill variable gen tests]\n");
+    // test gen fill variable
+    printf("\n[fill variable gen test]\n");
     gen_fill_variable(testvar);
     temp_var_counter++;
 
-    printf("\n[while gen tests]\n");
+    // test gen assign value
+    printf("\n[value assignment gen test]\n");
+    gen_assign_value(testvar);
+
+    // test gen while
+    printf("\n[while gen test]\n");
     gen_while_start();
     gen_while_check_condition();
     gen_while_end();
     temp_var_counter++;
 
-    printf("\n[if gen tests]\n");
+    // test gen if
+    printf("\n[if gen test]\n");
     gen_if_start();
     gen_if_start_else();
     gen_if_end();
     temp_var_counter++;
 
-    printf("\n[closure gen tests]\n");
+    // test gen closure
+    printf("\n[closure gen test]\n");
     gen_closure();
 
     // cleanup
     st_dispose(&tree);
     string_free(id);
+    string_free(voidfunc);
     string_free(testvar);
     // no need to list_dispose(params); because it's done by st_dispose()
 
