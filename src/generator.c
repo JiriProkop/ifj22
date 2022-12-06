@@ -355,8 +355,9 @@ void gen_chr() {
 void gen_header() {
     printf(".IFJcode22\n");
     printf("CREATEFRAME\n");
-    // universal variable for conditions 
+    // universal variable for conditions and assignments
     printf("DEFVAR GF@%%condition\n");
+    printf("DEFVAR GF@%%assignment\n");
 
     // jump to the temporary variable definitions
     printf("CALL %%temp_var_definitions\n");
@@ -541,6 +542,10 @@ void gen_def_variable(dynstr_t *variable, sym_table *tree_gen){
 
 void gen_fill_variable(dynstr_t *variable){
     printf("MOVE LF@%s GF@%%%u\n", variable->array, temp_var_counter);
+}
+
+void gen_assign_value(dynstr_t *variable) {
+    printf("POPS LF@%s\n", variable->array);
 }
 
 void gen_while_start(){

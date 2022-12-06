@@ -88,5 +88,13 @@ void gen_write(list_t *parameters);
 
 void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit);
 
+/**
+ * @brief Assigns a return value from function to variable.
+ * 
+ * @param variable A variable identifier.
+*/
+void gen_assign_value(dynstr_t *variable) {
+
+}
 
 #endif
