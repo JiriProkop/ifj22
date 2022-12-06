@@ -410,39 +410,42 @@ void gen_function_def_end(dynstr_t *id, sym_table *gen_tree) {
 void gen_cast_call(bool can_be_null, keywords casted_type, char* id, bool global){
     // push can be null 
     if(can_be_null){
-        printf("PUSH bool@true\n");
+        printf("PUSHS bool@true\n");
     } else{
-        printf("PUSH bool@false\n");
+        printf("PUSHS bool@false\n");
     }
     // push type 
     switch (casted_type)
     {
     case keyword_int:
-        printf("PUSH string@int\n");
+        printf("PUSHS string@int\n");
         break;
     case keyword_float:
-        printf("PUSH string@float\n");
+        printf("PUSHS string@float\n");
         break;
     case keyword_string: 
-        printf("PUSH string@string\n");
+        printf("PUSHS string@string\n");
         break;
     default:
         break;
     }
     // push id
     if(global){
-        printf("PUSH GF@%%%u\n", temp_var_counter);
+        printf("PUSHS GF@%%%u\n", temp_var_counter);
     }else {
-        printf("PUSH %s\n", id);
+        printf("PUSHS %s\n", id);
     }
+    printf("CALL %%type_casting\n");
 }
 
 void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit){
     sym_data *data_func = st_search(gen_tree, id_function);
+    // if not in function 
     if(exit){
         printf("EXIT GF@%%%u\n", temp_var_counter);
         return;
     }
+    // if function returns something else than void
     if(data_func->return_type != keyword_void){
         gen_cast_call(data_func->can_be_null, data_func->return_type, "GF%%", true);
         printf("PUSHS GF@%%%u\n", temp_var_counter);
@@ -515,14 +518,31 @@ void gen_while_start(){
 }
 
 void gen_while_check_condition(){
-    printf("JUMPIFEQ %%while%u_end LF@ int@1\n", gen_number_while_end);
+    printf("JUMPIFEQ %%while%u_end LF@ int@1\n", temp_var_counter);
 }
 
 void gen_while_end(){
-    printf("JUMPIFEQ %%while%u_start LF@ int@1\n", gen_number_while_end);
-    printf("LABEL %%while%u_end\n", gen_number_while_end);
+    printf("JUMPIFEQ %%while%u_start LF@ int@1\n", temp_var_counter);
+    printf("LABEL %%while%u_end\n", temp_var_counter);
 }
 
 void gen_if_start(){
-    
+    // cast current expression result to bool
+    printf("PUSHS GF%%%u\n", temp_var_counter);
+    printf("CALL %%cast_bool\n");
+    printf("POPS GF@%%%u\n", temp_var_counter);
+    // start if 
+    printf("JUMPIFEQ if%u_else GF@%%%u bool@false\n", gen_number_if);
+    gen_number_if++;
+    gen_number_open_if++;
+}
+
+void gen_if_start_else(){
+    printf("JUMP if%u_end\n", gen_number_if - gen_number_open_if);
+    printf("LABEL if%u_else\n", gen_number_if - gen_number_open_if);
+}
+
+void gen_if_end(){
+    printf("LABEL if%u_end\n", gen_number_if - gen_number_open_if);
+    gen_number_open_if--;
 }
