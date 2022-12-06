@@ -9,33 +9,32 @@
 
 unsigned gen_number_while_start = 0;
 unsigned gen_number_while_end = 0;
-// unsigned temp_var_counter = 1; TODO - delete
 
 // type_casting
 void gen_type_casting() {
-    printf("DEFVAR GF@%%cast_var\n");
-    printf("DEFVAR GF@%%cast_type\n");
-    printf("DEFVAR GF@%%cast_null\n");
-    printf("DEFVAR GF@%%cast_type_temp\n");
+    printf("DEFVAR GF@%%cast_var%%\n");
+    printf("DEFVAR GF@%%cast_type%%\n");
+    printf("DEFVAR GF@%%cast_null%%\n");
+    printf("DEFVAR GF@%%cast_type_temp%%\n");
     printf("JUMP %%type_casting_end\n");
 
     printf("LABEL %%type_casting\n");
-    printf("POPS GF@%%cast_var\n");
-    printf("POPS GF@%%cast_type\n");
-    printf("POPS GF@%%cast_null\n");
-    printf("TYPE GF@%%cast_type_temp GF@%%cast_var\n");
+    printf("POPS GF@%%cast_var%%\n");
+    printf("POPS GF@%%cast_type%%\n");
+    printf("POPS GF@%%cast_null%%\n");
+    printf("TYPE GF@%%cast_type_temp%% GF@%%cast_var%%\n");
 
     // check for null
-    printf("JUMPIFNEQ %%cast_continue1 GF@%%cast_type_temp string@nil\n");
-    printf("JUMPIFNEQ %%cast_continue1_1 GF@%%cast_null bool@true\n");
-    printf("PUSHS GF@%%cast_var\n");
+    printf("JUMPIFNEQ %%cast_continue1 GF@%%cast_type_temp%% string@nil\n");
+    printf("JUMPIFNEQ %%cast_continue1_1 GF@%%cast_null%% bool@true\n");
+    printf("PUSHS GF@%%cast_var%%\n");
     printf("RETURN\n");
     printf("LABEL %%cast_continue1_1\n");
-    printf("JUMPIFNEQ %%cast_continue1_2 GF@%%cast_type string@int\n");
+    printf("JUMPIFNEQ %%cast_continue1_2 GF@%%cast_type%% string@int\n");
     printf("PUSHS int@0\n");
     printf("RETURN\n");
     printf("LABEL %%cast_continue1_2\n");
-    printf("JUMPIFNEQ %%cast_continue1_3 GF@%%cast_type string@float\n");
+    printf("JUMPIFNEQ %%cast_continue1_3 GF@%%cast_type%% string@float\n");
     printf("PUSHS float@0x0p+0\n");
     printf("RETURN\n");
     printf("LABEL %%cast_continue1_3\n");
@@ -43,30 +42,30 @@ void gen_type_casting() {
     printf("RETURN\n");
     printf("LABEL %%cast_continue1\n");
     // type should be int
-    printf("JUMPIFNEQ %%cast_continue2 GF@%%cast_type string@int\n");
-    printf("JUMPIFNEQ %%cast_continue2_1 GF@%%cast_type_temp string@int\n");
-    printf("PUSHS GF@%%cast_var\n");
+    printf("JUMPIFNEQ %%cast_continue2 GF@%%cast_type%% string@int\n");
+    printf("JUMPIFNEQ %%cast_continue2_1 GF@%%cast_type_temp%% string@int\n");
+    printf("PUSHS GF@%%cast_var%%\n");
     printf("RETURN\n");
     printf("LABEL %%cast_continue2_1\n");
-    printf("JUMPIFNEQ %%cast_error GF@%%cast_type_temp string@float\n");
-    printf("FLOAT2INT GF@%%cast_var GF@%%cast_var\n");
-    printf("PUSHS GF@%%cast_var\n");
+    printf("JUMPIFNEQ %%cast_error GF@%%cast_type_temp%% string@float\n");
+    printf("FLOAT2INT GF@%%cast_var%% GF@%%cast_var%%\n");
+    printf("PUSHS GF@%%cast_var%%\n");
     printf("RETURN\n");
     printf("LABEL %%cast_continue2\n");
     // type should be float
-    printf("JUMPIFNEQ %%cast_continue3 GF@%%cast_type string@float\n");
-    printf("JUMPIFNEQ %%cast_continue3_1 GF@%%cast_type_temp string@float\n");
-    printf("PUSHS GF@%%cast_var\n");
+    printf("JUMPIFNEQ %%cast_continue3 GF@%%cast_type%% string@float\n");
+    printf("JUMPIFNEQ %%cast_continue3_1 GF@%%cast_type_temp%% string@float\n");
+    printf("PUSHS GF@%%cast_var%%\n");
     printf("RETURN\n");
     printf("LABEL %%cast_continue3_1\n");
-    printf("JUMPIFNEQ %%cast_error GF@%%cast_type_temp string@int\n");
-    printf("INT2FLOAT GF@%%cast_var GF@%%cast_var\n");
-    printf("PUSHS GF@%%cast_var\n");
+    printf("JUMPIFNEQ %%cast_error GF@%%cast_type_temp%% string@int\n");
+    printf("INT2FLOAT GF@%%cast_var%% GF@%%cast_var%%\n");
+    printf("PUSHS GF@%%cast_var%%\n");
     printf("RETURN\n");
     printf("LABEL %%cast_continue3\n");
     // type should be string
-    printf("JUMPIFNEQ %%cast_error GF@%%cast_type GF@%%cast_type_temp\n");
-    printf("PUSHS GF@%%cast_var\n");
+    printf("JUMPIFNEQ %%cast_error GF@%%cast_type%% GF@%%cast_type_temp%%\n");
+    printf("PUSHS GF@%%cast_var%%\n");
     printf("RETURN\n");
 
     printf("LABEL %%cast_error\n");
@@ -75,17 +74,17 @@ void gen_type_casting() {
 }
 
 void gen_cast_to_bool() {
-    printf("DEFVAR GF@%%cast_bool_var\n");
-    printf("DEFVAR GF@%%cast_bool_type\n");
+    printf("DEFVAR GF@%%cast_bool_var%%\n");
+    printf("DEFVAR GF@%%cast_bool_type%%\n");
     printf("JUMP %%cast_bool_end\n");
     printf("LABEL %%cast_bool\n");
 
-    printf("POPS GF@%%cast_bool_var\n");
-    printf("TYPE GF@%%cast_bool_type GF@%%cast_bool_var\n");
+    printf("POPS GF@%%cast_bool_var%%\n");
+    printf("TYPE GF@%%cast_bool_type%% GF@%%cast_bool_var%%\n");
 
     // int
-    printf("JUMPIFNEQ %%cast_bool_continue1 GF@%%cast_bool_type string@int\n");
-    printf("JUMPIFNEQ %%cast_bool_continue1_1 GF@%%cast_bool_var int@0\n");
+    printf("JUMPIFNEQ %%cast_bool_continue1 GF@%%cast_bool_type%% string@int\n");
+    printf("JUMPIFNEQ %%cast_bool_continue1_1 GF@%%cast_bool_var%% int@0\n");
     printf("PUSHS bool@false\n");
     printf("RETURN\n");
     printf("LABEL %%cast_bool_continue1_1\n");
@@ -93,8 +92,8 @@ void gen_cast_to_bool() {
     printf("RETURN\n");
     printf("LABEL %%cast_bool_continue1\n");
     // float
-    printf("JUMPIFNEQ %%cast_bool_continue2 GF@%%cast_bool_type string@float\n");
-    printf("JUMPIFNEQ %%cast_bool_continue2_1 GF@%%cast_bool_var float@0x0p+0\n");
+    printf("JUMPIFNEQ %%cast_bool_continue2 GF@%%cast_bool_type%% string@float\n");
+    printf("JUMPIFNEQ %%cast_bool_continue2_1 GF@%%cast_bool_var%% float@0x0p+0\n");
     printf("PUSHS bool@false\n");
     printf("RETURN\n");
     printf("LABEL %%cast_bool_continue2_1\n");
@@ -102,8 +101,8 @@ void gen_cast_to_bool() {
     printf("RETURN\n");
     printf("LABEL %%cast_bool_continue2\n");
     // string
-    printf("JUMPIFNEQ %%cast_bool_continue3 GF@%%cast_bool_type string@string\n");
-    printf("JUMPIFNEQ %%cast_bool_continue3_1 GF@%%cast_bool_var string@\n");
+    printf("JUMPIFNEQ %%cast_bool_continue3 GF@%%cast_bool_type%% string@string\n");
+    printf("JUMPIFNEQ %%cast_bool_continue3_1 GF@%%cast_bool_var%% string@\n");
     printf("PUSHS bool@false\n");
     printf("RETURN\n");
     printf("LABEL %%cast_bool_continue3_1\n");
@@ -117,26 +116,26 @@ void gen_cast_to_bool() {
 }
 
 void gen_check_type() {
-    printf("DEFVAR GF@%%check_type_var\n");
-    printf("DEFVAR GF@%%check_type_type\n");
-    printf("DEFVAR GF@%%check_type_bool\n");
-    printf("DEFVAR GF@%%check_type_temp\n");
+    printf("DEFVAR GF@%%check_type_var%%\n");
+    printf("DEFVAR GF@%%check_type_type%%\n");
+    printf("DEFVAR GF@%%check_type_bool%%\n");
+    printf("DEFVAR GF@%%check_type_temp%%\n");
     printf("JUMP %%check_type_end\n");
     printf("LABEL %%check_type\n");
 
-    printf("POPS GF@%%check_type_var\n");
-    printf("POPS GF@%%check_type_type\n");
-    printf("POPS GF@%%check_type_bool\n");
+    printf("POPS GF@%%check_type_var%%\n");
+    printf("POPS GF@%%check_type_type%%\n");
+    printf("POPS GF@%%check_type_bool%%\n");
 
-    printf("TYPE GF@%%check_type_temp GF@%%check_type_var\n");
+    printf("TYPE GF@%%check_type_temp%% GF@%%check_type_var%%\n");
 
     // the variable is null
-    printf("JUMPIFNEQ %%check_type_continue GF@%%check_type_temp string@nil\n");
-    printf("JUMPIFEQ %%check_type_error GF@%%check_type_bool bool@false\n");
+    printf("JUMPIFNEQ %%check_type_continue GF@%%check_type_temp%% string@nil\n");
+    printf("JUMPIFEQ %%check_type_error GF@%%check_type_bool%% bool@false\n");
     printf("RETURN\n");
     printf("LABEL %%check_type_continue\n");
     // other than null
-    printf("JUMPIFNEQ %%check_type_error GF@%%check_type_type GF@%%check_type_temp\n");
+    printf("JUMPIFNEQ %%check_type_error GF@%%check_type_type%% GF@%%check_type_temp%%\n");
     printf("RETURN\n");
 
     printf("LABEL %%check_type_error\n");
@@ -161,7 +160,7 @@ void gen_function_def(dynstr_t *id, list_t* parameters){
     list_node_t* i = parameters->first;
     // define all the arguments as temp variable for future use 
     while(i != NULL){
-        printf("DEFVAR LF@%%%s_%s\n", id->array, i->id->array);
+        printf("DEFVAR GF@%%%s_%s\n", id->array, i->id->array);
         i = i->next;
     }
     // jump end when giong through the code 
@@ -173,7 +172,7 @@ void gen_function_def(dynstr_t *id, list_t* parameters){
     i = parameters->first;
     while(i != NULL){
         printf("DEFVAR TF@%s\n", i->id->array);
-        printf("MOVE TF@%s LF@%%%s_%s\n",i->id->array, id->array, i->id->array);
+        printf("MOVE TF@%s GF@%%%s_%s\n",i->id->array, id->array, i->id->array);
         i = i->next;
     }
     printf("PUSHFRAME\n");
@@ -260,7 +259,7 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
             printf("CALL %%check_type\n"); // calling the check type function
         }
 
-        printf("MOVE LF@%%%s_%s LF@%s\n", id->array, expected_parameters_i->id->array, recieve_parameters_i->id->array);
+        printf("MOVE GF@%%%s_%s LF@%s\n", id->array, expected_parameters_i->id->array, recieve_parameters_i->id->array);
         recieve_parameters_i = recieve_parameters_i->next;
         expected_parameters_i = expected_parameters_i->next;
     }
@@ -283,8 +282,8 @@ void gen_def_variable(dynstr_t *variable, sym_table *tree_gen){
     }
 }
 
-void gen_fill_variable(dynstr_t *varible){
-    printf("MOVE %s GF@%%%u\n", varible->array, temp_var_counter);
+void gen_fill_variable(dynstr_t *variable){
+    printf("MOVE LF@%s GF@%%%u\n", variable->array, temp_var_counter);
 }
 
 void gen_while_start(){
@@ -299,7 +298,7 @@ void gen_while_start(){
     // go back to parser to print condition 
 }
 
-void gen_while_chceck_condition(){
+void gen_while_check_condition(){
     printf("JUMPIFEQ %%while%u_end LF@ int@1\n", gen_number_while_end);
 }
 
@@ -514,8 +513,3 @@ void gen_chr() {
     printf("RETURN\n");
     printf("LABEL chr_end\n");
 }
-
-// TODO u volani u parametru typova kontrola, ne konverze - ale u tech vestavenych jen u nekterych
-// TODO volani parametru/cehokoliv pomoci te globalni promenne
-
-// TODO argumenty funkci musi byt GLOBALNI, protoze jinak nepujdou funkce volat ve funkcich
