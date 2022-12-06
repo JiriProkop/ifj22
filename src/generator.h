@@ -31,13 +31,49 @@ void gen_function_def(dynstr_t *id, list_t *parameters);
 void gen_function_def_end(dynstr_t *id, sym_table *gen_tree);
 
 /**
- * @brief Function for printing the call of function 
+ * @brief Function for printing function call 
  * 
- * @param id of function that is called
- * @param parameters with which the function was called
- * @param tree symtable tree for expected parameters 
+ * @param id Function identifier 
+ * @param parameters Function parameters
+ * @param tree Parser tree
  */
 void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree);
+
+/**
+ * @brief Function for printing the call of function 
+ * 
+ * @param id Function identifier
+ * @param parameters Function parametrs
+ * @param tree Parser tree
+ */
+
+/**
+ * @brief Function for filling variable, takes value from stack 
+ * 
+ * @param variable Variable to be filled 
+ */
+void gen_fill_variable(dynstr_t *variable);
+
+/**
+ * @brief Function for printing start of if
+ * 
+ */
+void gen_if_start();
+
+/**
+ * @brief Function for printing start of else
+ * 
+ */
+void gen_if_start_else();
+
+/**
+ * @brief Function for printing end of if and else;
+ * 
+ */
+void gen_if_end();
+
+
+
 
 void gen_write(list_t *parameters);
 void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit);
