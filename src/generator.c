@@ -355,6 +355,11 @@ void gen_header() {
     printf("CREATEFRAME\n");
     // universal variable for conditions 
     printf("DEFVAR GF@%%condition\n");
+
+    // jump to the temporary variable definitions
+    printf("JUMP %%temp_var_definitions\n");
+    printf("LABEL %%temp_var_definitions_back\n");
+
     printf("PUSHFRAME\n");
     
     gen_type_casting();
@@ -502,11 +507,25 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
     printf("CALL %s_start\n", id->array);
 }   
 
+void gen_temp_var_definitions() {
+    printf("JUMP %%temp_var_definitions_end\n");
+    printf("LABEL %%temp_var_definitions\n");
+
+    // define the variable for all used numbers
+    for(unsigned int i = 0; i < temp_var_counter; i++) {
+        printf("DEFVAR GF@%%%u\n", i);
+    }
+
+    printf("JUMP %%temp_var_definitions_back\n");
+    printf("LABEL %%temp_var_definitions_end\n");
+}
 
 void gen_closure(){
     printf("POPFRAME\n");
     printf("CLEARS\n");
     printf("EXIT int@0\n");
+
+    gen_temp_var_definitions(); // temporary variable definitons
 }
 
 void gen_def_variable(dynstr_t *variable, sym_table *tree_gen){
