@@ -72,10 +72,20 @@ void gen_if_start_else();
  */
 void gen_if_end();
 
+void gen_def_variable(dynstr_t *variable, sym_table *tree_gen);
 
+void gen_fill_variable(dynstr_t *variable);
 
+void gen_while_start();
+
+void gen_while_check_condition();
+
+void gen_while_end();
+
+void gen_closure();
 
 void gen_write(list_t *parameters);
+
 void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit);
 
 
