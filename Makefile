@@ -4,7 +4,7 @@ LDLIBS = -lm
 
 TESTDIR = tests/
 SOURCES = src/
-CASES = tests_dynstr tests_scanner tests_parser tests_stack
+CASES = tests_dynstr tests_scanner tests_parser tests_stack tests_generator
 TESTS = $(addprefix $(TESTDIR), $(CASES))
 
 PARTS = $(TESTS)
@@ -30,7 +30,7 @@ test: $(TESTS)
 #	$(TESTDIR)tests_expr > $(TESTDIR)tests_expr.output < $(TESTDIR)tests_expr.input
 #	diff -su $(TESTDIR)tests_expr.output $(TESTDIR)correct_out/tests_expr.output
 # generator tests
-#	$(TESTDIR)tests_generator > $(TESTDIR)tests_generator.output
+	$(TESTDIR)tests_generator > $(TESTDIR)tests_generator.output
 #	diff -su $(TESTDIR)tests_generator.output $(TESTDIR)correct_out/tests_generator.output
 
 # check the tests with valgrind
