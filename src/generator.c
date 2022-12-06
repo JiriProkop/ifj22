@@ -560,7 +560,7 @@ void gen_while_check_condition(){
 
 void gen_while_end(){
     printf("JUMP %%while%u_start\n", gen_number_while_start - gen_number_while_open);
-    printf("LABEL %%while%u_end\n", temp_var_counter);
+    printf("LABEL %%while%u_end\n", gen_number_while_start - gen_number_while_open);
     gen_number_while_open--;
 }
 

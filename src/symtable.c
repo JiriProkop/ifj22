@@ -5,10 +5,22 @@
 #include "dynstr.h"
 #include "ll.h"
 
+/**
+ * @brief Initializes an empty symbol table.
+ * 
+ * @param tab Pointer to a pointer to a symbol table
+ */
 void st_init(sym_table **tab) {
     *tab = NULL;
 }
 
+/**
+ * @brief Inserts a new node to a symbol table.
+ * 
+ * @param tab Pointer to a pointer to a symbol table
+ * @param key Identifier
+ * @param data Node data
+ */
 void st_insert(sym_table **tab, dynstr_t *id, sym_data *data) {
     if (*tab == NULL) {
         sym_table *new = malloc(sizeof(sym_table));
@@ -34,6 +46,13 @@ void st_insert(sym_table **tab, dynstr_t *id, sym_data *data) {
     }
 }
 
+/**
+ * @brief Searches a symbol table for a node with a specified identifier and returns its data.
+ * 
+ * @param tab Pointer to a symbol table
+ * @param key Identifier
+ * @return A pointer to node data when found, NULL otherwise.
+ */
 sym_data *st_search(sym_table *tab, dynstr_t *id) {
     if (tab != NULL) {
         int cmp = dynstrcmp(id, tab->id);
@@ -49,6 +68,12 @@ sym_data *st_search(sym_table *tab, dynstr_t *id) {
     return NULL;
 }
 
+/**
+ * @brief Function that repleaces target by his rightmost chid. Used in st_delete
+ * 
+ * @param target the target to be repleaced
+ * @param tab the tree to search for the rightmost chid
+ */
 void replace_by_rightmost(sym_table *target, sym_table **tab) {
     if ((*tab)->right == NULL) {
         string_free(target->id);
@@ -65,6 +90,15 @@ void replace_by_rightmost(sym_table *target, sym_table **tab) {
     }
 }
 
+/**
+ * @brief Deletes a node from a symbol table.
+ * When a node with the specified identifier isn't found, no operation is performed.
+ * When the node has one subtree, it is inherited by the deleted node's parent.
+ * When the node has both subtrees, it is replaced by the rightmost node of the left subtree.
+ * 
+ * @param tab Pointer to a pointer to a symbol table
+ * @param key Identifier
+ */
 void st_delete(sym_table **tab, dynstr_t *id) {
     if (*tab != NULL) {
         int cmp = dynstrcmp(id, (*tab)->id);
@@ -101,6 +135,11 @@ void st_delete(sym_table **tab, dynstr_t *id) {
     }
 }
 
+/**
+ * @brief Disposes a symbol table by returning it to the initial state.
+ * 
+ * @param tab Pointer to a pointer to a symbol table
+ */
 void st_dispose(sym_table **tab) {
     if (*tab != NULL) {
         st_dispose(&(*tab)->left);
