@@ -871,6 +871,7 @@ bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
 
 // TODOs na probrání na schůzce:
 // $a + 5 jako parametr nezpracuje výraz -> předat to celé na zpracování výrazu? Nebo je to vůbec legal?
+// zadne else neni legalni... pouze v rozsireni bool
 
 // TODO uklidit v konci
 // TODO zkontrolovat errory
