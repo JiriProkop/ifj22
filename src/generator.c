@@ -218,6 +218,12 @@ void cmp_varval(token_t *tok2, bool save_to_right, unsigned *num) {
     if (tok2->type == token_varieble) {
         printf("TYPE GF@$type1 GF@$left_result\n");
         printf("TYPE GF@$type2 LF@%s\n", tok2->attr.str->array);
+		// neither operand can be bool
+        printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type1 string@bool\n", *num);
+        printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type2 string@bool\n", *num);
+        printf("EXIT int@7\n");
+        printf("LABEL CMP_NOTBOOL_%u\n", *num);
+
         printf("JUMPIFEQ CMP_SAMET_%u GF@$type1 GF@$type2\n", *num);
         if (save_to_right) {
             printf("MOVE GF@$right_result bool@false\n");
@@ -254,6 +260,12 @@ void cmp_varval(token_t *tok2, bool save_to_right, unsigned *num) {
 
         printf("TYPE GF@$type1 GF@$left_result\n");
         printf("TYPE GF@$type2 GF@$val1\n");
+		// neither operand can be bool
+        printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type1 string@bool\n", *num);
+        printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type2 string@bool\n", *num);
+        printf("EXIT int@7\n");
+        printf("LABEL CMP_NOTBOOL_%u\n", *num);
+
         printf("JUMPIFEQ CMP_SAMET_%u GF@$type1 GF@$type2\n", *num);
         if (save_to_right) {
             printf("MOVE GF@$right_result bool@false\n");
@@ -517,6 +529,12 @@ void gen_cmp(token_t *tok1, token_t *tok2, bool save_to_right) {
     if (tok1 == NULL && tok2 == NULL) {
         printf("TYPE GF@$type1 GF@$left_result\n");
         printf("TYPE GF@$type2 GF@$right_result\n");
+		// neither operand can be bool
+        printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type1 string@bool\n", unique_num_cmp);
+        printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type2 string@bool\n", unique_num_cmp);
+        printf("EXIT int@7\n");
+        printf("LABEL CMP_NOTBOOL_%u\n", unique_num_cmp);
+
         printf("JUMPIFEQ CMP_SAMET_%u GF@$type1 GF@$type2\n", unique_num_cmp);
         if (save_to_right) {
             printf("MOVE GF@$right_result bool@false\n");
@@ -572,6 +590,12 @@ void gen_cmp(token_t *tok1, token_t *tok2, bool save_to_right) {
 
         printf("TYPE GF@$type1 GF@$val1\n");
         printf("TYPE GF@$type2 GF@$val2\n");
+		// neither operand can be bool
+        printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type1 string@bool\n", unique_num_cmp);
+        printf("JUMPIFNEQ CMP_NOTBOOL_%u GF@$type2 string@bool\n", unique_num_cmp);
+        printf("EXIT int@7\n");
+        printf("LABEL CMP_NOTBOOL_%u\n", unique_num_cmp);
+
         printf("JUMPIFEQ CMP_SAMET_%u GF@$type1 GF@$type2\n", unique_num_cmp);
         if (save_to_right) {
             printf("MOVE GF@$right_result bool@false\n");
@@ -630,7 +654,7 @@ void gen_expression(exprll *ll) {
                 if (gen_expr_different_place(rule_node, ll)) {
                     printf("NOT GF@$right_result GF@$right_result\n");
                 } else {
-					printf("NOT GF@$left_result GF@$left_result\n");
+                    printf("NOT GF@$left_result GF@$left_result\n");
                 }
                 break;
             case erule_lower:
