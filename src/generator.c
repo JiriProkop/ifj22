@@ -557,7 +557,7 @@ void gen_while_check_condition(){
 }
 
 void gen_while_end(){
-    printf("JUMPIFEQ %%while%u_start GF@%%%u int@1\n", gen_number_while_start - gen_number_while_open, temp_var_counter);
+    printf("JUMP %%while%u_start\n", gen_number_while_start - gen_number_while_open);
     printf("LABEL %%while%u_end\n", temp_var_counter);
     gen_number_while_open--;
 }
