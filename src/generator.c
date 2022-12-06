@@ -549,7 +549,7 @@ void gen_while_start(){
 
 void gen_while_check_condition(){
     // cast current expression result to bool
-    printf("PUSHS GF%%%u\n", temp_var_counter);
+    printf("PUSHS GF@%%%u\n", temp_var_counter);
     printf("CALL %%cast_bool\n");
     printf("POPS GF@%%%u\n", temp_var_counter);
     // start if 
@@ -557,14 +557,14 @@ void gen_while_check_condition(){
 }
 
 void gen_while_end(){
-    printf("JUMPIFEQ %%while%u_start GF@%%%u int@1\n", gen_number_while_start - gen_number_while_open, temp_var_counter);
+    printf("JUMP %%while%u_start\n", gen_number_while_start - gen_number_while_open);
     printf("LABEL %%while%u_end\n", temp_var_counter);
     gen_number_while_open--;
 }
 
 void gen_if_start(){
     // cast current expression result to bool
-    printf("PUSHS GF%%%u\n", temp_var_counter);
+    printf("PUSHS GF@%%%u\n", temp_var_counter);
     printf("CALL %%cast_bool\n");
     printf("POPS GF@%%%u\n", temp_var_counter);
     // start if 
