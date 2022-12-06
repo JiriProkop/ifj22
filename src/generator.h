@@ -39,4 +39,8 @@ void gen_function_def_end(dynstr_t *id, sym_table *gen_tree);
  */
 void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree);
 
+void gen_write(list_t *parameters);
+void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit);
+
+
 #endif
