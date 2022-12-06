@@ -10,6 +10,9 @@
 unsigned gen_number_while_start = 0;
 unsigned gen_number_while_end = 0;
 
+unsigned gen_number_if = 0;
+unsigned gen_number_open_if = 0;
+
 // type_casting
 void gen_type_casting() {
     printf("DEFVAR GF@%%cast_var%%\n");
@@ -139,7 +142,7 @@ void gen_check_type() {
     printf("RETURN\n");
 
     printf("LABEL %%check_type_error\n");
-    printf("EXIT int@7\n");
+    printf("EXIT int@4\n");
     printf("LABEL %%check_type_end\n");
 }
 
@@ -193,12 +196,12 @@ void gen_write(list_t *parameters) {
 }
 
 void gen_floatval() {
-    printf("DEFVAR LF@%%floatval_term\n");
+    printf("DEFVAR GF@%%floatval_term\n");
     printf("JUMP floatval_end\n");
     printf("LABEL floatval_start\n");
     printf("CREATEFRAME\n");
     printf("DEFVAR TF@term\n");
-    printf("MOVE TF@term LF@%%floatval_term\n");
+    printf("MOVE TF@term GF@%%floatval_term\n");
     printf("PUSHFRAME\n");
 
     printf("PUSHS bool@false\n");
@@ -214,12 +217,12 @@ void gen_floatval() {
 }
 
 void gen_intval() {
-    printf("DEFVAR LF@%%intval_term\n");
+    printf("DEFVAR GF@%%intval_term\n");
     printf("JUMP intval_end\n");
     printf("LABEL intval_start\n");
     printf("CREATEFRAME\n");
     printf("DEFVAR TF@term\n");
-    printf("MOVE TF@term LF@%%intval_term\n");
+    printf("MOVE TF@term GF@%%intval_term\n");
     printf("PUSHFRAME\n");
 
     printf("PUSHS bool@false\n");
@@ -235,12 +238,12 @@ void gen_intval() {
 }
 
 void gen_strval() {
-    printf("DEFVAR LF@%%strval_term\n");
+    printf("DEFVAR GF@%%strval_term\n");
     printf("JUMP strval_end\n");
     printf("LABEL strval_start\n");
     printf("CREATEFRAME\n");
     printf("DEFVAR TF@term\n");
-    printf("MOVE TF@term LF@%%strval_term\n");
+    printf("MOVE TF@term GF@%%strval_term\n");
     printf("PUSHFRAME\n");
 
     printf("PUSHS bool@false\n");
@@ -256,12 +259,12 @@ void gen_strval() {
 }
 
 void gen_strlen() {
-    printf("DEFVAR LF@%%strlen_s\n");
+    printf("DEFVAR GF@%%strlen_s\n");
     printf("JUMP strlen_end\n");
     printf("LABEL strlen_start\n");
     printf("CREATEFRAME\n");
     printf("DEFVAR TF@s\n");
-    printf("MOVE TF@s LF@%%strlen_s\n");
+    printf("MOVE TF@s GF@%%strlen_s\n");
     printf("PUSHFRAME\n");
     printf("DEFVAR LF@len\n");
     printf("STRLEN LF@len LF@s\n");
@@ -272,18 +275,18 @@ void gen_strlen() {
 }
 
 void gen_substring() {
-    printf("DEFVAR LF@%%substring_s\n");
-    printf("DEFVAR LF@%%substring_i\n");
-    printf("DEFVAR LF@%%substring_j\n");
+    printf("DEFVAR GF@%%substring_s\n");
+    printf("DEFVAR GF@%%substring_i\n");
+    printf("DEFVAR GF@%%substring_j\n");
     printf("JUMP substring_end\n");
     printf("LABEL substring_start\n");
     printf("CREATEFRAME\n");
     printf("DEFVAR TF@s\n");
     printf("DEFVAR TF@i\n");
     printf("DEFVAR TF@j\n");
-    printf("MOVE TF@s LF@%%substring_s\n");
-    printf("MOVE TF@i LF@%%substring_i\n");
-    printf("MOVE TF@j LF@%%substring_j\n");
+    printf("MOVE TF@s GF@%%substring_s\n");
+    printf("MOVE TF@i GF@%%substring_i\n");
+    printf("MOVE TF@j GF@%%substring_j\n");
     printf("PUSHFRAME\n");
 
     printf("DEFVAR LF@chk\n");
@@ -323,11 +326,11 @@ void gen_substring() {
 }
 
 void gen_ord() {
-    printf("DEFVAR LF@%%ord_c\n");
+    printf("DEFVAR GF@%%ord_c\n");
     printf("JUMP ord_end\n");
     printf("LABEL ord_start\n");
-    printf("JUMPIFEQ ord_empty LF@%%ord_c string@\n");
-    printf("PUSHS LF@%%ord_c\n");
+    printf("JUMPIFEQ ord_empty GF@%%ord_c string@\n");
+    printf("PUSHS GF@%%ord_c\n");
     printf("PUSHS int@0\n");
     printf("STRI2INTS\n");
     printf("RETURN\n");
@@ -338,10 +341,10 @@ void gen_ord() {
 }
 
 void gen_chr() {
-    printf("DEFVAR LF@%%chr_i\n");
+    printf("DEFVAR GF@%%chr_i\n");
     printf("JUMP chr_end\n");
     printf("LABEL chr_start\n");
-    printf("PUSHS LF@%%chr_i\n");
+    printf("PUSHS GF@%%chr_i\n");
     printf("INT2CHARS\n");
     printf("RETURN\n");
     printf("LABEL chr_end\n");
@@ -363,7 +366,7 @@ void gen_header() {
     gen_floatval();
     gen_intval();
     gen_strval();
-    gen_srtlen();
+    gen_strlen();
     gen_substring();
     gen_ord();
     gen_chr();
@@ -407,45 +410,65 @@ void gen_function_def_end(dynstr_t *id, sym_table *gen_tree) {
 void gen_cast_call(bool can_be_null, keywords casted_type, char* id, bool global){
     // push can be null 
     if(can_be_null){
-        printf("PUSH bool@true\n");
+        printf("PUSHS bool@true\n");
     } else{
-        printf("PUSH bool@false\n");
+        printf("PUSHS bool@false\n");
     }
     // push type 
     switch (casted_type)
     {
     case keyword_int:
-        printf("PUSH string@int\n");
+        printf("PUSHS string@int\n");
         break;
     case keyword_float:
-        printf("PUSH string@float\n");
+        printf("PUSHS string@float\n");
         break;
     case keyword_string: 
-        printf("PUSH string@string\n");
+        printf("PUSHS string@string\n");
         break;
     default:
         break;
     }
     // push id
     if(global){
-        printf("PUSH GF@%%%u\n", temp_var_counter);
+        printf("PUSHS GF@%%%u\n", temp_var_counter);
     }else {
-        printf("PUSH %s\n", id);
+        printf("PUSHS %s\n", id);
     }
+    printf("CALL %%type_casting\n");
 }
 
-void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit){
-    sym_data *data_func = st_search(gen_tree, id_function);
-    if(exit){
+void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit) {
+    // if the return is from the "main" function
+    if(exit) {
+        printf("CLEARS\n");
         printf("EXIT GF@%%%u\n", temp_var_counter);
         return;
-    }
-    if(data_func->return_type != keyword_void){
-        gen_cast_call(data_func->can_be_null, data_func->return_type, "GF%%", true);
-        printf("PUSHS GF@%%%u\n", temp_var_counter);
-    }
-    printf("POPFRAME\n");
-    printf("RETURN\n");
+    } else {
+        sym_data *data_func = st_search(gen_tree, id_function);
+        // only push to the stack if the function is not void
+        if(data_func->return_type != keyword_void) {
+            if(data_func->can_be_null) {
+                printf("PUSHS bool@true\n");
+            } else {
+                printf("PUSHS bool@false\n");
+            }
+            if(data_func->return_type == keyword_int) {
+                printf("PUSHS string@int\n");
+            } else if(data_func->return_type == keyword_float) {
+                printf("PUSHS string@float\n");
+            } else if(data_func->return_type == keyword_string) {
+                printf("PUSHS string@string\n");
+            }
+            printf("PUSHS GF@%%%u\n", temp_var_counter);
+            printf("CALL %%check_type\n"); // calling the check type function
+
+            // push the return value to stack
+            printf("PUSHS GF@%%%u\n", temp_var_counter);
+        }
+        printf("POPFRAME\n");
+        printf("RETURN\n");
+    }   
 }
 
 void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
@@ -512,14 +535,32 @@ void gen_while_start(){
 }
 
 void gen_while_check_condition(){
-    printf("JUMPIFEQ %%while%u_end LF@ int@1\n", gen_number_while_end);
+    printf("JUMPIFEQ %%while%u_end LF@ int@1\n", temp_var_counter);
 }
 
 void gen_while_end(){
-    printf("JUMPIFEQ %%while%u_start LF@ int@1\n", gen_number_while_end);
-    printf("LABEL %%while%u_end\n", gen_number_while_end);
+    printf("JUMPIFEQ %%while%u_start LF@ int@1\n", temp_var_counter);
+    printf("LABEL %%while%u_end\n", temp_var_counter);
 }
 
 void gen_if_start(){
-    
+    // cast current expression result to bool
+    printf("PUSHS GF%%%u\n", temp_var_counter);
+    printf("CALL %%cast_bool\n");
+    printf("POPS GF@%%%u\n", temp_var_counter);
+    // start if 
+    printf("JUMPIFEQ if%u_else GF@%%%u bool@false\n", gen_number_if, temp_var_counter);
+    gen_number_if++;
+    gen_number_open_if++;
+}
+
+void gen_if_start_else(){
+    // start else
+    printf("JUMP if%u_end\n", gen_number_if - gen_number_open_if);
+    printf("LABEL if%u_else\n", gen_number_if - gen_number_open_if);
+}
+
+void gen_if_end(){
+    printf("LABEL if%u_end\n", gen_number_if - gen_number_open_if);
+    gen_number_open_if--;
 }
