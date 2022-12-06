@@ -444,6 +444,225 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
     }
 }
 
+void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
+    if (tok2->type == token_varieble) {
+		printf("MOVE GF@$tmp LF@%s\n", tok2->attr.str->array);
+		printf("TYPE GF@$type1 GF@$left_result\n");
+        printf("TYPE GF@$type2 LF@%s\n", tok2->attr.str->array);
+        // neither can be bool
+        printf("JUMPIFNEQ LESSEQ_NOTBOOL_%u string@bool GF@$type1\n", *num);
+        printf("JUMPIFNEQ LESSEQ_NOTBOOL_%u string@bool GF@$type2\n", *num);
+        printf("EXIT int@7\n");
+        printf("LABEL LESSEQ_NOTBOOL_%u\n", *num);
+        // if(1st op == int)
+        printf("JUMPIFNEQ LESSEQ_NOTINT_%u GF@$type1 string@int\n", *num);
+        printf("JUMPIFNEQ LESSEQ_INNOTINT_%u GF@$type2 string@int\n", *num);
+
+		printf("LT GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+		printf("EQ GF@$cond2 GF@$left_result LF@%s\n", tok2->attr.str->array);
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", *num);
+        printf("LABEL LESSEQ_INNOTINT%u\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        
+		printf("LT GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+		printf("EQ GF@$cond2 GF@$left_result LF@%s\n", tok2->attr.str->array);
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", *num);
+        printf("LABEL LESSEQ_NOTINT_%u\n", *num);
+        // if(1st op == float)
+        printf("JUMPIFNEQ LESSEQ_NOTFLOAT_%u GF@$type1 string@float\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS LF@%s\n", tok2->attr.str->array);
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS LF@%s\n", tok2->attr.str->array);
+        
+		printf("LT GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+		printf("EQ GF@$cond2 GF@$left_result LF@%s\n", tok2->attr.str->array);
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", *num);
+        // if(1st op == string)
+        printf("JUMPIFNEQ LESSEQ_NOTSTR_%u GF@$type1 string@string\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS LF@%s\n", tok2->attr.str->array);
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS LF@%s\n", tok2->attr.str->array);
+        
+		printf("LT GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+		printf("EQ GF@$cond2 GF@$left_result LF@%s\n", tok2->attr.str->array);
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", *num);
+        // else
+        printf("JUMPIFNEQ LESSEQ_TOBOOL_%u GF@$type2 string@string\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        
+		printf("LT GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+		printf("EQ GF@$cond2 GF@$left_result LF@%s\n", tok2->attr.str->array);
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", *num);
+        printf("LABEL LESSEQ_TOBOOL_%u\n", *num);
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$left_result\n");
+
+        printf("PUSHS LF@%s\n", tok2->attr.str->array);
+        printf("CALL %%cast_bool\n");
+        printf("POPS LF@%s\n", tok2->attr.str->array);
+        
+		printf("LT GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+		printf("EQ GF@$cond2 GF@$left_result LF@%s\n", tok2->attr.str->array);
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("LABEL LESSEQ_DONE_%u\n", *num);
+		printf("MOVE LF@%s GF@$tmp\n", tok2->attr.str->array);
+    } else {
+		if (tok2->type == token_string) {
+            printf("MOVE GF@$val1 string@%s\n", tok2->attr.str->array);
+        } else if (tok2->type == token_integer) {
+            printf("MOVE GF@$val1 int@%d\n", tok2->attr.integer);
+        } else if (tok2->type == token_float) {
+            printf("MOVE GF@$val1 float@%a\n", (double)tok2->attr.doub);
+        } else {
+            error_handle(tok2->line, expr_type_error);
+            abort();
+        }
+
+		printf("TYPE GF@$type1 GF@$left_result\n");
+        printf("TYPE GF@$type2 GF@$val1\n");
+        // neither can be bool
+        printf("JUMPIFNEQ LESSEQ_NOTBOOL_%u string@bool GF@$type1\n", *num);
+        printf("JUMPIFNEQ LESSEQ_NOTBOOL_%u string@bool GF@$type2\n", *num);
+        printf("EXIT int@7\n");
+        printf("LABEL LESSEQ_NOTBOOL_%u\n", *num);
+        // if(1st op == int)
+        printf("JUMPIFNEQ LESSEQ_NOTINT_%u GF@$type1 string@int\n", *num);
+        printf("JUMPIFNEQ LESSEQ_INNOTINT_%u GF@$type2 string@int\n", *num);
+		
+		printf("LT GF@$cond1 GF@$left_result GF@$val1\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$val1\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", *num);
+        printf("LABEL LESSEQ_INNOTINT%u\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        
+		printf("LT GF@$cond1 GF@$left_result GF@$val1\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$val1\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", *num);
+        printf("LABEL LESSEQ_NOTINT_%u\n", *num);
+        // if(1st op == float)
+        printf("JUMPIFNEQ LESSEQ_NOTFLOAT_%u GF@$type1 string@float\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val1\n");
+        
+		printf("LT GF@$cond1 GF@$left_result GF@$val1\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$val1\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", *num);
+        // if(1st op == string)
+        printf("JUMPIFNEQ LESSEQ_NOTSTR_%u GF@$type1 string@string\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val1\n");
+        
+		printf("LT GF@$cond1 GF@$left_result GF@$val1\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$val1\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", *num);
+        // else
+        printf("JUMPIFNEQ LESSEQ_TOBOOL_%u GF@$type2 string@string\n", *num);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        
+		printf("LT GF@$cond1 GF@$left_result GF@$val1\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$val1\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", *num);
+        printf("LABEL LESSEQ_TOBOOL_%u\n", *num);
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$left_result\n");
+
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$val1\n");
+        
+		printf("LT GF@$cond1 GF@$left_result GF@$val1\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$val1\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("LABEL LESSEQ_DONE_%u\n", *num);
+    }
+}
+
 void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned *num, const char *operation) {
     if (tok1 == NULL && tok2 == NULL) {
         // both represent results of smaller expressions
@@ -638,7 +857,6 @@ void gen_cat(token_t *tok1, token_t *tok2, bool save_to_right) {
         }
     } else if (tok1 == NULL) {
         cat_varval(tok2, save_to_right);
-
     } else if (tok2 == NULL) {
         cat_varval(tok1, save_to_right);
     } else {
@@ -861,9 +1079,9 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
         }
         printf("LABEL LESS_DONE_%u\n", unique_num_less);
     } else if (tok1 == NULL) {
-        cmp_varval(tok2, save_to_right, &unique_num_less);
+        less_varval(tok2, save_to_right, &unique_num_less);
     } else if (tok2 == NULL) {
-		cmp_varval(tok1, save_to_right, &unique_num_less);
+		less_varval(tok1, save_to_right, &unique_num_less);
     } else {
 		if (tok1->type == token_string) {
             printf("MOVE GF@$val1 string@%s\n", tok1->attr.str->array);
@@ -977,6 +1195,244 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
     unique_num_less++;
 }
 
+void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
+	static unsigned unique_num_lesseq = 0;
+    if (tok1 == NULL && tok2 == NULL) {
+        printf("TYPE GF@$type1 GF@$left_result\n");
+        printf("TYPE GF@$type2 GF@$right_result\n");
+        // neither can be bool
+        printf("JUMPIFNEQ LESSEQ_NOTBOOL_%u string@bool GF@$type1\n", unique_num_lesseq);
+        printf("JUMPIFNEQ LESSEQ_NOTBOOL_%u string@bool GF@$type2\n", unique_num_lesseq);
+        printf("EXIT int@7\n");
+        printf("LABEL LESSEQ_NOTBOOL_%u\n", unique_num_lesseq);
+        // if(1st op == int)
+        printf("JUMPIFNEQ LESSEQ_NOTINT_%u GF@$type1 string@int\n", unique_num_lesseq);
+        printf("JUMPIFNEQ LESSEQ_INNOTINT_%u GF@$type2 string@int\n", unique_num_lesseq);
+
+        printf("LT GF@$cond1 GF@$left_result GF@$right_result\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$right_result\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", unique_num_lesseq);
+        printf("LABEL LESSEQ_INNOTINT%u\n", unique_num_lesseq);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        
+        printf("LT GF@$cond1 GF@$left_result GF@$right_result\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$right_result\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", unique_num_lesseq);
+        printf("LABEL LESSEQ_NOTINT_%u\n", unique_num_lesseq);
+        // if(1st op == float)
+        printf("JUMPIFNEQ LESSEQ_NOTFLOAT_%u GF@$type1 string@float\n", unique_num_lesseq);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$right_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$right_result\n");
+        
+        printf("LT GF@$cond1 GF@$left_result GF@$right_result\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$right_result\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", unique_num_lesseq);
+        // if(1st op == string)
+        printf("JUMPIFNEQ LESSEQ_NOTSTR_%u GF@$type1 string@string\n", unique_num_lesseq);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$right_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$right_result\n");
+        
+        printf("LT GF@$cond1 GF@$left_result GF@$right_result\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$right_result\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", unique_num_lesseq);
+        // else
+        printf("JUMPIFNEQ LESSEQ_TOBOOL_%u GF@$type2 string@string\n", unique_num_lesseq);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$left_result\n");
+        
+        printf("LT GF@$cond1 GF@$left_result GF@$right_result\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$right_result\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", unique_num_lesseq);
+        printf("LABEL LESSEQ_TOBOOL_%u\n", unique_num_lesseq);
+        printf("PUSHS GF@$left_result\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$left_result\n");
+
+        printf("PUSHS GF@$right_result\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$right_result\n");
+        
+        printf("LT GF@$cond1 GF@$left_result GF@$right_result\n");
+		printf("EQ GF@$cond2 GF@$left_result GF@$right_result\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("LABEL LESSEQ_DONE_%u\n", unique_num_lesseq);
+    } else if (tok1 == NULL) {
+        lesseq_varval(tok2, save_to_right, &unique_num_lesseq);
+    } else if (tok2 == NULL) {
+		lesseq_varval(tok1, save_to_right, &unique_num_lesseq);
+    } else {
+		if (tok1->type == token_string) {
+            printf("MOVE GF@$val1 string@%s\n", tok1->attr.str->array);
+        } else if (tok1->type == token_varieble) {
+            printf("MOVE GF@$val1 LF@%s\n", tok1->attr.str->array);
+        } else if (tok1->type == token_integer) {
+            printf("MOVE GF@$val1 int@%d\n", tok1->attr.integer);
+        } else if (tok1->type == token_float) {
+            printf("MOVE GF@$val1 float@%a\n", (double)tok1->attr.doub);
+        } else {
+            error_handle(tok1->line, expr_type_error);
+            abort();
+        }
+
+        if (tok2->type == token_string) {
+            printf("MOVE GF@$val2 string@%s\n", tok2->attr.str->array);
+        } else if (tok2->type == token_varieble) {
+            printf("MOVE GF@$val2 LF@%s\n", tok2->attr.str->array);
+        } else if (tok2->type == token_integer) {
+            printf("MOVE GF@$val2 int@%d\n", tok2->attr.integer);
+        } else if (tok2->type == token_float) {
+            printf("MOVE GF@$val2 float@%a\n", (double)tok2->attr.doub);
+        } else {
+            error_handle(tok2->line, expr_type_error);
+            abort();
+        }
+
+		printf("TYPE GF@$type1 GF@$val1\n");
+        printf("TYPE GF@$type2 GF@$val2\n");
+        // neither can be bool
+        printf("JUMPIFNEQ LESSEQ_NOTBOOL_%u string@bool GF@$type1\n", unique_num_lesseq);
+        printf("JUMPIFNEQ LESSEQ_NOTBOOL_%u string@bool GF@$type2\n", unique_num_lesseq);
+        printf("EXIT int@7\n");
+        printf("LABEL LESSEQ_NOTBOOL_%u\n", unique_num_lesseq);
+        // if(1st op == int)
+        printf("JUMPIFNEQ LESSEQ_NOTINT_%u GF@$type1 string@int\n", unique_num_lesseq);
+        printf("JUMPIFNEQ LESSEQ_INNOTINT_%u GF@$type2 string@int\n", unique_num_lesseq);
+
+        printf("LT GF@$cond1 GF@$val1 GF@$val2\n");
+		printf("EQ GF@$cond2 GF@$val1 GF@$val2\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", unique_num_lesseq);
+        printf("LABEL LESSEQ_INNOTINT%u\n", unique_num_lesseq);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val1\n");
+		
+        printf("LT GF@$cond1 GF@$val1 GF@$val2\n");
+		printf("EQ GF@$cond2 GF@$val1 GF@$val2\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", unique_num_lesseq);
+        printf("LABEL LESSEQ_NOTINT_%u\n", unique_num_lesseq);
+        // if(1st op == float)
+        printf("JUMPIFNEQ LESSEQ_NOTFLOAT_%u GF@$type1 string@float\n", unique_num_lesseq);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@float\n");
+        printf("PUSHS GF@$val2\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val2\n");
+
+        printf("LT GF@$cond1 GF@$val1 GF@$val2\n");
+		printf("EQ GF@$cond2 GF@$val1 GF@$val2\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", unique_num_lesseq);
+        // if(1st op == string)
+        printf("JUMPIFNEQ LESSEQ_NOTSTR_%u GF@$type1 string@string\n", unique_num_lesseq);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$val2\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val2\n");
+
+        printf("LT GF@$cond1 GF@$val1 GF@$val2\n");
+		printf("EQ GF@$cond2 GF@$val1 GF@$val2\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", unique_num_lesseq);
+        // else
+        printf("JUMPIFNEQ LESSEQ_TOBOOL_%u GF@$type2 string@string\n", unique_num_lesseq);
+        printf("PUSHS bool@false\n");
+        printf("PUSHS string@string\n");
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%TYPE_CASTING\n");
+        printf("POPS GF@$val1\n");
+
+        printf("LT GF@$cond1 GF@$val1 GF@$val2\n");
+		printf("EQ GF@$cond2 GF@$val1 GF@$val2\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("JUMP LESSEQ_DONE_%u\n", unique_num_lesseq);
+        printf("LABEL LESSEQ_TOBOOL_%u\n", unique_num_lesseq);
+        printf("PUSHS GF@$val1\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$val1\n");
+
+        printf("PUSHS GF@$val2\n");
+        printf("CALL %%cast_bool\n");
+        printf("POPS GF@$val2\n");
+
+        printf("LT GF@$cond1 GF@$val1 GF@$val2\n");
+		printf("EQ GF@$cond2 GF@$val1 GF@$val2\n");
+        if (save_to_right) {
+        	printf("OR GF@$right_result GF@$cond1 GF@$cond2\n");
+        } else {
+            printf("OR GF@$left_result GF@$cond1 GF@$cond2\n");
+        }
+        printf("LABEL LESSEQ_DONE_%u\n", unique_num_lesseq);
+    }
+    unique_num_lesseq++;
+}
+
 void gen_expression(exprll *ll) {
     printf("MOVE GF@$left_result nil@nil\n");
     while (1) {
@@ -1016,6 +1472,7 @@ void gen_expression(exprll *ll) {
 				gen_less(rule_node->next->next->ptok, rule_node->next->ptok, gen_expr_different_place(rule_node, ll));
                 break;
             case erule_lower_equal:
+				gen_lesseq(rule_node->next->next->ptok, rule_node->next->ptok, gen_expr_different_place(rule_node, ll));
                 break;
             case erule_greater:
                 break;
