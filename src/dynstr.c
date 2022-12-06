@@ -85,7 +85,7 @@ int dynstrcmp(dynstr_t *strplus, dynstr_t *strminus){
     unsigned i = 0;
     while(i <= strplus->length){
         if (strplus->array[i] != strminus->array[i]){
-            return (int)strplus->array[i] - (int)strminus->array[i];
+            return (unsigned)strplus->array[i] - (unsigned)strminus->array[i];
         }
         i++;
     }
