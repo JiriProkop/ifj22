@@ -1,7 +1,7 @@
 /**
  * Project: compiler of IFJ22 programming language
  *
- * @brief Header file linked list usef for storing parameters.
+ * @brief Header file of linked list usef for storing parameters.
  *
  * @author Štěpán Czajkowski <xczajk01@stud.fit.vutbr.cz>
  */
