@@ -242,6 +242,7 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
     list_node_t *expected_parameters_i = fce_data->parameters->first;
 
     while(recieve_parameters_i != NULL && expected_parameters_i != NULL){
+        // check if the parameter is the right type
         if(expected_parameters_i->can_be_null) {
             printf("PUSHS bool@true\n");
         } else {
@@ -255,7 +256,8 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
             printf("PUSHS string@string\n");
         }
         printf("PUSHS LF@%s\n", recieve_parameters_i->id->array);
-        printf("CALL %%check_type\n");
+        printf("CALL %%check_type\n"); // calling the check type function
+
         printf("MOVE LF@%%%s_%s LF@%s\n", id->array, expected_parameters_i->id->array, recieve_parameters_i->id->array);
         recieve_parameters_i = recieve_parameters_i->next;
         expected_parameters_i = expected_parameters_i->next;
