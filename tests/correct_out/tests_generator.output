@@ -56,6 +56,7 @@ JUMPIFNEQ %cast_error GF@%cast_type% GF@%cast_type_temp%
 PUSHS GF@%cast_var%
 RETURN
 LABEL %cast_error
+DPRINT string@Type\032compability\032error\032in\032arithmetic\032string\032or\032relation\032expression\010
 EXIT int@7
 LABEL %type_casting_end
 DEFVAR GF@%cast_bool_var%
@@ -108,6 +109,7 @@ LABEL %check_type_continue
 JUMPIFNEQ %check_type_error GF@%check_type_type% GF@%check_type_temp%
 RETURN
 LABEL %check_type_error
+DPRINT string@Wrong\032function\032argument\032type\032and\032or\032count\032or\032wrong\032return\032type\010
 EXIT int@4
 LABEL %check_type_end
 JUMP reads_end
@@ -291,7 +293,8 @@ testfunc
 
 [function def end gen test]
 POPFRAME
-EXIT int@6
+DPRINT string@Wrong\032function\032argument\032type\032and\032or\032count\032or\032wrong\032return\032type\010
+EXIT int@4
 RETURN
 LABEL testfunc_end
 
@@ -329,7 +332,7 @@ RETURN
 
 [return gen tests - exit]
 CLEARS
-EXIT GF@%1
+EXIT int@0
 
 [info: current tree]
 
