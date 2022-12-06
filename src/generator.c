@@ -549,7 +549,7 @@ void gen_if_start(){
     printf("CALL %%cast_bool\n");
     printf("POPS GF@%%%u\n", temp_var_counter);
     // start if 
-    printf("JUMPIFEQ if%u_else GF@%%%u bool@false\n", gen_number_if);
+    printf("JUMPIFEQ if%u_else GF@%%%u bool@false\n", gen_number_if, temp_var_counter);
     gen_number_if++;
     gen_number_open_if++;
 }
