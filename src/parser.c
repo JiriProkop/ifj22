@@ -690,7 +690,7 @@ bool prikaz(dynstr_t *current_function_id) {
             get_tkn();
             if(value && current_tkn->type == token_identifier) {
                 value = prikaz(current_function_id);
-		    // TODO gen funkce
+                gen_assign_value(id);
             } else {
                 value = vyraz(false, *current_tkn, current_frame);
                 // ;

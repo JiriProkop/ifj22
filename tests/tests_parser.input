@@ -1,16 +1,9 @@
 <?php
 declare(strict_types=1);
 
-function foo(int $a) : void {
-    if($a) {
-        $a = 3;
-    } else {
-        $a = 4;
-    }
-    write($a);
+function foo() : int {
+    return 3;
 }
 
-$a = 2;
-foo($a);
-
+$a = foo();
 write($a);
