@@ -232,7 +232,7 @@ void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit){
         gen_cast_call(data_func->can_be_null, data_func->return_type, "GF%%", true);
         printf("PUSHS GF@%%%u\n", temp_var_counter);
     }
-    printf("POPFRAME");
+    printf("POPFRAME\n");
     printf("RETURN\n");
 }
 
