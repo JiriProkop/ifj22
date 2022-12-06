@@ -14,7 +14,6 @@ void dynstr_init(dynstr_t *string) {
     string->allocated = STR_DEFAULT_LENGTH - 1; // minus one, since the last char is for \0
 }
 
-//TODO smazat clear i delete, nikdo je nepouziva
 void dynstr_clear(dynstr_t *string) {
     string->array[0] = '\0';
     string->length = 0;

@@ -15,8 +15,6 @@
 #include "ll.h"
 #include "dynstr.h"
 
-// TODO additional functions?, data types?, keep track of unused variables?
-
 /// @struct Symbol data structure
 typedef struct{
     bool is_function; // true if it is a function, false if it is a variable
