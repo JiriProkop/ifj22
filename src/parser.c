@@ -206,7 +206,6 @@ void add_prebuilt() {
             abort();
         }
         dynstr_init(id);
-        dynstr_clear(id);
         dynstr_add_string(id, prebuit[i]);
         // since the functions are already declared and made,
         // we do not care about return type
