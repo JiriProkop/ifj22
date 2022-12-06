@@ -139,7 +139,7 @@ void gen_check_type() {
     printf("RETURN\n");
 
     printf("LABEL %%check_type_error\n");
-    printf("EXIT int@7\n");
+    printf("EXIT int@4\n");
     printf("LABEL %%check_type_end\n");
 }
 
