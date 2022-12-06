@@ -258,7 +258,7 @@ bool program() {
     } else {
         value = true;
         // <prikaz>
-        if(value && !prikaz()) {
+        if(value && !prikaz(NULL)) {
             value = false;
         }
         // <program>
@@ -357,18 +357,17 @@ bool definice() {
         }
         // <prikaz_fce>
         get_tkn();
-        if(value && !prikaz_fce()) {
+        if(value && !prikaz_fce(id)) {
             value = false;
         }
         // }
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
-
-        gen_function_def_end(id, tree); // generate function definition end
-
         // return the frame back to the main frame
         current_frame = tree;
+
+        gen_function_def_end(id, tree); // generate function definition end
     }
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
@@ -458,7 +457,7 @@ bool param(dynstr_t *fun_id, list_t *parameters) {
     return value;
 }
 
-bool prikaz_fce() {
+bool prikaz_fce(dynstr_t *current_function_id) {
     bool value = false;
     // rule: <prikaz_fce> -> eps
     if(current_tkn->type == token_curly_right) {
@@ -470,7 +469,7 @@ bool prikaz_fce() {
         
         value = true;
         // <prikaz>
-        if(value && !prikaz()) {
+        if(value && !prikaz(current_function_id)) {
             value = false;
         }
 
@@ -480,7 +479,7 @@ bool prikaz_fce() {
         } else {
             tkn_already_loaded = false;
         }
-        if(value && !prikaz_fce()) {
+        if(value && !prikaz_fce(current_function_id)) {
             value = false;
         }
     }
@@ -492,19 +491,31 @@ bool prikaz_fce() {
     return value;
 }
 
-bool prikaz() {
+bool prikaz(dynstr_t *current_function_id) {
     bool value = false;
     // rule: <prikaz> -> RETURN <vyraz> ;
     if(current_tkn->attr.keyword == keyword_return) {
         value = true;
         // <vyraz>
         get_tkn();
+        if(value && current_tkn->type == token_semicol && st_search(tree, current_function_id)->return_type != keyword_void) {
+            error_handle(current_tkn->line, func_arr_or_ret_error);
+            abort();
+        }
+
         if(value && !vyraz(false, *current_tkn, current_frame)) {
             value = false; 
         }
         // ;
         if(value && current_tkn->type != token_semicol) {
             value = false;
+        }
+
+        // generate the return statement
+        if(current_frame == tree) {
+            gen_return(NULL, tree, 1);
+        } else {
+            gen_return(current_function_id, tree, 0);
         }
 
         temp_var_counter++;
@@ -536,7 +547,7 @@ bool prikaz() {
 
         // if the function is write, then we do not care about the number of parameters
         if(dynstr_compare(id, "write") == 1) {
-            printf("funkce write\n"); // TODO gen write
+            gen_write(parameters);
         // else check if we got the right number of parameters
         } else {
             list_node_t *temp = parameters->first;
@@ -587,7 +598,7 @@ bool prikaz() {
         }
         // <prikaz_fce>
         get_tkn();
-        if(value && !prikaz_fce()) {
+        if(value && !prikaz_fce(current_function_id)) {
             value = false;
         }
         // }
@@ -596,7 +607,7 @@ bool prikaz() {
         }
         // <else>
         get_tkn();
-        if(value && !else_rule()) {
+        if(value && !else_rule(current_function_id)) {
             value = false;
         }
     // rule: <prikaz>-> WHILE ( <vyraz> ) { <prikaz_fce> }
@@ -626,7 +637,7 @@ bool prikaz() {
         }
         // <prikaz_fce>
         get_tkn();
-        if(value && !prikaz_fce()) {
+        if(value && !prikaz_fce(current_function_id)) {
             value = false;
         }
         // }
@@ -657,7 +668,7 @@ bool prikaz() {
             // <vyraz>
             get_tkn();
             if(value && current_tkn->type == token_identifier) {
-                value = prikaz();
+                value = prikaz(current_function_id);
 		    // TODO gen funkce
             } else {
                 value = vyraz(false, *current_tkn, current_frame);
@@ -685,7 +696,7 @@ bool prikaz() {
     return value;
 }
 
-bool else_rule() {
+bool else_rule(dynstr_t *current_function_id) {
     bool value = false;
     // rule: <else> -> eps
     if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
@@ -705,7 +716,7 @@ bool else_rule() {
         }
         // <prikaz_fce>
         get_tkn();
-        if(value && !prikaz_fce()) {
+        if(value && !prikaz_fce(current_function_id)) {
             value = false;
         }
         // }
@@ -871,7 +882,6 @@ bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
 
 // TODOs na probrání na schůzce:
 // $a + 5 jako parametr nezpracuje výraz -> předat to celé na zpracování výrazu? Nebo je to vůbec legal?
-// zadne else neni legalni... pouze v rozsireni bool
 
-// TODO uklidit v konci
+// TODO uklidit v konci - abort()
 // TODO zkontrolovat errory

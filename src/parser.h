@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include "scanner.h"
 #include "symtable.h"
+#include "dynstr.h"
 
 #ifndef _PARSER_H
 #define _PARSER_H
@@ -109,23 +110,27 @@ bool param(dynstr_t *fun_id, list_t *parameters);
 /**
  * A function for the <prikaz_fce> rule.
  * 
+ * @param current_function_id Identifier of the function we are in.
  * @return True if it was correct.
 */
-bool prikaz_fce();
+bool prikaz_fce(dynstr_t *current_function_id);
 
 /**
  * A function for the <prikaz> rule.
  * 
+ * @param current_function_id Identifier of the function we are in, if we are in the "main" function,
+ *                            then it should be NULL.
  * @return True if it was correct.
 */
-bool prikaz();
+bool prikaz(dynstr_t *current_function_id);
 
 /**
  * A function for the <else> rule.
  * 
+ * @param current_function_id Identifier of the function we are in.
  * @return True if it was correct.
 */
-bool else_rule();
+bool else_rule(dynstr_t *current_function_id);
 
 /**
  * A function for the <vol_parametry> rule.
