@@ -622,6 +622,9 @@ bool prikaz(dynstr_t *current_function_id) {
     // rule: <prikaz>-> WHILE ( <vyraz> ) { <prikaz_fce> }
     } else if(current_tkn->attr.keyword == keyword_while) {
         value = true;
+
+        gen_while_start(); // generate the start of while statement
+
         // (
         get_tkn();
         if(value && current_tkn->type != token_parentheses_left) {
@@ -637,6 +640,7 @@ bool prikaz(dynstr_t *current_function_id) {
             value = false;
         }
 
+        gen_while_check_condition(); // generate while contition checking
         temp_var_counter++;
 
         // {
@@ -653,6 +657,8 @@ bool prikaz(dynstr_t *current_function_id) {
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
+
+        gen_while_end(); // generate end of while statement
     // rule: <prikaz> -> VAR_ID = <vyraz> ;
     } else if(current_tkn->type == token_varieble) {
         dynstr_t *id = current_tkn->attr.str;
