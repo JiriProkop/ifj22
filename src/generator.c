@@ -492,12 +492,12 @@ void gen_ord() {
     printf("DEFVAR LF@%%ord_c\n");
     printf("JUMP ord_end\n");
     printf("LABEL ord_start\n");
-    printf("JUMPIFEQ ord_empty LF@c string@\n");
+    printf("JUMPIFEQ %ord_empty LF@%%ord_c string@\n");
     printf("PUSHS LF@%%ord_c\n");
     printf("PUSHS int@0\n");
     printf("STRI2INTS\n");
     printf("RETURN\n");
-    printf("LABEL ord_empty\n");
+    printf("LABEL %ord_empty\n");
     printf("PUSHS int@0\n");
     printf("RETURN\n");
     printf("LABEL ord_end\n");
