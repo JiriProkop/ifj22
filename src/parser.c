@@ -718,7 +718,7 @@ bool prikaz(dynstr_t *current_function_id) {
             }
         }
     // checks expressions
-    } else {
+    } else if(current_tkn->type != token_semicol) {
         value = vyraz(false, *current_tkn);
         // check for ;
         if(value && current_tkn->type != token_semicol) {
