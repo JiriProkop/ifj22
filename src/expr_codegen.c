@@ -21,6 +21,11 @@ bool gen_expr_different_place(exprll *rule_node, exprll *ll) {
     }
     return false;
 }
+//TODO
+void check_existance() {
+	// je promenna ve stromu? (current_frame)
+	// neni TYPE promenne string@  ?
+}
 
 void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *operation) {
     // tok1 represents result of smaller expression
@@ -43,7 +48,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
         // if(type1 == int)
         printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
         if (!strcmp(operation, "DIV")) {
-            printf("PUSHS bool@true\n");
+            printf("PUSHS bool@false\n");
             printf("PUSHS string@float\n");
             printf("PUSHS LF@%s\n", tok2->attr.str->array);
             printf("CALL %%TYPE_CASTING\n");
@@ -52,7 +57,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
             printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
         }
         //		type2 is float, need to convert left_result to float
-        printf("PUSHS bool@true\n");
+        printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
         printf("CALL %%TYPE_CASTING\n");
@@ -62,7 +67,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
         printf("LABEL %s_FLOAT_%u\n", operation, *num);
         printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@float\n", operation, *num);
         // 		type2 is int, need to convert it to float
-        printf("PUSHS bool@true\n");
+        printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS LF@%s\n", tok2->attr.str->array);
         printf("CALL %%TYPE_CASTING\n");
@@ -88,6 +93,13 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
             printf("MOVE GF@$val1 int@%d\n", tok2->attr.integer);
         } else if (tok2->type == token_float) {
             printf("MOVE GF@$val1 float@%a\n", (double)tok2->attr.doub);
+        } else if (tok2->type == token_keyword && tok2->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val1 nil@nil\n");
+			printf("PUSHS bool@false\n");
+            printf("PUSHS string@float\n");
+            printf("PUSHS GF@$val1\n");
+            printf("CALL %%TYPE_CASTING\n");
+            printf("POPS GF@$val1\n");
         } else {
             error_handle(tok2->line, expr_type_error);
             abort();
@@ -102,7 +114,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
         // if(type1 == int)
         printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
         if (!strcmp(operation, "DIV")) {
-            printf("PUSHS bool@true\n");
+            printf("PUSHS bool@false\n");
             printf("PUSHS string@float\n");
             printf("PUSHS GF@$val1\n");
             printf("CALL %%TYPE_CASTING\n");
@@ -111,7 +123,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
             printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
         }
         //		type2 is float, need to convert left_result to float
-        printf("PUSHS bool@true\n");
+        printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
         printf("CALL %%TYPE_CASTING\n");
@@ -121,7 +133,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
         printf("LABEL %s_FLOAT_%u\n", operation, *num);
         printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@float\n", operation, *num);
         // 		type2 is int, need to convert it to float
-        printf("PUSHS bool@true\n");
+        printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val1\n");
         printf("CALL %%TYPE_CASTING\n");
@@ -167,6 +179,13 @@ void cat_varval(token_t *tok2, bool save_to_right) {
     } else {
         if (tok2->type == token_string) {
             printf("MOVE GF@$val1 string@%s\n", tok2->attr.str->array);
+        } else if (tok2->type == token_keyword && tok2->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val1 nil@nil\n");
+            printf("PUSHS bool@false\n");
+            printf("PUSHS string@string\n");
+            printf("PUSHS GF@$val1\n");
+            printf("CALL %%TYPE_CASTING\n");
+            printf("POPS GF@$val1\n");
         } else {
             error_handle(tok2->line, expr_type_error);
             abort();
@@ -223,6 +242,8 @@ void cmp_varval(token_t *tok2, bool save_to_right, unsigned *num) {
             printf("MOVE GF@$val1 int@%d\n", tok2->attr.integer);
         } else if (tok2->type == token_float) {
             printf("MOVE GF@$val1 float@%a\n", (double)tok2->attr.doub);
+        } else if (tok2->type == token_keyword && tok2->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val1 nil@nil\n");
         } else {
             error_handle(tok2->line, expr_type_error);
             abort();
@@ -354,6 +375,8 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
             printf("MOVE GF@$val1 int@%d\n", tok2->attr.integer);
         } else if (tok2->type == token_float) {
             printf("MOVE GF@$val1 float@%a\n", (double)tok2->attr.doub);
+        } else if (tok2->type == token_keyword && tok2->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val1 nil@nil\n");
         } else {
             error_handle(tok2->line, expr_type_error);
             abort();
@@ -414,7 +437,7 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
             printf("LT GF@$left_result GF@$left_result GF@$val1\n");
         }
         printf("JUMP LESS_DONE_%u\n", *num);
-        // else
+        // else - type1 is nil@nil
         printf("JUMPIFNEQ LESS_TOBOOL_%u GF@$type2 string@string\n", *num);
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
@@ -555,6 +578,8 @@ void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
             printf("MOVE GF@$val1 int@%d\n", tok2->attr.integer);
         } else if (tok2->type == token_float) {
             printf("MOVE GF@$val1 float@%a\n", (double)tok2->attr.doub);
+        } else if (tok2->type == token_keyword && tok2->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val1 nil@nil\n");
         } else {
             error_handle(tok2->line, expr_type_error);
             abort();
@@ -681,7 +706,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
         // if(type1 == int)
         printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
         if (!strcmp(operation, "DIV")) {
-            printf("PUSHS bool@true\n");
+            printf("PUSHS bool@false\n");
             printf("PUSHS string@float\n");
             printf("PUSHS GF@$right_result\n");
             printf("CALL %%TYPE_CASTING\n");
@@ -690,7 +715,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
             printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
         }
         //		type2 is float, need to convert left_result to float
-        printf("PUSHS bool@true\n");
+        printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
         printf("CALL %%TYPE_CASTING\n");
@@ -700,7 +725,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
         printf("LABEL %s_FLOAT_%u\n", operation, *num);
         printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@float\n", operation, *num);
         // 		type2 is int, need to convert it to float
-        printf("PUSHS bool@true\n");
+        printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$right_result\n");
         printf("CALL %%TYPE_CASTING\n");
@@ -740,6 +765,13 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
             printf("EXIT int@7\n");
             printf("LABEL %s_TOVAR1_%u\n", operation, *num);
             printf("MOVE GF@$val1 LF@%s\n", tok1->attr.str->array);
+        } else if (tok1->type == token_keyword && tok1->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val1 nil@nil\n");
+			printf("PUSHS bool@false\n");
+            printf("PUSHS string@int\n");
+            printf("PUSHS GF@$val1\n");
+            printf("CALL %%TYPE_CASTING\n");
+            printf("POPS GF@$val1\n");
         } else {
             error_handle(tok1->line, expr_type_error);
             abort();
@@ -755,6 +787,13 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
             printf("EXIT int@7\n");
             printf("LABEL %s_TOVAR2_%u\n", operation, *num);
             printf("MOVE GF@$val2 LF@%s\n", tok2->attr.str->array);
+        } else if (tok2->type == token_keyword && tok2->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val2 nil@nil\n");
+			printf("PUSHS bool@false\n");
+            printf("PUSHS string@int\n");
+            printf("PUSHS GF@$val2\n");
+            printf("CALL %%TYPE_CASTING\n");
+            printf("POPS GF@$val2\n");
         } else {
             error_handle(tok2->line, expr_type_error);
             abort();
@@ -764,7 +803,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
         // if(type1 == int)
         printf("JUMPIFNEQ %s_FLOAT_%u GF@$type1 string@int\n", operation, *num);
         if (!strcmp(operation, "DIV")) {
-            printf("PUSHS bool@true\n");
+            printf("PUSHS bool@false\n");
             printf("PUSHS string@float\n");
             printf("PUSHS GF@$val2\n");
             printf("CALL %%TYPE_CASTING\n");
@@ -773,7 +812,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
             printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
         }
         //		type2 is float, need to convert val1 to float
-        printf("PUSHS bool@true\n");
+        printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val1\n");
         printf("CALL %%TYPE_CASTING\n");
@@ -783,7 +822,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
         printf("LABEL %s_FLOAT_%u\n", operation, *num);
         printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@float\n", operation, *num);
         // 		type2 is int, need to convert it to float
-        printf("PUSHS bool@true\n");
+        printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val2\n");
         printf("CALL %%TYPE_CASTING\n");
@@ -868,6 +907,13 @@ void gen_cat(token_t *tok1, token_t *tok2, bool save_to_right) {
             printf("PUSHS LF@%s\n", tok1->attr.str->array);
             printf("CALL %%TYPE_CASTING\n");
             printf("POPS GF@$val1\n");
+        } else if (tok1->type == token_keyword && tok1->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val1 nil@nil\n");
+			printf("PUSHS bool@false\n");
+            printf("PUSHS string@string\n");
+            printf("PUSHS GF@$val1\n");
+            printf("CALL %%TYPE_CASTING\n");
+            printf("POPS GF@$val1\n");
         } else {
             error_handle(tok1->line, expr_type_error);
             abort();
@@ -879,6 +925,13 @@ void gen_cat(token_t *tok1, token_t *tok2, bool save_to_right) {
             printf("PUSHS bool@false\n");
             printf("PUSHS string@string\n");
             printf("PUSHS LF@%s\n", tok2->attr.str->array);
+            printf("CALL %%TYPE_CASTING\n");
+            printf("POPS GF@$val2\n");
+        } else if (tok2->type == token_keyword && tok2->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val2 nil@nil\n");
+			printf("PUSHS bool@false\n");
+            printf("PUSHS string@string\n");
+            printf("PUSHS GF@$val2\n");
             printf("CALL %%TYPE_CASTING\n");
             printf("POPS GF@$val2\n");
         } else {
@@ -941,6 +994,8 @@ void gen_cmp(token_t *tok1, token_t *tok2, bool save_to_right) {
             printf("MOVE GF@$val1 int@%d\n", tok1->attr.integer);
         } else if (tok1->type == token_float) {
             printf("MOVE GF@$val1 float@%a\n", (double)tok1->attr.doub);
+        } else if (tok1->type == token_keyword && tok1->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val1 nil@nil\n");
         } else {
             error_handle(tok1->line, expr_type_error);
             abort();
@@ -954,6 +1009,8 @@ void gen_cmp(token_t *tok1, token_t *tok2, bool save_to_right) {
             printf("MOVE GF@$val2 int@%d\n", tok2->attr.integer);
         } else if (tok2->type == token_float) {
             printf("MOVE GF@$val2 float@%a\n", (double)tok2->attr.doub);
+        } else if (tok2->type == token_keyword && tok2->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val2 nil@nil\n");
         } else {
             error_handle(tok2->line, expr_type_error);
             abort();
@@ -1091,6 +1148,8 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
             printf("MOVE GF@$val1 int@%d\n", tok1->attr.integer);
         } else if (tok1->type == token_float) {
             printf("MOVE GF@$val1 float@%a\n", (double)tok1->attr.doub);
+        } else if (tok1->type == token_keyword && tok1->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val1 nil@nil\n");
         } else {
             error_handle(tok1->line, expr_type_error);
             abort();
@@ -1104,6 +1163,8 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
             printf("MOVE GF@$val2 int@%d\n", tok2->attr.integer);
         } else if (tok2->type == token_float) {
             printf("MOVE GF@$val2 float@%a\n", (double)tok2->attr.doub);
+        } else if (tok2->type == token_keyword && tok2->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val2 nil@nil\n");
         } else {
             error_handle(tok2->line, expr_type_error);
             abort();
@@ -1311,6 +1372,8 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
             printf("MOVE GF@$val1 int@%d\n", tok1->attr.integer);
         } else if (tok1->type == token_float) {
             printf("MOVE GF@$val1 float@%a\n", (double)tok1->attr.doub);
+        } else if (tok1->type == token_keyword && tok1->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val1 nil@nil\n");
         } else {
             error_handle(tok1->line, expr_type_error);
             abort();
@@ -1324,6 +1387,8 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
             printf("MOVE GF@$val2 int@%d\n", tok2->attr.integer);
         } else if (tok2->type == token_float) {
             printf("MOVE GF@$val2 float@%a\n", (double)tok2->attr.doub);
+        } else if (tok2->type == token_keyword && tok2->attr.keyword == keyword_null) {
+            printf("MOVE GF@$val2 nil@nil\n");
         } else {
             error_handle(tok2->line, expr_type_error);
             abort();
