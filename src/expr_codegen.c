@@ -1233,12 +1233,12 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
     } else if (tok2 == NULL) {
         if (save_to_right) {
             printf("NOT GF@$right_result GF@$right_result\n");
-            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok1->attr.str->array);
             printf("NOT GF@$cond1 GF@$cond1\n");
             printf("AND GF@$right_result GF@$right_result GF@$cond1\n");
         } else {
             printf("NOT GF@$left_result GF@$left_result\n");
-            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok1->attr.str->array);
             printf("NOT GF@$cond1 GF@$cond1\n");
             printf("AND GF@$left_result GF@$left_result GF@$cond1\n");
         }
@@ -1478,11 +1478,11 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
         lesseq_varval(tok1, save_to_right, &unique_num_lesseq);
         if (save_to_right) {
             printf("NOT GF@$right_result GF@$right_result\n");
-            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok1->attr.str->array);
             printf("OR GF@$right_result GF@$right_result GF@$cond1\n");
         } else {
             printf("NOT GF@$left_result GF@$left_result\n");
-            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok1->attr.str->array);
             printf("OR GF@$left_result GF@$left_result GF@$cond1\n");
         }
     } else {
