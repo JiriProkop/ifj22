@@ -411,6 +411,7 @@ void gen_define_used_vars(sym_table *tree) {
     if(tree != NULL) {
         if(!tree->data->is_function && !tree->data->defined) {
             printf("DEFVAR LF@%s\n", tree->id->array);
+            tree->data->defined = true;
         }
         gen_define_used_vars(tree->left);
         gen_define_used_vars(tree->right);
