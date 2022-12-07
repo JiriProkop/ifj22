@@ -29,13 +29,6 @@ typedef struct {
 void dynstr_init(dynstr_t *string);
 
 /**
- * Clears the dynamic string.
- *
- * @param string Pointer to dynamic string with the dynstr_t type.
- */
-void dynstr_clear(dynstr_t *string);
-
-/**
  * Dynamic string destructor.
  *
  * @warning You still have to free the dynstr_t structure!

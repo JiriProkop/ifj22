@@ -75,13 +75,6 @@ void stack_pop(stack *stack){
 	tmp_node = NULL;
 }
 
-token_t *stack_top(stack *stack){
-	if(stack->top == NULL){
-		return NULL;
-	}
-	return stack->top->current;
-}
-
 void stack_dispose_all(stack *stack){
 	token_t *tmp_token;
 	stack_node_t *tmp_node;

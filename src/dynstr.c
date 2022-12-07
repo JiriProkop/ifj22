@@ -23,11 +23,6 @@ void dynstr_init(dynstr_t *string) {
     string->allocated = STR_DEFAULT_LENGTH - 1; // minus one, since the last char is for \0
 }
 
-void dynstr_clear(dynstr_t *string) {
-    string->array[0] = '\0';
-    string->length = 0;
-}
-
 void dynstr_delete(dynstr_t *string) {
     if(string == NULL || string->array == NULL){
         return;

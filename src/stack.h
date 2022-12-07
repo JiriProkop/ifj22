@@ -72,14 +72,6 @@ token_t *stack_save_pop(stack *stack);
 void stack_pop(stack *stack);
 
 /**
- * @brief Function that returns the first token in stack without removing it 
- * 
- * @param stack the stack to from which the first node will be 
- * @param return_token pointer to the first token in stack 
- */
-token_t *stack_top(stack *stack);
-
-/**
  * @brief Function that frees the stack and the tokens in it 
  * 
  * @param stack the stack to be disposed

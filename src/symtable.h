@@ -62,17 +62,6 @@ void st_insert(sym_table **tab, dynstr_t *id, sym_data *data);
 sym_data *st_search(sym_table *tab, dynstr_t *id);
 
 /**
- * @brief Deletes a node from a symbol table.
- * When a node with the specified identifier isn't found, no operation is performed.
- * When the node has one subtree, it is inherited by the deleted node's parent.
- * When the node has both subtrees, it is replaced by the rightmost node of the left subtree.
- * 
- * @param tab Pointer to a pointer to a symbol table
- * @param key Identifier
- */
-void st_delete(sym_table **tab, dynstr_t *id);
-
-/**
  * @brief Disposes a symbol table by returning it to the initial state.
  * 
  * @param tab Pointer to a pointer to a symbol table

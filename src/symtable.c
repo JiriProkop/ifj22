@@ -75,42 +75,6 @@ void replace_by_rightmost(sym_table *target, sym_table **tab) {
     }
 }
 
-void st_delete(sym_table **tab, dynstr_t *id) {
-    if (*tab != NULL) {
-        int cmp = dynstrcmp(id, (*tab)->id);
-        if (!cmp) {
-            if (((*tab)->left == NULL) && ((*tab)->right == NULL)) {
-                string_free((*tab)->id);
-                list_dispose((*tab)->data->parameters);
-                st_dispose(&(*tab)->data->local_frame);
-                free((*tab)->data);
-                free(*tab);
-                *tab = NULL;
-            } else if (((*tab)->left != NULL) && ((*tab)->right != NULL)) {
-                replace_by_rightmost(*tab, &(*tab)->left);
-                return;
-            } else {
-                sym_table *d = *tab;
-                if (d->left == NULL){
-                    *tab = d->right;
-                }
-                else{
-                    *tab = d->left;
-                }
-                string_free(d->id);
-                list_dispose(d->data->parameters);
-                st_dispose(&d->data->local_frame);
-                free(d->data);
-                free(d);
-            }
-        } else if (cmp < 0) {
-            st_delete(&(*tab)->left, id);
-        } else {
-            st_delete(&(*tab)->right, id);
-        }
-    }
-}
-
 void st_dispose(sym_table **tab) {
     if (*tab != NULL) {
         st_dispose(&(*tab)->left);

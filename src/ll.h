@@ -44,28 +44,12 @@ typedef struct{
 void list_init(list_t *list);
 
 /**
- * @brief Function for finding out if list is empty
- * 
- * @param list 
- * @return true is empty 
- * @return false is not empty 
- */
-bool list_is_empty(list_t *list);
-
-/**
  * @brief Function that adds node on the end of the list 
  * 
  * @param list 
  * @param token  
  */
 int list_add(list_t *list, keywords type, dynstr_t* id);
-
-/**
- * @brief Function that removes first node of the list, if the list is empty does nothing 
- * 
- * @param list list from which to delete
- */
-void list_delete_first(list_t *list);
 
 /**
  * @brief Function that returns the first node in the list
@@ -82,15 +66,5 @@ list_node_t *list_first(list_t *list);
  * @param list the list to be disposed
  */
 void list_dispose(list_t *list);
-
-/**
- * @brief Function that searches the list for a key
- * 
- * @param list the list to be searched 
- * @param searched_str the key 
- * @return list_node_t* the searched node or NULL if not found 
- */
-list_node_t *list_search(list_t *list, dynstr_t *searched_str);
-
 
 #endif
