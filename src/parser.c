@@ -710,7 +710,7 @@ bool prikaz(dynstr_t *current_function_id) {
         // something else
         get_tkn();
         if(value && current_tkn->type != token_assign) {
-            vyraz(true, prev_tok);
+            value = vyraz(true, prev_tok);
             // ;
             if(value && current_tkn->type != token_semicol) {
                 value = false;
