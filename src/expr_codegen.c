@@ -36,19 +36,15 @@ bool gen_expr_different_place(exprll *rule_node, exprll *ll) {
  *
  */
 void check_existance(token_t *tok, unsigned *num) {
-    // TODO
-    /*
-        je promenna ve stromu? (current_frame)
-        if(st_search(current_frame, tok.attr.str.array) == NULL) {
-                        error_handle(tok2.line, undefined_id)
-                        abort();
-        } else {
-                        printf("TYPE GF@$type LF@%s\n");
-                        printf("JUMPIFNEQ IS_DEF_%u GF@$type string@\n", *num);
-                        printf("EXIT int@5\n");
-                        printf("LABEL IS_DEF_%u\n", *num);
-        }
-    */
+    if (st_search(current_frame, tok->attr.str->array) == NULL) {
+        error_handle(tok->line, undefied_identifier_error);
+        abort();
+    } else {
+        printf("TYPE GF@$type LF@%s\n");
+        printf("JUMPIFNEQ IS_DEF_%u GF@$type string@\n", *num);
+        printf("EXIT int@5\n");
+        printf("LABEL IS_DEF_%u\n", *num);
+    }
 }
 
 /**
@@ -897,9 +893,6 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
     }
 }
 
-// TODO DEFVAR right and left result + type on the start of codegen or something
-// TODO DEFVAR GF@$val1 a GF@$val2
-// TODO DEFVAR GF@$type GF@$type1 GF@$type2, GF@$tmp, GF@$cond1, GF@$cond2
 /**
  * Generates code for operation plus.
  *
@@ -1237,15 +1230,15 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
         less_varval(tok2, save_to_right, &unique_num_less);
     } else if (tok2 == NULL) {
         if (save_to_right) {
-			printf("NOT GF@$right_result GF@$right_result\n");
+            printf("NOT GF@$right_result GF@$right_result\n");
             printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
             printf("NOT GF@$cond1 GF@$cond1\n");
-			printf("AND GF@$right_result GF@$right_result GF@$cond1\n");
+            printf("AND GF@$right_result GF@$right_result GF@$cond1\n");
         } else {
-			printf("NOT GF@$left_result GF@$left_result\n");
-			printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+            printf("NOT GF@$left_result GF@$left_result\n");
+            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
             printf("NOT GF@$cond1 GF@$cond1\n");
-			printf("AND GF@$left_result GF@$left_result GF@$cond1\n");
+            printf("AND GF@$left_result GF@$left_result GF@$cond1\n");
         }
         less_varval(tok1, save_to_right, &unique_num_less);
     } else {
@@ -1482,13 +1475,13 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
     } else if (tok2 == NULL) {
         lesseq_varval(tok1, save_to_right, &unique_num_lesseq);
         if (save_to_right) {
-			printf("NOT GF@$right_result GF@$right_result\n");
+            printf("NOT GF@$right_result GF@$right_result\n");
             printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
-			printf("OR GF@$right_result GF@$right_result GF@$cond1\n");
+            printf("OR GF@$right_result GF@$right_result GF@$cond1\n");
         } else {
-			printf("NOT GF@$left_result GF@$left_result\n");
-			printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
-			printf("OR GF@$left_result GF@$left_result GF@$cond1\n");
+            printf("NOT GF@$left_result GF@$left_result\n");
+            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+            printf("OR GF@$left_result GF@$left_result GF@$cond1\n");
         }
     } else {
         if (tok1->type == token_string) {
@@ -1632,7 +1625,7 @@ void gen_expression(exprll *ll) {
     while (1) {
         exprll *rule_node = exprll_leftmost_rule(ll);
         if (rule_node == NULL) {
-            // TODO left_result to temp_var_count
+            printf("MOVE GF@%%%u GF@$left_result\n", temp_var_counter);
             return;
         }
         switch (rule_node->rule) {
