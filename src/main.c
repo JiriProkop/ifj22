@@ -2,7 +2,7 @@
  * Project: compiler of IFJ22 programming language
  *
  * @brief The main file, that calls the parser
- *
+ * @file main.c
  * @author Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
  */
 
