@@ -56,6 +56,7 @@ JUMPIFNEQ %cast_error GF@%cast_type% GF@%cast_type_temp%
 PUSHS GF@%cast_var%
 RETURN
 LABEL %cast_error
+DPRINT string@Type\032compability\032error\032in\032arithmetic\032string\032or\032relation\032expression\010
 EXIT int@7
 LABEL %type_casting_end
 DEFVAR GF@%cast_bool_var%
@@ -108,6 +109,7 @@ LABEL %check_type_continue
 JUMPIFNEQ %check_type_error GF@%check_type_type% GF@%check_type_temp%
 RETURN
 LABEL %check_type_error
+DPRINT string@Wrong\032function\032argument\032type\032and\032or\032count\032or\032wrong\032return\032type\010
 EXIT int@4
 LABEL %check_type_end
 JUMP reads_end
@@ -269,7 +271,7 @@ LABEL chr_end
 [info: parameter list]
 list from the start :  'teststr', 'testint', 'testfloat',
 
-[function def gen test]
+[function def gen test - non-void function with 3 parameters]
 DEFVAR GF@%testfunc_teststr
 DEFVAR GF@%testfunc_testint
 DEFVAR GF@%testfunc_testfloat
@@ -284,18 +286,32 @@ DEFVAR TF@testfloat
 MOVE TF@testfloat GF@%testfunc_testfloat
 PUSHFRAME
 
+[function def gen test - void function without parameters]
+JUMP voidfunc_end
+LABEL voidfunc_start
+CREATEFRAME
+PUSHFRAME
+
 [info: current tree]
 
 
+          voidfunc
+
 testfunc
 
-[function def end gen test]
+[function def end gen test - non-void function with 3 parameters]
 POPFRAME
-EXIT int@6
+DPRINT string@Wrong\032function\032argument\032type\032and\032or\032count\032or\032wrong\032return\032type\010
+EXIT int@4
 RETURN
 LABEL testfunc_end
 
-[function def call tests]
+[function def end gen test - void function without parameters]
+POPFRAME
+RETURN
+LABEL voidfunc_end
+
+[function def call test - non-void function with 3 parameters]
 PUSHS bool@false
 PUSHS string@string
 PUSHS LF@teststr
@@ -313,12 +329,15 @@ CALL %check_type
 MOVE GF@%testfunc_testfloat LF@testfloat
 CALL testfunc_start
 
-[write gen tests]
+[function def call test - void function without parameters]
+CALL voidfunc_start
+
+[write gen test]
 WRITE LF@teststr
 WRITE LF@testint
 WRITE LF@testfloat
 
-[return gen tests - no exit]
+[return gen test - non-void function with 3 parameters - no exit]
 PUSHS bool@false
 PUSHS string@int
 PUSHS GF@%0
@@ -327,44 +346,57 @@ PUSHS GF@%0
 POPFRAME
 RETURN
 
-[return gen tests - exit]
+[return gen test - non-void function with 3 parameters - exit]
 CLEARS
-EXIT GF@%1
+EXIT int@0
+
+[return gen test - void function without parameters - no exit]
+POPFRAME
+RETURN
+
+[return gen test - void function without parameters - exit]
+CLEARS
+EXIT int@0
 
 [info: current tree]
 
 
-          testvar
+          voidfunc
+
+                    testvar
 
 testfunc
 
-[variable def gen tests - variable not defined]
+[variable def gen test - variable not defined]
 DEFVAR LF@testvar
 
-[variable def gen tests - variable defined]
+[variable def gen test - variable defined]
 
-[fill variable gen tests]
-MOVE LF@testvar GF@%2
+[fill variable gen test]
+MOVE LF@testvar GF@%4
 
-[while gen tests]
+[value assignment gen test]
+POPS LF@testvar
+
+[while gen test]
 LABEL %while0_start
-PUSHS GF@%3
+PUSHS GF@%5
 CALL %cast_bool
-POPS GF@%3
-JUMPIFEQ %while0_end GF@%3 bool@true
+POPS GF@%5
+JUMPIFEQ %while0_end GF@%5 bool@true
 JUMP %while0_start
 LABEL %while0_end
 
-[if gen tests]
-PUSHS GF@%4
+[if gen test]
+PUSHS GF@%6
 CALL %cast_bool
-POPS GF@%4
-JUMPIFEQ if0_else GF@%4 bool@false
+POPS GF@%6
+JUMPIFEQ if0_else GF@%6 bool@false
 JUMP if0_end
 LABEL if0_else
 LABEL if0_end
 
-[closure gen tests]
+[closure gen test]
 POPFRAME
 CLEARS
 EXIT int@0
@@ -375,5 +407,7 @@ DEFVAR GF@%1
 DEFVAR GF@%2
 DEFVAR GF@%3
 DEFVAR GF@%4
+DEFVAR GF@%5
+DEFVAR GF@%6
 RETURN
 LABEL %temp_var_definitions_end

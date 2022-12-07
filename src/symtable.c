@@ -1,3 +1,12 @@
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @brief The implementation of a code generator.
+ *
+ * @author Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
+ * @author Štěpán Czajkowski <xczajk01@stud.fit.vutbr.cz>
+ * @author Marek Chalupka <xchalu18@stud.fit.vut.cz>
+ */
 #include <stdlib.h>
 #include <string.h>
 #include "error.h"

@@ -30,8 +30,8 @@ test: $(TESTS)
 #	$(TESTDIR)tests_expr > $(TESTDIR)tests_expr.output < $(TESTDIR)tests_expr.input
 #	diff -su $(TESTDIR)tests_expr.output $(TESTDIR)correct_out/tests_expr.output
 # generator tests
-#	$(TESTDIR)tests_generator > $(TESTDIR)tests_generator.output
-#	diff -su $(TESTDIR)tests_generator.output $(TESTDIR)correct_out/tests_generator.output
+	$(TESTDIR)tests_generator > $(TESTDIR)tests_generator.output
+	diff -su $(TESTDIR)tests_generator.output $(TESTDIR)correct_out/tests_generator.output
 
 # check the tests with valgrind
 valgrind: $(TESTS)
