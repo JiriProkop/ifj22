@@ -4,7 +4,7 @@ LDLIBS = -lm
 
 TESTDIR = tests/
 SOURCES = src/
-CASES = tests_dynstr tests_scanner tests_parser tests_stack tests_generator
+CASES = tests_dynstr tests_scanner tests_parser tests_stack
 TESTS = $(addprefix $(TESTDIR), $(CASES))
 
 PARTS = $(TESTS)

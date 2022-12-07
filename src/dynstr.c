@@ -14,12 +14,11 @@ void dynstr_init(dynstr_t *string) {
     string->allocated = STR_DEFAULT_LENGTH - 1; // minus one, since the last char is for \0
 }
 
-//TODO smazat clear i delete, nikdo je nepouziva
 void dynstr_clear(dynstr_t *string) {
     string->array[0] = '\0';
     string->length = 0;
 }
-// akorat delete je uzit ve funkci free o kousek nize
+
 void dynstr_delete(dynstr_t *string) {
     if(string == NULL || string->array == NULL){
         return;
@@ -85,7 +84,7 @@ int dynstrcmp(dynstr_t *strplus, dynstr_t *strminus){
     unsigned i = 0;
     while(i <= strplus->length){
         if (strplus->array[i] != strminus->array[i]){
-            return (int)strplus->array[i] - (int)strminus->array[i];
+            return (unsigned)strplus->array[i] - (unsigned)strminus->array[i];
         }
         i++;
     }

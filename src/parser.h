@@ -9,10 +9,10 @@
 #include <stdbool.h>
 #include "scanner.h"
 #include "symtable.h"
+#include "dynstr.h"
 
 #ifndef _PARSER_H
 #define _PARSER_H
-
 
 /**
  * A global variable used for the current token.
@@ -25,7 +25,7 @@ extern token_t *current_tkn;
 extern unsigned int temp_var_counter;
 
 /**
- * Function frees everything allocated in parser and aborts.
+ * Function frees everything allocated in parser and exits program.
 */
 void abort();
 
@@ -50,8 +50,10 @@ void free_tkn();
  * @param params A number of function parametres.
  * @param type Either a return type of the function or a type of a variable.
  * @param can_be_null True if the type is nullable.
+ * @param defined True only for parameters, false for other variables.
 */
-void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters, unsigned int params, keywords type, bool can_be_null);
+void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters,
+              unsigned int params, keywords type, bool can_be_null, bool defined);
 
 /**
  * Function for converting the parameters list to the function subtree.
@@ -109,23 +111,27 @@ bool param(dynstr_t *fun_id, list_t *parameters);
 /**
  * A function for the <prikaz_fce> rule.
  * 
+ * @param current_function_id Identifier of the function we are in.
  * @return True if it was correct.
 */
-bool prikaz_fce();
+bool prikaz_fce(dynstr_t *current_function_id);
 
 /**
  * A function for the <prikaz> rule.
  * 
+ * @param current_function_id Identifier of the function we are in, if we are in the "main" function,
+ *                            then it should be NULL.
  * @return True if it was correct.
 */
-bool prikaz();
+bool prikaz(dynstr_t *current_function_id);
 
 /**
  * A function for the <else> rule.
  * 
+ * @param current_function_id Identifier of the function we are in.
  * @return True if it was correct.
 */
-bool else_rule();
+bool else_rule(dynstr_t *current_function_id);
 
 /**
  * A function for the <vol_parametry> rule.

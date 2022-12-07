@@ -56,17 +56,18 @@ void free_tkn() {
     current_tkn = NULL;
 } 
 
-void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters, unsigned int params, keywords type, bool can_be_null) {
+void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *parameters,
+              unsigned int params, keywords type, bool can_be_null, bool defined) {
     sym_data *data = malloc(sizeof(sym_data));
     if(data == NULL) {
         error_handle(0,compiler_error);
         abort();
     }
-    data->defined = false;
+    data->defined = defined;
     if(is_function) {
         sym_table *subtree = malloc(sizeof(sym_data));
         if(subtree == NULL) {
-            error_handle(0,compiler_error);
+            error_handle(0, compiler_error);
             abort();
         }
         st_init(&subtree);
@@ -89,7 +90,7 @@ unsigned int convert_list_to_subtree(list_t *list, sym_table **subtree) {
     unsigned int num_of_params = 0;
     list_node_t *temp = list_first(list);
     while(temp != NULL) {
-        add_node(subtree, temp->id, 0, NULL, 0, temp->type, temp->can_be_null);
+        add_node(subtree, temp->id, 0, NULL, 0, temp->type, temp->can_be_null, 1);
         num_of_params++;
         temp = temp->next;
     }
@@ -120,8 +121,20 @@ void add_prebuilt() {
     dynstr_init(arg1);
     dynstr_add_string(arg1, "term");
     list_add(args4, keyword_void, arg1);
-    list_t *args5 = args4;
-    list_t *args6 = args4;
+    list_t *args5 = malloc(sizeof(list_t));
+    if(args5 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args5);
+    list_add(args5, keyword_void, arg1);
+    list_t *args6 = malloc(sizeof(list_t));
+    if(args6 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args6);
+    list_add(args6, keyword_void, arg1);
     list_t *args7 = malloc(sizeof(list_t));
     if(args7 == NULL) {
         error_handle(0, compiler_error);
@@ -193,11 +206,10 @@ void add_prebuilt() {
             abort();
         }
         dynstr_init(id);
-        dynstr_clear(id);
         dynstr_add_string(id, prebuit[i]);
         // since the functions are already declared and made,
         // we do not care about return type
-        add_node(&tree, id, 1, arguments[i], parameter_number[i], keyword_void, true);
+        add_node(&tree, id, 1, arguments[i], parameter_number[i], keyword_void, true, 0);
     }
 }
 
@@ -258,7 +270,7 @@ bool program() {
     } else {
         value = true;
         // <prikaz>
-        if(value && !prikaz()) {
+        if(value && !prikaz(NULL)) {
             value = false;
         }
         // <program>
@@ -340,7 +352,7 @@ bool definice() {
 
         // adding the function to the symtable tree
         if(st_search(tree, id) == NULL) {
-            add_node(&tree, id, 1, parameters, params, type, can_be_null);
+            add_node(&tree, id, 1, parameters, params, type, can_be_null, 0);
             current_frame = st_search(tree, id)->local_frame;
             st_search(tree, id)->params = convert_list_to_subtree(parameters, &current_frame);
 
@@ -357,18 +369,17 @@ bool definice() {
         }
         // <prikaz_fce>
         get_tkn();
-        if(value && !prikaz_fce()) {
+        if(value && !prikaz_fce(id)) {
             value = false;
         }
         // }
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
-
-        gen_function_def_end(id, tree); // generate function definition end
-
         // return the frame back to the main frame
         current_frame = tree;
+
+        gen_function_def_end(id, tree); // generate function definition end
     }
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
@@ -458,7 +469,7 @@ bool param(dynstr_t *fun_id, list_t *parameters) {
     return value;
 }
 
-bool prikaz_fce() {
+bool prikaz_fce(dynstr_t *current_function_id) {
     bool value = false;
     // rule: <prikaz_fce> -> eps
     if(current_tkn->type == token_curly_right) {
@@ -470,7 +481,7 @@ bool prikaz_fce() {
         
         value = true;
         // <prikaz>
-        if(value && !prikaz()) {
+        if(value && !prikaz(current_function_id)) {
             value = false;
         }
 
@@ -480,7 +491,7 @@ bool prikaz_fce() {
         } else {
             tkn_already_loaded = false;
         }
-        if(value && !prikaz_fce()) {
+        if(value && !prikaz_fce(current_function_id)) {
             value = false;
         }
     }
@@ -492,19 +503,35 @@ bool prikaz_fce() {
     return value;
 }
 
-bool prikaz() {
+bool prikaz(dynstr_t *current_function_id) {
     bool value = false;
     // rule: <prikaz> -> RETURN <vyraz> ;
     if(current_tkn->attr.keyword == keyword_return) {
         value = true;
         // <vyraz>
         get_tkn();
+        // check if the return type is correct (return; is only valid in void functions)
+        if(current_tkn->type == token_semicol && st_search(tree, current_function_id)->return_type != keyword_void) {
+            error_handle(current_tkn->line, ret_expr_cnt_error);
+            abort();
+        } else if(current_tkn->type != token_semicol && st_search(tree, current_function_id)->return_type == keyword_void) {
+            error_handle(current_tkn->line, ret_expr_cnt_error);
+            abort();
+        }
+
         if(value && !vyraz(false, *current_tkn, current_frame)) {
             value = false; 
         }
         // ;
         if(value && current_tkn->type != token_semicol) {
             value = false;
+        }
+
+        // generate the return statement
+        if(current_frame == tree) {
+            gen_return(NULL, tree, 1);
+        } else {
+            gen_return(current_function_id, tree, 0);
         }
 
         temp_var_counter++;
@@ -536,7 +563,7 @@ bool prikaz() {
 
         // if the function is write, then we do not care about the number of parameters
         if(dynstr_compare(id, "write") == 1) {
-            printf("funkce write\n"); // TODO gen write
+            gen_write(parameters);
         // else check if we got the right number of parameters
         } else {
             list_node_t *temp = parameters->first;
@@ -548,6 +575,8 @@ bool prikaz() {
             if(st_search(tree, id)->params != num_of_params) {
                 error_handle(current_tkn->line, func_arr_or_ret_error);
                 abort();
+            } else {
+                gen_function_call(id, parameters, tree);
             }
         }
 
@@ -577,7 +606,8 @@ bool prikaz() {
         if(value && current_tkn->type != token_parentheses_right) {
             value = false;
         }
-
+        
+        gen_if_start(); // generate start of if statement
         temp_var_counter++;
     
         // {
@@ -587,21 +617,29 @@ bool prikaz() {
         }
         // <prikaz_fce>
         get_tkn();
-        if(value && !prikaz_fce()) {
+        if(value && !prikaz_fce(current_function_id)) {
             value = false;
         }
         // }
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
+
+        gen_if_start_else(); // generate the start of else statement
+
         // <else>
         get_tkn();
-        if(value && !else_rule()) {
+        if(value && !else_rule(current_function_id)) {
             value = false;
         }
+
+        gen_if_end(); // generate end of if-else statement
     // rule: <prikaz>-> WHILE ( <vyraz> ) { <prikaz_fce> }
     } else if(current_tkn->attr.keyword == keyword_while) {
         value = true;
+
+        gen_while_start(); // generate the start of while statement
+
         // (
         get_tkn();
         if(value && current_tkn->type != token_parentheses_left) {
@@ -617,6 +655,7 @@ bool prikaz() {
             value = false;
         }
 
+        gen_while_check_condition(); // generate while contition checking
         temp_var_counter++;
 
         // {
@@ -626,13 +665,15 @@ bool prikaz() {
         }
         // <prikaz_fce>
         get_tkn();
-        if(value && !prikaz_fce()) {
+        if(value && !prikaz_fce(current_function_id)) {
             value = false;
         }
         // }
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
+
+        gen_while_end(); // generate end of while statement
     // rule: <prikaz> -> VAR_ID = <vyraz> ;
     } else if(current_tkn->type == token_varieble) {
         dynstr_t *id = current_tkn->attr.str;
@@ -651,22 +692,25 @@ bool prikaz() {
         // =
         } else {
             if(st_search(current_frame, id) == NULL) {
-                add_node(&current_frame, id, 0, NULL, 0, keyword_null, true);
+                add_node(&current_frame, id, 0, NULL, 0, keyword_null, 0, 0);
             }
+            // generates the definition of a variable, if it was not already defined
+            gen_def_variable(id, current_frame);
 
             // <vyraz>
             get_tkn();
             if(value && current_tkn->type == token_identifier) {
-                value = prikaz();
-		    // TODO gen funkce
+                value = prikaz(current_function_id);
+                gen_assign_value(id);
             } else {
                 value = vyraz(false, *current_tkn, current_frame);
                 // ;
                 if(value && current_tkn->type != token_semicol) {
                     value = false;
                 }
+                gen_fill_variable(id);
+                temp_var_counter++;
             }
-            temp_var_counter++;
         }
     // checks expressions
     } else {
@@ -685,7 +729,7 @@ bool prikaz() {
     return value;
 }
 
-bool else_rule() {
+bool else_rule(dynstr_t *current_function_id) {
     bool value = false;
     // rule: <else> -> eps
     if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
@@ -705,7 +749,7 @@ bool else_rule() {
         }
         // <prikaz_fce>
         get_tkn();
-        if(value && !prikaz_fce()) {
+        if(value && !prikaz_fce(current_function_id)) {
             value = false;
         }
         // }
@@ -732,7 +776,7 @@ bool vol_parametry(list_t *parameters) {
         if(st_search(current_frame, current_tkn->attr.str) != NULL) {
             list_add(parameters, keyword_void, current_tkn->attr.str);
         } else {
-            error_handle(current_tkn->line, func_arr_or_ret_error);
+            error_handle(current_tkn->line, undefied_identifier_error);
             abort();
         }
 
@@ -803,7 +847,7 @@ bool vol_par(list_t *parameters) {
         if(st_search(current_frame, current_tkn->attr.str) != NULL) {
             list_add(parameters, keyword_void, current_tkn->attr.str);
         } else {
-            error_handle(current_tkn->line, func_arr_or_ret_error);
+            error_handle(current_tkn->line, undefied_identifier_error);
             abort();
         }
 
@@ -849,16 +893,12 @@ bool vol_par(list_t *parameters) {
 }
 
 bool konec() {
-    bool value = false;
-    if(current_tkn->type == token_none) {
-        value = true;
-    }
-
-    if(!value) {
+    if(current_tkn->type != token_none) {
         error_handle(current_tkn->line, syntax_error);
         abort();
     }
-    return value;
+    gen_closure();
+    abort(); // end the parser
 }
 
 bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
@@ -868,10 +908,3 @@ bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
         return expr(*current_tkn, NULL, frame);
     }
 }
-
-// TODOs na probrání na schůzce:
-// $a + 5 jako parametr nezpracuje výraz -> předat to celé na zpracování výrazu? Nebo je to vůbec legal?
-// zadne else neni legalni... pouze v rozsireni bool
-
-// TODO uklidit v konci
-// TODO zkontrolovat errory

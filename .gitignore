@@ -64,3 +64,4 @@ tests/tests_symtable
 tests/tests_ll
 tests/tests_generator
 tests/*.output
+src/compiler
