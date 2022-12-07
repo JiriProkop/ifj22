@@ -2,6 +2,7 @@
 # Project: compiler of IFJ22 programming language
 #
 # File: Makefile
+# Brief: The implementation of Makefile.
 #
 # Author: Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
 #
