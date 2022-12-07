@@ -1,3 +1,11 @@
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @brief The main file, that calls the parser
+ *
+ * @author Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
+ */
+
 #include "scanner.h"
 #include "parser.h"
 #include "generator.h"
@@ -9,6 +17,7 @@
 #include "ll.h"
 
 int main() {
-    start();
+    start(); // call the parser
+    abort(); // clean and exit
     return ret;
 }

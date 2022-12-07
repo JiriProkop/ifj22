@@ -294,7 +294,7 @@ bool definice() {
     bool value = false;
     // rule: <definice> -> FUNCTION ID ( <parametry> ) : TYP { <prikaz_fce> }
     if(current_tkn->attr.keyword == keyword_function) {
-        dynstr_t *id;
+        dynstr_t *id = NULL;
         list_t *parameters = malloc(sizeof(list_t));
         if(parameters == NULL) {
             error_handle(0, compiler_error);
@@ -302,7 +302,7 @@ bool definice() {
         }
         list_init(parameters);
         unsigned int params = 0;
-        keywords type;
+        keywords type = keyword_null;
         bool can_be_null = false;
         int line_num = 0;
 
@@ -898,7 +898,7 @@ bool konec() {
     }
     current_frame = tree; // just in case
     gen_closure();
-    abort(); // end the parser
+    return true;
 }
 
 bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
