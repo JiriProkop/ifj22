@@ -1,0 +1,2469 @@
+[36m> [37mAOC
+[36m---> [37mDay 3
+[TEST] Part 1
+[[31mERR[37m] Wrong output found , but expected 7701
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Part 2
+[[31mERR[37m] Wrong output found , but expected 2644
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mDay 4 - gzvv
+[TEST] Part 1
+[[31mERR[37m] Wrong output found , but expected 532
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Part 2
+[[31mERR[37m] Wrong output found , but expected 854
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mDay 3 - gzvv
+[TEST] Part 1
+[[31mERR[37m] Wrong output found , but expected 7674
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Part 2
+[[31mERR[37m] Wrong output found , but expected 2805
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mDay 1
+[TEST] Part 1
+[[31mERR[37m] Wrong output found , but expected 70509
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Part 2
+[[31mERR[37m] Wrong output found , but expected 208567
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mDay 5
+[36m---> [37mDay 5 - gzvv
+[TEST] Part 1
+[[31mERR[37m] Wrong output found , but expected FJSRQCFTN
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Part 2
+[[31mERR[37m] Wrong output found , but expected CJVLJQPHS
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mDay 2
+[TEST] Part 1
+[[31mERR[37m] Wrong output found , but expected 11841
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Part 2
+[[31mERR[37m] Wrong output found , but expected 13022
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mDay 4
+[36m> [37mHeavy tests
+[TEST] Lisp interpreter
+[[31mERR[37m] Wrong output found , but expected i:720
+
+532.21: invalid character
+532.21-22: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 3, but expected 0
+STDERR output:
+Undefined function or redefinition of one on line: 38
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Hello World Brainfuck
+[[31mERR[37m] Wrong output found , but expected Hello World!
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Square root
+[[31mERR[37m] Wrong output found , but expected Square root of 2 is: 0x1.6a09e667f3bccp+0
+
+498.20: invalid character
+498.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Array
+[[31mERR[37m] Wrong output found , but expected this is test
+program
+hello
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 67
+Syntax error on line: 67
+
+[[31mERR[37m] TEST FAILURE
+[36m> [37mLexer
+[36m---> [37mFloat
+[TEST] Missing exponent
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Missing decimal
+[[31mERR[37m] Wrong error code found 0, but expected 1
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Maximal float
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Function param without space
+[[32mOK[37m ] TEST SUCCESS
+[36m---> [37mEpilog
+[TEST] Space after epilog
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Text after epilog
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Double newline after epilog
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Pure epilog
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Epilog with code
+[[32mOK[37m ] TEST SUCCESS
+[36m---> [37mProlog
+[TEST] Commented prolog
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Text before prolog
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Empty file
+[[31mERR[37m] Wrong error code found 0, but expected 1 or 2
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Comment before prolog
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Missing prolog
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Missing prolog 2
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Spaced prolog
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Pure prolog
+[[32mOK[37m ] TEST SUCCESS
+[36m---> [37mLine comment
+[TEST] Comment error
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Comment comment
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Okay comment
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Unexpected character
+[[31mERR[37m] Wrong error code found 0, but expected 1
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mString
+[TEST] Unescaped dollar
+[[31mERR[37m] Wrong error code found 0, but expected 1
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Lowercase hexa escape
+[[31mERR[37m] Wrong output found , but expected J
+
+282.20: invalid character
+282.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Uppercase hexa escape
+[[31mERR[37m] Wrong output found , but expected J
+
+282.20: invalid character
+282.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Okay string
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Escaped tab
+[[31mERR[37m] Wrong output found , but expected 	
+
+281.20: invalid character
+281.20-21: invalid character
+281.20-22: invalid character
+282.20: invalid character
+282.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Numeric hexa escape
+[[31mERR[37m] Wrong output found , but expected A
+
+282.20: invalid character
+282.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Octal escape
+[[31mERR[37m] Wrong output found , but expected B
+
+282.20: invalid character
+282.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Unterminated string
+[[31mERR[37m] Wrong error code found 2, but expected 1
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Escaped newline
+[[31mERR[37m] Wrong output found , but expected 
+
+
+281.20: invalid character
+281.20-21: invalid character
+282.20: invalid character
+282.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Escaped backslash
+[[31mERR[37m] Wrong output found , but expected \
+
+282.20: invalid character
+282.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Escaped dollar
+[[31mERR[37m] Wrong output found , but expected $
+
+282.20: invalid character
+282.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Escaped quote
+[[31mERR[37m] Wrong output found , but expected "
+
+282.20: invalid character
+282.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mBlock comment
+[TEST] Comment comment
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Okay comment
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Unterminated comment
+[[31mERR[37m] Wrong error code found 0, but expected 1
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mNot equals
+[TEST] Okay
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Not okay
+[[31mERR[37m] Wrong error code found 2, but expected 1
+STDERR output:
+Lexical analysis error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mEquals
+[TEST] Okay
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Not okay
+[[31mERR[37m] Wrong error code found 2, but expected 1
+STDERR output:
+Lexical analysis error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[36m> [37mExamples from Assigment
+[TEST] example1
+[[31mERR[37m] Wrong output found , but expected Zadejte cislo pro vypocet faktorialu
+Vysledek je: 120
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] example3
+[[31mERR[37m] Wrong output found , but expected Toto je nejaky text v programu jazyka IFJ22
+Toto je nejaky text v programu jazyka IFJ22, ktery jeste trochu obohatime
+Pozice retezce "text" v $str2: 15
+Zadejte serazenou posloupnost vsech malych pismen a-h, Spatne zadana posloupnost, zkuste znovu:
+Spatne zadana posloupnost, zkuste znovu:
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] visibility
+[[31mERR[37m] Wrong output found , but expected 42426Insert non-empty input for quiting, otherwise next iteration.
+6Insert non-empty input for quiting, otherwise next iteration.
+6Insert non-empty input for quiting, otherwise next iteration.
+6Insert non-empty input for quiting, otherwise next iteration.
+quit10
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] fun
+[[31mERR[37m] Wrong output found , but expected calling f with 10
+calling g with 9
+calling f with 9
+res: 8
+
+435.20: invalid character
+435.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 3, but expected 0
+STDERR output:
+Undefined function or redefinition of one on line: 10
+
+[[31mERR[37m] TEST FAILURE
+[TEST] substr
+[[31mERR[37m] Wrong output found , but expected Ahoj
+"Sve'te \"
+Toto je nejaky text
+Toto je nejaky text, ktery jeste trochu obohatime
+4 znaky od 16. znaku (index 15) v "Toto je nejaky text, ktery jeste trochu obohatime":text
+4 znaky od 16. znaku v "Toto je nejaky text, ktery jeste trochu obohatime":text
+
+281.24: invalid character
+281.24-25: invalid character
+282.20: invalid character
+282.20-21: invalid character
+391.21: invalid character
+391.21-22: invalid character
+432.21: invalid character
+432.21-22: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] hello
+[[31mERR[37m] Wrong output found , but expected Hello from IFJ22
+Hello from IFJ23
+
+291.20: invalid character
+291.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] example2
+[[31mERR[37m] Wrong output found , but expected Zadejte cislo pro vypocet faktorialu: Vysledek je: 720
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m> [37mFunexp
+[TEST] Normal call
+[[31mERR[37m] Wrong output found , but expected ABCD
+
+343.20: invalid character
+343.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 18
+Syntax error on line: 18
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Return
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 8
+Syntax error on line: 8
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Write call
+[[31mERR[37m] Wrong output found , but expected ABCD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 14
+Syntax error on line: 14
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Parameter
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+375.14: syntax error, unexpected END
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m> [37mRosetta Code
+[TEST] Sierpinski carpet
+[[31mERR[37m] Wrong output found , but expected ***************************
+* ** ** ** ** ** ** ** ** *
+***************************
+***   ******   ******   ***
+* *   * ** *   * ** *   * *
+***   ******   ******   ***
+***************************
+* ** ** ** ** ** ** ** ** *
+***************************
+*********         *********
+* ** ** *         * ** ** *
+*********         *********
+***   ***         ***   ***
+* *   * *         * *   * *
+***   ***         ***   ***
+*********         *********
+* ** ** *         * ** ** *
+*********         *********
+***************************
+* ** ** ** ** ** ** ** ** *
+***************************
+***   ******   ******   ***
+* *   * ** *   * ** *   * *
+***   ******   ******   ***
+***************************
+* ** ** ** ** ** ** ** ** *
+***************************
+
+1001.21: invalid character
+1001.21-22: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Mandelbrot fixed
+[[31mERR[37m] Wrong output found , but expected PRECISION=6
+aaaaaaaaabbbbbbbbbbbbbbbbbbbbcbb
+aaaaaaaabbbbbbbbbbbbbbbbbbbbbbcb
+aaaaaaabbbbcccccccccccbbbbbbbbbc
+aaaaaabbbcccccccddeleddcbbbbbbbb
+aaaaabbcccccccdddeei fddccbbbbbb
+aaaabbcdcccccdddefk   eedccbbbbb
+aaaabccccccdddeikjm  klg dccbbbb
+aaabccccccdeeff         kecccbbb
+aaaccccdeifgggk         jfdcccbb
+aaacdddefi   k           fdcccbb
+aaaddefgk                edcccbb
+aaa                     gedccebb
+aaaddefgk                edcccbb
+aaaceddefi   l           fdcccbb
+aaacccddemfgggl         lfdcccbb
+aaabcccccdeeefgl        lecccbbb
+aaaabccccccddef k      g dccbbbb
+aaaabbcdccccddddefk  ieedccbbbbb
+aaaaabbcccccccdddefijfddccbbbbbb
+aaaaaabbccccccccfdeieddccbbbbbbb
+aaaaaaabbbbcccccccccccbbbbbbbbbb
+aaaaaaaabbbbbbbbbbbbbbbbbbbbbbcb
+
+1208.21: invalid character
+1208.21-22: invalid character
+2741.28: syntax error, unexpected END
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Sierpinski triangle
+[[31mERR[37m] Wrong output found , but expected                *               
+              * *              
+             *   *             
+            * * * *            
+           *       *           
+          * *     * *          
+         *   *   *   *         
+        * * * * * * * *        
+       *               *       
+      * *             * *      
+     *   *           *   *     
+    * * * *         * * * *    
+   *       *       *       *   
+  * *     * *     * *     * *  
+ *   *   *   *   *   *   *   * 
+* * * * * * * * * * * * * * * *
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 69
+Syntax error on line: 69
+
+[[31mERR[37m] TEST FAILURE
+[TEST] ROT13
+[[31mERR[37m] Wrong output found , but expected Uryyb jbeyq
+
+Wrong escape sequence!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Proper divisors
+[[31mERR[37m] Wrong output found , but expected 1: 
+2: 1 
+3: 1 
+4: 1 2 
+5: 1 
+6: 1 2 3 
+7: 1 
+8: 1 2 4 
+9: 1 3 
+10: 1 2 5 
+60 with 11 divisors
+
+621.21: invalid character
+621.21-22: invalid character
+901.6: syntax error, unexpected END, expecting ID
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Mandelbrot float
+[[31mERR[37m] Wrong output found , but expected >>>>>>=====<<<<<<<<<<<<<<<;;;;;;:::96032:;;;;<<<<==========
+>>>>>===<<<<<<<<<<<<<<<<;;;;;;;:::873*079::;;;;<<<<<=======
+>>>>===<<<<<<<<<<<<<<<;;;;;;;::9974    (.9::::;;<<<<<======
+>>>==<<<<<<<<<<<<<<<;;;;;;:98888764     5789999:;;<<<<<====
+>>==<<<<<<<<<<<<<;;;;::::996. &2           45335:;<<<<<<===
+>>=<<<<<<<<<<<;;;::::::999752                 *79:;<<<<<<==
+>=<<<<<<<<;;;:599999999886                    %78:;;<<<<<<=
+><<<<;;;;;:::972456-567763                      +9;;<<<<<<<
+><;;;;;;::::9875&      .3                       *9;;;<<<<<<
+>;;;;;;::997564'        '                       8:;;;<<<<<<
+>::988897735/                                 &89:;;;<<<<<<
+>::988897735/                                 &89:;;;<<<<<<
+>;;;;;;::997564'        '                       8:;;;<<<<<<
+><;;;;;;::::9875&      .3                       *9;;;<<<<<<
+><<<<;;;;;:::972456-567763                      +9;;<<<<<<<
+>=<<<<<<<<;;;:599999999886                    %78:;;<<<<<<=
+>>=<<<<<<<<<<<;;;::::::999752                 *79:;<<<<<<==
+>>==<<<<<<<<<<<<<;;;;::::996. &2           45335:;<<<<<<===
+>>>==<<<<<<<<<<<<<<<;;;;;;:98888764     5789999:;;<<<<<====
+>>>>===<<<<<<<<<<<<<<<;;;;;;;::9974    (.9::::;;<<<<<======
+>>>>>===<<<<<<<<<<<<<<<<;;;;;;;:::873*079::;;;;<<<<<=======
+
+1415.1-3: syntax error, unexpected ID, expecting END
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m> [37mStrnum
+[36m---> [37mComparison
+[36m---> [37mAddtion
+[36m------> [37mRuntime
+[36m------> [37mConstant
+[36m> [37mOperators
+[36m---> [37mNull Coalescing
+[36m------> [37mUndefined variable
+[36m> [37mSpecial
+[TEST] Keyword variable assigment
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Function redefinition
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Builtin function redefinition
+[[32mOK[37m ] TEST SUCCESS
+[36m> [37mCode generation
+[36m---> [37mUndefined variable
+[TEST] Floatval undefined var
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Statement
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Conditionally undefined
+[[31mERR[37m] Wrong error code found -11, but expected 5
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] User function argument
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Function argument
+[[32mOK[37m ] TEST SUCCESS
+[36m---> [37mDynamic type tests
+[TEST] Buggy Int float add 1
+[[31mERR[37m] Wrong output found , but expected 6
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Int float add 4
+[[31mERR[37m] Wrong output found , but expected 0x1.8p+1
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Int float add 3
+[[31mERR[37m] Wrong output found , but expected 0x1.cp+1
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Buggy Int float add 4
+[[31mERR[37m] Wrong error code found -11, but expected 5
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Buggy Int float add 3
+[[31mERR[37m] Wrong error code found -11, but expected 5
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Int float add 2
+[[31mERR[37m] Wrong output found , but expected 0x1.6p+2
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Int float add 1
+[[31mERR[37m] Wrong output found , but expected 6
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Buggy Int float add 2
+[[31mERR[37m] Wrong error code found -11, but expected 5
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mWhile
+[TEST] While string zero
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+287.23: invalid character
+287.23-24: invalid character
+291.24: invalid character
+291.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Always false while
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+306.23: invalid character
+306.23-24: invalid character
+310.24: invalid character
+310.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] While float zero
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+287.23: invalid character
+287.23-24: invalid character
+291.24: invalid character
+291.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] While null
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[TEST] While i less than 3
+[[31mERR[37m] Wrong output found , but expected 0
+1
+2
+GOOD
+
+348.20: invalid character
+348.20-21: invalid character
+389.24: invalid character
+389.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] While zero
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+287.23: invalid character
+287.23-24: invalid character
+291.24: invalid character
+291.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] While empty string
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+287.23: invalid character
+287.23-24: invalid character
+291.24: invalid character
+291.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mComparison
+[TEST] Less
+[[31mERR[37m] Wrong output found , but expected done
+1060.32-33: syntax error, unexpected ID
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Less equals
+[[31mERR[37m] Wrong output found , but expected done
+Wrong escape sequence!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Greater
+[[31mERR[37m] Wrong output found , but expected done
+1164.18: syntax error, unexpected END
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Greater equals
+[[31mERR[37m] Wrong output found , but expected done
+1056.23: syntax error, unexpected END
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Not equals
+[[31mERR[37m] Wrong output found , but expected done
+Wrong escape sequence!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 79
+Syntax error on line: 79
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Equals
+[[31mERR[37m] Wrong output found , but expected done
+Wrong escape sequence!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 79
+Syntax error on line: 79
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mFunction call
+[TEST] Optional int
+[[31mERR[37m] Wrong output found , but expected (null)
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 5
+Syntax error on line: 6
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Bad argument type 3
+[[31mERR[37m] Wrong error code found 2, but expected 4
+STDERR output:
+Syntax error on line: 6
+Syntax error on line: 6
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Optional float
+[[31mERR[37m] Wrong output found , but expected (null)
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 5
+Syntax error on line: 6
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Optional string
+[[31mERR[37m] Wrong output found , but expected (null)
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 5
+Syntax error on line: 6
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Bad argument type 2
+[[31mERR[37m] Wrong error code found 2, but expected 4
+STDERR output:
+Syntax error on line: 7
+Syntax error on line: 7
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Bad argument type 4
+[[31mERR[37m] Wrong error code found 2, but expected 4
+STDERR output:
+Syntax error on line: 6
+Syntax error on line: 6
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Success
+[[31mERR[37m] Wrong output found , but expected 1
+
+290.20: invalid character
+290.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Too many arguments
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Too few arguments
+[[32mOK[37m ] TEST SUCCESS
+[TEST]  Bad argument type 1
+[[31mERR[37m] Wrong error code found 51, but expected 4
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mMultiple variable assigments
+[TEST] Null
+[[31mERR[37m] Wrong output found , but expected 3
+
+289.20: invalid character
+289.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mReturn
+[TEST] Missing return keyword
+[[31mERR[37m] Wrong error code found 2, but expected 4
+STDERR output:
+Syntax error on line: 4
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Return void value
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Return wrong type 3
+[[31mERR[37m] Wrong error code found 2, but expected 4
+STDERR output:
+Syntax error on line: 4
+Syntax error on line: 4
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Optional int
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 4
+Syntax error on line: 4
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Return void
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Return wrong type 5
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Return wrong type 2
+[[31mERR[37m] Wrong error code found 2, but expected 4
+STDERR output:
+Syntax error on line: 4
+Syntax error on line: 4
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Optional float
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 4
+Syntax error on line: 4
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Optional string
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 4
+Syntax error on line: 4
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Return wrong type 4
+[[31mERR[37m] Wrong error code found 54, but expected 4
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Missing return value
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Missing return conditional runtime
+[[31mERR[37m] Wrong error code found -11, but expected 4
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Return wrong type 6
+[[31mERR[37m] Wrong error code found 2, but expected 4
+STDERR output:
+Syntax error on line: 4
+Syntax error on line: 4
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Return value
+[[31mERR[37m] Wrong output found , but expected 5
+
+306.20: invalid character
+306.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Void value use
+[[31mERR[37m] Wrong output found , but expected NULL
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Global return
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Missing return conditional const
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Return wrong type 1
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Global return funexp
+[[31mERR[37m] Wrong output found , but expected Hello
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Missing return
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Nonmissing return conditional runtime
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] No return void
+[[32mOK[37m ] TEST SUCCESS
+[36m---> [37mRecursive call
+[TEST] Two functions
+[[31mERR[37m] Wrong output found , but expected 66
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 3, but expected 0
+STDERR output:
+Undefined function or redefinition of one on line: 8
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Single Function
+[[31mERR[37m] Wrong output found , but expected 55
+
+382.1-3: syntax error, unexpected ID, expecting END
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Fibonacci
+[[31mERR[37m] Wrong output found , but expected 34
+
+381.1-2: syntax error, unexpected ID, expecting END
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mIf
+[36m------> [37mDynamic
+[TEST] If null integer
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If zero
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If nonempty string
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If null float
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If nonzero
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If empty string
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If null string
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mConstant
+[TEST] If string zero
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+286.23: invalid character
+286.23-24: invalid character
+290.24: invalid character
+290.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If float zero
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+286.23: invalid character
+286.23-24: invalid character
+290.24: invalid character
+290.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Always true if
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+305.24: invalid character
+305.24-25: invalid character
+309.23: invalid character
+309.23-24: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If null
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 4
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If zero
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+286.23: invalid character
+286.23-24: invalid character
+290.24: invalid character
+290.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If nonempty string
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+286.24: invalid character
+286.24-25: invalid character
+290.23: invalid character
+290.23-24: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If nonzero
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+286.24: invalid character
+286.24-25: invalid character
+290.23: invalid character
+290.23-24: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] If empty string
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+286.23: invalid character
+286.23-24: invalid character
+290.24: invalid character
+290.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Always false if
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+305.23: invalid character
+305.23-24: invalid character
+309.24: invalid character
+309.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mOperators
+[36m------> [37mAssignment
+[TEST] Bracketed variable
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Zero addition
+[[32mOK[37m ] TEST SUCCESS
+[36m------> [37mSubstract
+[36m---------> [37mConstant
+[TEST] Float
+[[31mERR[37m] Wrong output found , but expected 0x1p+0
+
+308.20: invalid character
+308.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null int
+[[31mERR[37m] Wrong output found , but expected -5
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Integer
+[[31mERR[37m] Wrong output found , but expected 3
+
+308.20: invalid character
+308.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mMultiply
+[36m---------> [37mConstant
+[TEST] Float
+[[31mERR[37m] Wrong output found , but expected 0x1p+0
+
+308.20: invalid character
+308.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null int
+[[31mERR[37m] Wrong output found , but expected 0
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Integer
+[[31mERR[37m] Wrong output found , but expected 60
+
+308.20: invalid character
+308.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null float
+[[31mERR[37m] Wrong output found , but expected 0x0p+0
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mConcatenate
+[36m---------> [37mRuntime
+[TEST] String
+[[31mERR[37m] Wrong output found , but expected hello hello
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 4
+Syntax error on line: 4
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null
+[[31mERR[37m] Wrong output found , but expected hello 
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 4
+Syntax error on line: 4
+
+[[31mERR[37m] TEST FAILURE
+[36m---------> [37mConstant
+[TEST] Strings
+[[31mERR[37m] Wrong output found , but expected Hello world
+
+283.28: invalid character
+283.28-29: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null string
+[[31mERR[37m] Wrong output found , but expected hello
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null null
+[[31mERR[37m] Wrong output found , but expected 
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mPrecedence
+[TEST] Add mult
+[[31mERR[37m] Wrong output found , but expected 238
+
+497.20: invalid character
+497.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Div div div
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+409.24: invalid character
+409.24-25: invalid character
+413.23: invalid character
+413.23-24: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mDivide
+[36m---------> [37mRuntime
+[TEST] String string 2
+[[31mERR[37m] Wrong error code found -11, but expected 7
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] String string 3
+[[31mERR[37m] Wrong error code found -11, but expected 7
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] String string
+[[31mERR[37m] Wrong error code found -11, but expected 7
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---------> [37mConstant
+[TEST] Float
+[[31mERR[37m] Wrong output found , but expected 0x1p+0
+
+313.20: invalid character
+313.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Int float
+[[31mERR[37m] Wrong output found , but expected 0x1.5555555555555p-1
+
+313.20: invalid character
+313.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Float int
+[[31mERR[37m] Wrong output found , but expected 0x1.8p+0
+
+313.20: invalid character
+313.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] String string 2
+[[32mOK[37m ] TEST SUCCESS
+[TEST] String string 3
+[[32mOK[37m ] TEST SUCCESS
+[TEST] String string
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Null null
+[[31mERR[37m] Wrong error code found 2, but expected 57
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Integer
+[[31mERR[37m] Wrong output found , but expected 0x1p-1
+
+313.20: invalid character
+313.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mAdd
+[36m---------> [37mRuntime
+[TEST] String string 2
+[[31mERR[37m] Wrong error code found -11, but expected 7
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] String string 3
+[[31mERR[37m] Wrong error code found -11, but expected 7
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] String string
+[[31mERR[37m] Wrong error code found -11, but expected 7
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---------> [37mConstant
+[TEST] Float
+[[31mERR[37m] Wrong output found , but expected 0x1p+0
+
+308.20: invalid character
+308.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Int float
+[[31mERR[37m] Wrong output found , but expected 0x1.4p+1
+
+308.20: invalid character
+308.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Float int
+[[31mERR[37m] Wrong output found , but expected 0x1.4p+1
+
+308.20: invalid character
+308.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] String string 2
+[[32mOK[37m ] TEST SUCCESS
+[TEST] String string 3
+[[32mOK[37m ] TEST SUCCESS
+[TEST] String string
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Null null
+[[31mERR[37m] Wrong output found , but expected 0
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Integer
+[[31mERR[37m] Wrong output found , but expected 3
+
+308.20: invalid character
+308.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mBuiltin functions
+[36m------> [37mIntval
+[TEST] Same Input and Output Var
+[[32mOK[37m ] TEST SUCCESS
+[36m---------> [37mInput
+[TEST] Int input
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------------> [37mString input
+[TEST] Float input
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------------> [37mBool input
+[36m---------> [37mConstant
+[TEST] Integer input
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+313.24: invalid character
+313.24-25: invalid character
+317.23: invalid character
+317.23-24: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Float input
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+313.24: invalid character
+313.24-25: invalid character
+317.23: invalid character
+317.23-24: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[36m------------> [37mBool input
+[36m------> [37mStrlen
+[TEST] Same Input and Output Var
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Input
+[[31mERR[37m] Wrong output found , but expected Length is 5
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Constant
+[[31mERR[37m] Wrong output found , but expected Length is 4
+
+281.21: invalid character
+281.21-22: invalid character
+Wrong escape sequence!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mOrd
+[TEST] Same Input and Output Var
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Empty
+[[31mERR[37m] Wrong output found , but expected Ord is 0
+
+Wrong escape sequence!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Input
+[[31mERR[37m] Wrong output found , but expected Ord is 33
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Constant
+[[31mERR[37m] Wrong output found , but expected Ord is 10
+
+281.20: invalid character
+281.20-21: invalid character
+Wrong escape sequence!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mReads
+[TEST] Not null
+[[31mERR[37m] Wrong output found , but expected Hello user!
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null
+[[31mERR[37m] Wrong output found , but expected It is null!
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mBoolval
+[36m---------> [37mConstant
+[36m------------> [37mInteger input
+[36m------------> [37mFloat input
+[36m------------> [37mBool input
+[36m------> [37mFloatval
+[TEST] Same Input and Output Var
+[[32mOK[37m ] TEST SUCCESS
+[36m---------> [37mInput
+[TEST] Int input
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------------> [37mString input
+[36m---------------> [37mExponential
+[TEST] Float input
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------------> [37mBool input
+[36m---------> [37mConstant
+[TEST] Integer input
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+313.24: invalid character
+313.24-25: invalid character
+317.23: invalid character
+317.23-24: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Float input
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+313.24: invalid character
+313.24-25: invalid character
+317.23: invalid character
+317.23-24: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[36m------------> [37mBool input
+[36m------> [37mChr
+[TEST] Same Input and Output Var
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Out of Interval
+[[31mERR[37m] Wrong error code found 54, but expected 58
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Input
+[[31mERR[37m] Wrong output found , but expected String is 7
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Constant
+[[31mERR[37m] Wrong output found , but expected String is !
+
+Wrong escape sequence!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mSubstring
+[TEST] Same Input and Output Var
+[[31mERR[37m] Wrong output found , but expected abcdbcbc
+Symbol LF@%1 not found!
+Error at line: 292
+Symbol is undefined!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 54, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---------> [37mNot null
+[TEST] Input
+[[31mERR[37m] Wrong output found , but expected Substring is "str"
+
+Wrong escape sequence!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Constant
+[[31mERR[37m] Wrong output found , but expected Substring is "str"
+
+Wrong escape sequence!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---------> [37mNull
+[TEST] i greater or equal to length
+[[31mERR[37m] Wrong output found , but expected Substring is NULL
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 4
+Syntax error on line: 5
+
+[[31mERR[37m] TEST FAILURE
+[TEST] j greater than length
+[[31mERR[37m] Wrong output found , but expected Substring is NULL
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 4
+Syntax error on line: 5
+
+[[31mERR[37m] TEST FAILURE
+[TEST] i greater than j
+[[31mERR[37m] Wrong output found , but expected Substring is NULL
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 4
+Syntax error on line: 5
+
+[[31mERR[37m] TEST FAILURE
+[TEST] i less than zero
+[[31mERR[37m] Wrong output found , but expected Substring is NULL
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+Syntax error on line: 5
+Syntax error on line: 6
+
+[[31mERR[37m] TEST FAILURE
+[TEST] j less than zero
+[[31mERR[37m] Wrong output found , but expected Substring is NULL
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+Syntax error on line: 5
+Syntax error on line: 6
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Same bounds
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+329.24: invalid character
+329.24-25: invalid character
+333.23: invalid character
+333.23-24: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mReadi
+[TEST] Not null
+[[31mERR[37m] Wrong output found , but expected 124
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null
+[[31mERR[37m] Wrong output found , but expected It is null!
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mWrite
+[TEST] Float
+[[31mERR[37m] Wrong output found , but expected 0x1.edd2f1a9fbe77p+6
+
+283.20: invalid character
+283.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] String
+[[31mERR[37m] Wrong output found , but expected Hello world!
+
+Wrong escape sequence!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Empty
+[[31mERR[37m] Wrong output found , but expected DONE
+
+281.24: invalid character
+281.24-25: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Int
+[[31mERR[37m] Wrong output found , but expected 666
+
+283.20: invalid character
+283.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Everything
+[[31mERR[37m] Wrong output found , but expected 123456 or 0x1.edd2f1a9fbe77p+6, thats the question
+
+285.20: invalid character
+285.20-21: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mReadf
+[TEST] Not null
+[[31mERR[37m] Wrong output found , but expected 0x1.8p+0
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null
+[[31mERR[37m] Wrong output found , but expected It is null!
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------> [37mStrval
+[TEST] Same Input and Output Var
+[[31mERR[37m] Wrong output found , but expected abcd
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 5
+Syntax error on line: 5
+
+[[31mERR[37m] TEST FAILURE
+[36m---------> [37mInput
+[36m------------> [37mInteger input
+[TEST] String input
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m------------> [37mFloat input
+[36m------------> [37mBool input
+[36m---------> [37mConstant
+[TEST] String input
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+313.24: invalid character
+313.24-25: invalid character
+317.23: invalid character
+317.23-24: invalid character
+Syntax error!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 51, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Null
+[[31mERR[37m] Wrong output found , but expected GOOD
+
+Error at line: 15
+Label does not exist!
+
+INTERPRETER STDERR output:
+[[31mERR[37m] Wrong error code found 2, but expected 0
+STDERR output:
+Syntax error on line: 3
+Syntax error on line: 3
+
+[[31mERR[37m] TEST FAILURE
+[36m------------> [37mBool input
+[36m> [37mCycles
+[36m> [37mParser
+[36m---> [37mAssignment
+[TEST] Okay
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Assigment nowhere
+[[32mOK[37m ] TEST SUCCESS
+[36m---> [37mExpressions
+[TEST] missing assignment
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Brackets no assign
+[[32mOK[37m ] TEST SUCCESS
+[TEST] missing operator 1
+[[32mOK[37m ] TEST SUCCESS
+[TEST] missing operand 3
+[[31mERR[37m] Timeout expired
+[[31mERR[37m] TEST FAILURE
+[TEST] missing operator 3
+[[32mOK[37m ] TEST SUCCESS
+[TEST] missing operator 2
+[[32mOK[37m ] TEST SUCCESS
+[TEST] missing operand 4
+[[31mERR[37m] Timeout expired
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mWhile
+[TEST] Empty
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Expression not ending in )
+[[32mOK[37m ] TEST SUCCESS
+[36m---> [37mReturn
+[TEST] Global return constant
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Global empty return
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Global return expression
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mFunction
+[TEST] Keyword function else
+[[31mERR[37m] Wrong error code found -11, but expected 2
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Trailing comma
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Keyword function return
+[[31mERR[37m] Wrong error code found -11, but expected 2
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Builtin
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Function parameter redefinition 2
+[[31mERR[37m] Wrong error code found -11, but expected 4 or 8
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Call without parenthesis
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Custom function
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Undefined function
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Function parameter redefinition
+[[31mERR[37m] Wrong error code found -11, but expected 4 or 8
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Trailing commas
+[[31mERR[37m] Wrong error code found -11, but expected 2
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mRandom
+[TEST] Equals 10
+[[31mERR[37m] Timeout expired
+[[31mERR[37m] TEST FAILURE
+[36m---> [37mIf
+[TEST] Single statement
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Multiple statements
+[[31mERR[37m] Wrong error code found -11, but expected 0
+STDERR output:
+
+[[31mERR[37m] TEST FAILURE
+[TEST] Expression not ending in )
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Empty if
+[[32mOK[37m ] TEST SUCCESS
+[TEST] Solo semicolon
+[[32mOK[37m ] TEST SUCCESS
+[36m> [37mBoolthen
+[36m---> [37mShortcircuiting
+[36m---> [37mElseif
+[36m------> [37mConstant
+[36m---> [37mNot
+[36m------> [37mBoolval by double not
+[36m---------> [37mConstant
+[36m------------> [37mInteger input
+[36m------------> [37mFloat input
+[36m------------> [37mBool input
+[36m------> [37mConstant
+[36m---> [37mAnd
+[36m------> [37mConstant
+[36m---> [37mOr
+[36m------> [37mConstant
+Tests finished with [31m202 errors[37m and [32m67 successes[37m
