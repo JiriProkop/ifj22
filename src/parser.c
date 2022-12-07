@@ -112,10 +112,30 @@ void add_prebuilt() {
                       "strval", "strlen", "substring", "ord", "chr"};
     
     // functions arguments
-    list_t *args0 = NULL;
-    list_t *args1 = NULL;
-    list_t *args2 = NULL;
-    list_t *args3 = NULL;
+    list_t *args0 = malloc(sizeof(list_t));
+    if(args0 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args0);
+    list_t *args1 = malloc(sizeof(list_t));
+    if(args1 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args1);
+    list_t *args2 = malloc(sizeof(list_t));
+    if(args2 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args2);
+    list_t *args3 = malloc(sizeof(list_t));
+    if(args3 == NULL) {
+        error_handle(0, compiler_error);
+        abort();
+    }
+    list_init(args3);
     list_t *args4 = malloc(sizeof(list_t));
     if(args4 == NULL) {
         error_handle(0, compiler_error);
