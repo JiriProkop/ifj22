@@ -240,14 +240,10 @@ bool start() {
 
     bool value = false;
     get_tkn();
-    // first it checks the token types and if then legal keywords
-    if(current_tkn->type == token_identifier || current_tkn->type == token_varieble ||
-       current_tkn->type == token_none || current_tkn->attr.keyword == keyword_function ||
-       current_tkn->attr.keyword == keyword_function || current_tkn->attr.keyword == keyword_return ||
-       current_tkn->attr.keyword == keyword_if || current_tkn->attr.keyword == keyword_while) {
-        
-        value = program() && konec();
-    }
+    
+    // rule: <start> -> <program> <konec>
+    value = program() && konec();
+
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
         abort();
