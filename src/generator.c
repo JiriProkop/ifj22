@@ -206,9 +206,12 @@ void gen_readf() {
 
 void gen_write(list_t *parameters) {
     list_node_t *towrite = parameters->first;
-    while (towrite != NULL)
-    {
-        printf("WRITE LF@%s\n", towrite->id->array);
+    while(towrite != NULL) {
+        if(towrite->id->array[0] == '%') {
+            printf("WRITE GF@%s\n", towrite->id->array);
+        } else {
+            printf("WRITE LF@%s\n", towrite->id->array);
+        }
         towrite = towrite->next;
     }
 }
