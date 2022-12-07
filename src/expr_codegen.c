@@ -77,7 +77,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
             printf("PUSHS bool@false\n");
             printf("PUSHS string@float\n");
             printf("PUSHS LF@%s\n", tok2->attr.str->array);
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS LF@%s\n", tok2->attr.str->array);
         } else {
             printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
@@ -86,7 +86,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
         printf("JUMP %s_DONE_%u\n", operation, *num);
         // else -> type1 is float
@@ -96,7 +96,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS LF@%s\n", tok2->attr.str->array);
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS LF@%s\n", tok2->attr.str->array);
         printf("JUMP %s_DONE_%u\n", operation, *num);
 
@@ -124,7 +124,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
             printf("PUSHS bool@false\n");
             printf("PUSHS string@float\n");
             printf("PUSHS GF@$val1\n");
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS GF@$val1\n");
         } else {
             error_handle(tok2->line, expr_type_error);
@@ -143,7 +143,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
             printf("PUSHS bool@false\n");
             printf("PUSHS string@float\n");
             printf("PUSHS GF@$val1\n");
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS GF@$val1\n");
         } else {
             printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
@@ -152,7 +152,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
         printf("JUMP %s_DONE_%u\n", operation, *num);
         // else -> type1 is float
@@ -162,7 +162,7 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val1\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val1\n");
         printf("JUMP %s_DONE_%u\n", operation, *num);
 
@@ -193,13 +193,13 @@ void cat_varval(token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS LF@%s\n", tok2->attr.str->array);
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS LF@%s\n", tok2->attr.str->array);
 
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
         if (save_to_right) {
             printf("CONCAT GF@$right_result GF@$left_result LF@%s\n", tok2->attr.str->array);
@@ -215,7 +215,7 @@ void cat_varval(token_t *tok2, bool save_to_right) {
             printf("PUSHS bool@false\n");
             printf("PUSHS string@string\n");
             printf("PUSHS GF@$val1\n");
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS GF@$val1\n");
         } else {
             error_handle(tok2->line, expr_type_error);
@@ -224,7 +224,7 @@ void cat_varval(token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
         if (save_to_right) {
             printf("CONCAT GF@$right_result GF@$left_result GF@$val1\n");
@@ -346,7 +346,7 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result LF@%s\n", tok2->attr.str->array);
@@ -360,7 +360,7 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS LF@%s\n", tok2->attr.str->array);
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS LF@%s\n", tok2->attr.str->array);
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result LF@%s\n", tok2->attr.str->array);
@@ -373,7 +373,7 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS LF@%s\n", tok2->attr.str->array);
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS LF@%s\n", tok2->attr.str->array);
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result LF@%s\n", tok2->attr.str->array);
@@ -386,7 +386,7 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result LF@%s\n", tok2->attr.str->array);
@@ -443,7 +443,7 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result GF@$val1\n");
@@ -457,7 +457,7 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val1\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val1\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result GF@$val1\n");
@@ -470,7 +470,7 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$val1\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val1\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result GF@$val1\n");
@@ -483,7 +483,7 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result GF@$val1\n");
@@ -539,7 +539,7 @@ void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
 
         printf("LT GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
@@ -556,7 +556,7 @@ void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS LF@%s\n", tok2->attr.str->array);
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS LF@%s\n", tok2->attr.str->array);
 
         printf("LT GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
@@ -572,7 +572,7 @@ void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS LF@%s\n", tok2->attr.str->array);
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS LF@%s\n", tok2->attr.str->array);
 
         printf("LT GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
@@ -588,7 +588,7 @@ void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
 
         printf("LT GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
@@ -654,7 +654,7 @@ void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
 
         printf("LT GF@$cond1 GF@$left_result GF@$val1\n");
@@ -671,7 +671,7 @@ void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val1\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val1\n");
 
         printf("LT GF@$cond1 GF@$left_result GF@$val1\n");
@@ -687,7 +687,7 @@ void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$val1\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val1\n");
 
         printf("LT GF@$cond1 GF@$left_result GF@$val1\n");
@@ -703,7 +703,7 @@ void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
 
         printf("LT GF@$cond1 GF@$left_result GF@$val1\n");
@@ -759,7 +759,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
             printf("PUSHS bool@false\n");
             printf("PUSHS string@float\n");
             printf("PUSHS GF@$right_result\n");
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS GF@$right_result\n");
         } else {
             printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
@@ -768,7 +768,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
         printf("JUMP %s_DONE_%u\n", operation, *num);
         // else -> type1 is float
@@ -778,7 +778,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$right_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$right_result\n");
         printf("JUMP %s_DONE_%u\n", operation, *num);
 
@@ -819,7 +819,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
             printf("PUSHS bool@false\n");
             printf("PUSHS string@int\n");
             printf("PUSHS GF@$val1\n");
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS GF@$val1\n");
         } else {
             error_handle(tok1->line, expr_type_error);
@@ -842,7 +842,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
             printf("PUSHS bool@false\n");
             printf("PUSHS string@int\n");
             printf("PUSHS GF@$val2\n");
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS GF@$val2\n");
         } else {
             error_handle(tok2->line, expr_type_error);
@@ -856,7 +856,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
             printf("PUSHS bool@false\n");
             printf("PUSHS string@float\n");
             printf("PUSHS GF@$val2\n");
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS GF@$val2\n");
         } else {
             printf("JUMPIFEQ %s_DONE_%u GF@$type2 string@int\n", operation, *num);
@@ -865,7 +865,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val1\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val1\n");
         printf("JUMP %s_DONE_%u\n", operation, *num);
         // else -> type1 is float
@@ -875,7 +875,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val2\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val2\n");
         printf("JUMP %s_DONE_%u\n", operation, *num);
 
@@ -956,13 +956,13 @@ void gen_cat(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
 
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$right_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$right_result\n");
         if (save_to_right) {
             printf("CONCAT GF@$right_result GF@$left_result GF@$right_result\n");
@@ -981,14 +981,14 @@ void gen_cat(token_t *tok1, token_t *tok2, bool save_to_right) {
             printf("PUSHS bool@false\n");
             printf("PUSHS string@string\n");
             printf("PUSHS LF@%s\n", tok1->attr.str->array);
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS GF@$val1\n");
         } else if (tok1->type == token_keyword && tok1->attr.keyword == keyword_null) {
             printf("MOVE GF@$val1 nil@nil\n");
             printf("PUSHS bool@false\n");
             printf("PUSHS string@string\n");
             printf("PUSHS GF@$val1\n");
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS GF@$val1\n");
         } else {
             error_handle(tok1->line, expr_type_error);
@@ -1002,14 +1002,14 @@ void gen_cat(token_t *tok1, token_t *tok2, bool save_to_right) {
             printf("PUSHS bool@false\n");
             printf("PUSHS string@string\n");
             printf("PUSHS LF@%s\n", tok2->attr.str->array);
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS GF@$val2\n");
         } else if (tok2->type == token_keyword && tok2->attr.keyword == keyword_null) {
             printf("MOVE GF@$val2 nil@nil\n");
             printf("PUSHS bool@false\n");
             printf("PUSHS string@string\n");
             printf("PUSHS GF@$val2\n");
-            printf("CALL %%TYPE_CASTING\n");
+            printf("CALL %%type_casting\n");
             printf("POPS GF@$val2\n");
         } else {
             error_handle(tok2->line, expr_type_error);
@@ -1166,7 +1166,7 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result GF@$right_result\n");
@@ -1180,7 +1180,7 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$right_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$right_result\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result GF@$right_result\n");
@@ -1193,7 +1193,7 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$right_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$right_result\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result GF@$right_result\n");
@@ -1206,7 +1206,7 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$left_result GF@$right_result\n");
@@ -1296,7 +1296,7 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val1\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val1\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$val1 GF@$val2\n");
@@ -1310,7 +1310,7 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val2\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val2\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$val1 GF@$val2\n");
@@ -1323,7 +1323,7 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$val2\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val2\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$val1 GF@$val2\n");
@@ -1336,7 +1336,7 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$val1\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val1\n");
         if (save_to_right) {
             printf("LT GF@$right_result GF@$val1 GF@$val2\n");
@@ -1395,7 +1395,7 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
 
         printf("LT GF@$cond1 GF@$left_result GF@$right_result\n");
@@ -1412,7 +1412,7 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$right_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$right_result\n");
 
         printf("LT GF@$cond1 GF@$left_result GF@$right_result\n");
@@ -1428,7 +1428,7 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$right_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$right_result\n");
 
         printf("LT GF@$cond1 GF@$left_result GF@$right_result\n");
@@ -1444,7 +1444,7 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$left_result\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$left_result\n");
 
         printf("LT GF@$cond1 GF@$left_result GF@$right_result\n");
@@ -1541,7 +1541,7 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val1\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val1\n");
 
         printf("LT GF@$cond1 GF@$val1 GF@$val2\n");
@@ -1558,7 +1558,7 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@float\n");
         printf("PUSHS GF@$val2\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val2\n");
 
         printf("LT GF@$cond1 GF@$val1 GF@$val2\n");
@@ -1574,7 +1574,7 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$val2\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val2\n");
 
         printf("LT GF@$cond1 GF@$val1 GF@$val2\n");
@@ -1590,7 +1590,7 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
         printf("PUSHS GF@$val1\n");
-        printf("CALL %%TYPE_CASTING\n");
+        printf("CALL %%type_casting\n");
         printf("POPS GF@$val1\n");
 
         printf("LT GF@$cond1 GF@$val1 GF@$val2\n");
