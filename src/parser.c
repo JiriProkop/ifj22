@@ -912,8 +912,8 @@ bool konec() {
 
 bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
     if(second_tkn) {
-        return expr(prev_tok, current_tkn, frame);
+        return expr(prev_tok, current_tkn);
     } else {
-        return expr(*current_tkn, NULL, frame);
+        return expr(*current_tkn, NULL);
     }
 }
