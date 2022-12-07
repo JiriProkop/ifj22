@@ -9,6 +9,8 @@
  * @author Marek Chalupka <xchalu18@stud.fit.vut.cz>
  */
 
+#define SIZE 150
+
 #include <stdio.h>
 #include "generator.h"
 #include "dynstr.h"
@@ -18,11 +20,11 @@
 #include "error.h"
 #include "scanner.h"
 
-unsigned gen_number_while_start = 0;
-unsigned gen_number_while_open = 0;
+unsigned gen_while_i = 1;
+unsigned gen_if_i = 1;
 
-unsigned gen_number_if = 0;
-unsigned gen_number_open_if = 0;
+unsigned *while_array;
+unsigned *if_array;
 
 // type_casting
 void gen_type_casting() {
@@ -396,6 +398,24 @@ void gen_header() {
     gen_substring();
     gen_ord();
     gen_chr();
+
+    // malloc tmp arrays
+    while_array = malloc(sizeof(unsigned) * SIZE);
+    if(while_array == NULL){
+        error_handle(0, compiler_error);
+        abort();
+    }
+    if_array = malloc(sizeof(unsigned) * SIZE);
+    if(if_array == NULL){
+        free(while_array);
+        error_handle(0, compiler_error);
+        abort();
+    }
+    // init arrays
+    for(int i = 0; i < SIZE; i++){
+        while_array[i] = 0;
+        if_array[i] = 0;
+    }
 }
 
 void gen_function_def(dynstr_t *id, list_t* parameters){
@@ -593,9 +613,20 @@ void gen_assign_value(dynstr_t *variable) {
 }
 
 void gen_while_start(){
-    printf("LABEL %%while%u_start\n", gen_number_while_start);
-    gen_number_while_start++;
-    gen_number_while_open++;
+    printf("LABEL %%while%u_start\n", gen_while_i);
+    int i = 0;
+    while(i < SIZE && while_array[i] != 0){
+        i++;
+    }
+    // check that the array did not overflow
+    if(i == SIZE){
+        error_handle(0, compiler_error);
+        free(while_array);
+        free(if_array);
+        abort();
+    }
+    while_array[i] = gen_while_i;
+
 }
 
 void gen_while_check_condition(){
@@ -604,13 +635,18 @@ void gen_while_check_condition(){
     printf("CALL %%cast_bool\n");
     printf("POPS GF@%%%u\n", temp_var_counter);
     // start if 
-    printf("JUMPIFEQ %%while%u_end GF@%%%u bool@true\n", gen_number_while_start - gen_number_while_open, temp_var_counter);
+    printf("JUMPIFEQ %%while%u_end GF@%%%u bool@true\n", gen_while_i, temp_var_counter);
+    gen_while_i++;
 }
 
 void gen_while_end(){
-    printf("JUMP %%while%u_start\n", gen_number_while_start - gen_number_while_open);
-    printf("LABEL %%while%u_end\n", gen_number_while_start - gen_number_while_open);
-    gen_number_while_open--;
+    int i = SIZE - 1;
+    while(while_array[i] == 0 && i == 0){
+        i--;
+    }
+    printf("JUMP %%while%u_start\n", while_array[i]);
+    printf("LABEL %%while%u_end\n", while_array[i]);
+    while_array[i] = 0;
 }
 
 void gen_if_start(){
@@ -619,18 +655,37 @@ void gen_if_start(){
     printf("CALL %%cast_bool\n");
     printf("POPS GF@%%%u\n", temp_var_counter);
     // start if 
-    printf("JUMPIFEQ if%u_else GF@%%%u bool@false\n", gen_number_if, temp_var_counter);
-    gen_number_if++;
-    gen_number_open_if++;
+    printf("JUMPIFEQ if%u_else GF@%%%u bool@false\n", gen_if_i, temp_var_counter);
+    int i = 0;
+    while (i < SIZE && if_array[i] != 0){
+        i++;
+    }
+    // check that the array did not overflow
+    if(i == SIZE){
+        error_handle(0, compiler_error);
+        free(while_array);
+        free(if_array);
+        abort();
+    }
+    if_array[i] = gen_if_i;
+    gen_if_i++;
 }
 
 void gen_if_start_else(){
     // start else
-    printf("JUMP if%u_end\n", gen_number_if - gen_number_open_if);
-    printf("LABEL if%u_else\n", gen_number_if - gen_number_open_if);
+    int i = SIZE - 1;
+    while(i != 0 && if_array[i] == 0){
+        i--;
+    }
+    printf("JUMP if%u_end\n", if_array[i]);
+    printf("LABEL if%u_else\n", if_array[i]);
 }
 
 void gen_if_end(){
-    printf("LABEL if%u_end\n", gen_number_if - gen_number_open_if);
-    gen_number_open_if--;
+    int i = SIZE - 1;
+    while(i != 0 && if_array[i] == 0){
+        i--;
+    }
+    printf("LABEL if%u_end\n", if_array[i]);
+    if_array[i] = 0;
 }
