@@ -113,6 +113,11 @@ void gen_cast_to_bool() {
     printf("PUSHS bool@true\n");
     printf("RETURN\n");
     printf("LABEL %%cast_bool_continue3\n");
+    // bool
+    printf("JUMPIFNEQ %%cast_bool_continue4 GF@%%cast_bool_type%% string@bool\n");
+    printf("PUSHS GF@%%cast_bool_var%%\n");
+    printf("RETURN\n");
+    printf("LABEL %%cast_bool_continue4\n");
 
     printf("PUSHS bool@false\n");
     printf("RETURN\n");
@@ -357,11 +362,9 @@ void gen_header() {
     printf("CREATEFRAME\n");
     // universal variable for conditions and assignments
     printf("DEFVAR GF@%%condition\n");
-
+    printf("PUSHFRAME\n");
     // jump to the temporary variable definitions
     printf("CALL %%temp_var_definitions\n");
-
-    printf("PUSHFRAME\n");
     
     gen_type_casting();
     gen_cast_to_bool();
@@ -398,8 +401,21 @@ void gen_function_def(dynstr_t *id, list_t* parameters){
         i = i->next;
     }
     printf("PUSHFRAME\n");
+
+    // define all the variables used in the function
+    printf("JUMP %s_definitions\n", id->array);
+    printf("LABEL %s_definitions_back\n", id->array);
 }
 
+void gen_define_used_vars(sym_table *tree) {
+    if(tree != NULL) {
+        if(!tree->data->is_function && !tree->data->defined) {
+            printf("DEFVAR LF@%s\n", tree->id->array);
+        }
+        gen_define_used_vars(tree->left);
+        gen_define_used_vars(tree->right);
+    }
+}
 
 void gen_function_def_end(dynstr_t *id, sym_table *gen_tree) {
     printf("POPFRAME\n");
@@ -411,6 +427,14 @@ void gen_function_def_end(dynstr_t *id, sym_table *gen_tree) {
     }
     // if you got on the end of void function return
     printf("RETURN\n");
+
+    // define all the variables used in the function
+    printf("JUMP %s_definitions_skip\n", id->array);
+    printf("LABEL %s_definitions\n", id->array);
+    gen_define_used_vars(current_frame);
+    printf("JUMP %s_definitions_back\n", id->array);
+    printf("LABEL %s_definitions_skip\n", id->array);
+
     printf("LABEL %s_end\n", id->array);
 }
 
@@ -518,6 +542,9 @@ void gen_temp_var_definitions() {
         printf("DEFVAR GF@%%%u\n", i);
     }
 
+    // also define all the used variables in the "main" frame
+    gen_define_used_vars(current_frame);
+
     printf("RETURN\n");
     printf("LABEL %%temp_var_definitions_end\n");
 }
@@ -528,15 +555,6 @@ void gen_closure(){
     printf("EXIT int@0\n");
 
     gen_temp_var_definitions(); // temporary variable definitons
-}
-
-void gen_def_variable(dynstr_t *variable, sym_table *tree_gen){
-    // define if it is not already defined 
-    sym_data* variable_node = st_search(tree_gen,variable);   
-    if(variable_node->defined == false){
-        printf("DEFVAR LF@%s\n", variable->array);
-        variable_node->defined = true;
-    }
 }
 
 void gen_fill_variable(dynstr_t *variable){

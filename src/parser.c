@@ -376,10 +376,11 @@ bool definice() {
         if(value && current_tkn->type != token_curly_right) {
             value = false;
         }
-        // return the frame back to the main frame
-        current_frame = tree;
 
         gen_function_def_end(id, tree); // generate function definition end
+
+        // return the frame back to the main frame
+        current_frame = tree;
     }
     if(!value) {
         error_handle(current_tkn->line, syntax_error);
@@ -694,8 +695,6 @@ bool prikaz(dynstr_t *current_function_id) {
             if(st_search(current_frame, id) == NULL) {
                 add_node(&current_frame, id, 0, NULL, 0, keyword_null, 0, 0);
             }
-            // generates the definition of a variable, if it was not already defined
-            gen_def_variable(id, current_frame);
 
             // <vyraz>
             get_tkn();
@@ -897,6 +896,7 @@ bool konec() {
         error_handle(current_tkn->line, syntax_error);
         abort();
     }
+    current_frame = tree; // just in case
     gen_closure();
     abort(); // end the parser
 }

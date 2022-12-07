@@ -1,9 +1,14 @@
 <?php
 declare(strict_types=1);
 
-function foo() : int {
-    return 3;
+function foo(int $a) : void {
+    if($a) {
+        $b = 1;
+    }
+    $b = 2;
+    write($b);
 }
 
-$a = foo();
-write($a);
+$x = 3;
+
+foo($x);
