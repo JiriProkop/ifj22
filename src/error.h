@@ -1,6 +1,7 @@
 /**
  * Project: compiler of IFJ22 programming language
  *
+ * @file error.h
  * @brief error handler
  *
  * @author Jiří Prokop xproko47 <xproko47@stud.fit.vutbr.cz>

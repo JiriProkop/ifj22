@@ -1,3 +1,14 @@
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @file generator.c
+ * @brief The implementation of a code generator.
+ * 
+ * @author Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
+ * @author Štěpán Czajkowski <xczajk01@stud.fit.vutbr.cz>
+ * @author Marek Chalupka <xchalu18@stud.fit.vut.cz>
+ */
+
 #include <stdio.h>
 #include "generator.h"
 #include "dynstr.h"

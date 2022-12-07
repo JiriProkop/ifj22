@@ -1,3 +1,12 @@
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @file dynstr.c
+ * @brief Dynamic string implementation.
+ *
+ * @author Patrik Čerbák xcerba00 <xcerba00@stud.fit.vutbr.cz>
+ */
+
 #include <stdlib.h>
 #include "dynstr.h"
 #include "parser.h"

@@ -1,3 +1,12 @@
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @file parser.c
+ * @brief The implementation of a parser.
+ *
+ * @author Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>

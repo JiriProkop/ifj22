@@ -1,6 +1,15 @@
 #include <ctype.h>
 #include <limits.h>
 #include <math.h>
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @file scanner.c
+ * @brief scanner implementation.
+ *
+ * @author Jiří Prokop xproko47 <xproko47@stud.fit.vutbr.cz>
+ */
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>

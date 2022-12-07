@@ -1,6 +1,7 @@
 /**
  * Project: compiler of IFJ22 programming language
  *
+ * @file scanner.h
  * @brief scanner implementation.
  *
  * @author Jiří Prokop xproko47 <xproko47@stud.fit.vutbr.cz>

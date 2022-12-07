@@ -1,10 +1,11 @@
 /**
  * Project: compiler of IFJ22 programming language
  *
+ * @file symtable.h
  * @brief Symbol table implementation using binary search tree.
- * Based on solution of the second IAL homework.
  *
  * @author Marek Chalupka <xchalu18@stud.fit.vut.cz>
+ * @author Štěpán Czajkowski <xczajk01@stud.fit.vutbr.cz>
  */
 
 #ifndef _SYMTABLE_H

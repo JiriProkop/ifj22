@@ -1,6 +1,7 @@
 /**
  * Project: compiler of IFJ22 programming language
  *
+ * @file stack.h
  * @brief Header file of stack
  *
  * @author Štěpán Czajkowski xczajk01 <xczajk01@stud.fit.vutbr.cz>
