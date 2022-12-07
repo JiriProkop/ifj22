@@ -12,7 +12,7 @@ CFLAGS = -std=c11 -Wall -Wextra -O2
 LDLIBS = -lm
 
 # the main program
-compiler: scanner.o parser.o generator.o error.o expr.o symtable.o dynstr.o stack.o ll.o
+compiler: scanner.o parser.o generator.o error.o expr.o symtable.o dynstr.o stack.o ll.o expr_codegen.o
 	$(CC) $(CFLAGS) $^ main.c -o $@ $(LDLIBS)
 
 # compile object files
