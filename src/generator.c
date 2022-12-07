@@ -377,7 +377,8 @@ void gen_header() {
     printf("DEFVAR GF@$tmp\nDEFVAR GF@$val1\nDEFVAR GF@$val2\nDEFVAR GF@$cond1\nDEFVAR GF@$cond2\n");
     printf("PUSHFRAME\n");
     // jump to the temporary variable definitions
-    printf("CALL %%temp_var_definitions\n");
+    printf("JUMP %%temp_var_definitions\n");
+    printf("LABEL %%temp_var_definitions_back\n");
     
     gen_type_casting();
     gen_cast_to_bool();
@@ -559,7 +560,7 @@ void gen_temp_var_definitions() {
     // also define all the used variables in the "main" frame
     gen_define_used_vars(current_frame);
 
-    printf("RETURN\n");
+    printf("JUMP %%temp_var_definitions_back\n");
     printf("LABEL %%temp_var_definitions_end\n");
 }
 
