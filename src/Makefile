@@ -1,3 +1,11 @@
+#
+# Project: compiler of IFJ22 programming language
+#
+# File: Makefile
+#
+# Author: Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
+#
+
 CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -O2
 LDLIBS = -lm
