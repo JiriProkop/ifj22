@@ -25,6 +25,11 @@ extern token_t *current_tkn;
 extern unsigned int temp_var_counter;
 
 /**
+ * A global variable for the tree of current frame.
+*/
+extern sym_table *current_frame;
+
+/**
  * Function frees everything allocated in parser and exits program.
 */
 void abort();
