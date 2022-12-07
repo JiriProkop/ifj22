@@ -87,7 +87,7 @@ void add_node(sym_table **tree, dynstr_t *id, bool is_function, list_t *paramete
     }
     data->defined = defined;
     if(is_function) {
-        sym_table *subtree = malloc(sizeof(sym_data));
+        sym_table *subtree = malloc(sizeof(sym_table));
         if(subtree == NULL) {
             error_handle(0, compiler_error);
             abort();
