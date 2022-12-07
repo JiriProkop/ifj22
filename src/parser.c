@@ -529,7 +529,7 @@ bool prikaz(dynstr_t *current_function_id) {
             abort();
         }
 
-        if(value && !vyraz(false, *current_tkn, current_frame)) {
+        if(value && !vyraz(false, *current_tkn)) {
             value = false; 
         }
         // ;
@@ -609,7 +609,7 @@ bool prikaz(dynstr_t *current_function_id) {
         }
         // <vyraz>
         get_tkn();
-        if(value && !vyraz(false, *current_tkn, current_frame)) {
+        if(value && !vyraz(false, *current_tkn)) {
             value = false; 
         }
         // )
@@ -657,7 +657,7 @@ bool prikaz(dynstr_t *current_function_id) {
         }
         // <vyraz>
         get_tkn();
-        if(value && !vyraz(false, *current_tkn, current_frame)) {
+        if(value && !vyraz(false, *current_tkn)) {
             value = false; 
         }
         // )
@@ -693,7 +693,7 @@ bool prikaz(dynstr_t *current_function_id) {
         // something else
         get_tkn();
         if(value && current_tkn->type != token_assign) {
-            vyraz(true, prev_tok, current_frame);
+            vyraz(true, prev_tok);
             // ;
             if(value && current_tkn->type != token_semicol) {
                 value = false;
@@ -711,7 +711,7 @@ bool prikaz(dynstr_t *current_function_id) {
                 value = prikaz(current_function_id);
                 gen_assign_value(id);
             } else {
-                value = vyraz(false, *current_tkn, current_frame);
+                value = vyraz(false, *current_tkn);
                 // ;
                 if(value && current_tkn->type != token_semicol) {
                     value = false;
@@ -722,7 +722,7 @@ bool prikaz(dynstr_t *current_function_id) {
         }
     // checks expressions
     } else {
-        value = vyraz(false, *current_tkn, current_frame);
+        value = vyraz(false, *current_tkn);
         // check for ;
         if(value && current_tkn->type != token_semicol) {
             value = false;
@@ -796,7 +796,7 @@ bool vol_parametry(list_t *parameters) {
         value = true;
         // <vyraz>
         // no get_tkn(), since the token in if -^ is also a first token from <vyraz>
-        if(value && !vyraz(false, *current_tkn, current_frame)) {
+        if(value && !vyraz(false, *current_tkn)) {
             value = false;
         }
         // adding the parameter to a list
@@ -867,7 +867,7 @@ bool vol_par(list_t *parameters) {
         value = true;
         // <vyraz>
         // no get_tkn(), since the token in if -^ is also a first token from <vyraz>
-        if(value && !vyraz(false, *current_tkn, current_frame)) {
+        if(value && !vyraz(false, *current_tkn)) {
             value = false;
         }
         // adding the parameter to a list
@@ -910,7 +910,7 @@ bool konec() {
     return true;
 }
 
-bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame) {
+bool vyraz(bool second_tkn, token_t prev_tok) {
     if(second_tkn) {
         return expr(prev_tok, current_tkn);
     } else {

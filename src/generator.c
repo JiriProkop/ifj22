@@ -373,6 +373,8 @@ void gen_header() {
     printf("CREATEFRAME\n");
     // universal variable for conditions and assignments
     printf("DEFVAR GF@%%condition\n");
+    printf("DEFVAR GF@$left_result\nDEFVAR GF@$right_result\nDEFVAR GF@$type1\nDEFVAR GF@$type2\nDEFVAR GF@$type\n");
+    printf("DEFVAR GF@$tmp\nDEFVAR GF@$val1\nDEFVAR GF@$val2\nDEFVAR GF@$cond1\nDEFVAR GF@$cond2\n");
     printf("PUSHFRAME\n");
     // jump to the temporary variable definitions
     printf("CALL %%temp_var_definitions\n");

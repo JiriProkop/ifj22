@@ -175,9 +175,8 @@ bool konec();
  * 
  * @param second_tkn True if there are two tokens for the calling of expr()
  * @param prev_tok If second_tok is true, than it is a previous token, otherwise it is undefined.
- * @param frame Pointer to the current frame.
  * @return True if it was correct.
 */
-bool vyraz(bool second_tkn, token_t prev_tok, sym_table *frame);
+bool vyraz(bool second_tkn, token_t prev_tok);
 
 #endif
