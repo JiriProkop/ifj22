@@ -1621,11 +1621,18 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
 }
 
 void gen_expression(exprll *ll) {
-    printf("MOVE GF@$left_result nil@nil\n");
+    bool flag = false;
+    if(exprll_leftmost_rule(ll) != NULL) {
+        printf("MOVE GF@$left_result nil@nil\n");
+    } else {
+        flag = true;
+    }
     while (1) {
         exprll *rule_node = exprll_leftmost_rule(ll);
         if (rule_node == NULL) {
-            printf("MOVE GF@%%%u GF@$left_result\n", temp_var_counter);
+            if(flag) {
+                printf("MOVE GF@%%%u GF@$left_result\n", temp_var_counter);
+            }
             return;
         }
         switch (rule_node->rule) {

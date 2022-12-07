@@ -17,6 +17,19 @@
 #include "symtable.h"
 #include "generator.h"
 
+void print_tree(sym_table *treee) {
+    if(treee == NULL) {
+        printf("[...] - [...]\n");
+        return;
+    } else {
+        printf("[%s] - [%d]\n", treee->id->array, treee->data->is_function);
+        print_tree(treee->left);
+        print_tree(treee->right);
+    }
+}
+
+
+
 /**
  * A global variable used for the current token.
 */
@@ -234,6 +247,7 @@ bool start() {
 
     // add all the prebuit functions to the tree
     add_prebuilt();
+    current_frame = tree; // return the current_frame back to tree
 
     gen_header(); // generate the header of the code
 
@@ -704,7 +718,7 @@ bool prikaz(dynstr_t *current_function_id) {
             if(st_search(current_frame, id) == NULL) {
                 add_node(&current_frame, id, 0, NULL, 0, keyword_null, 0, 0);
             }
-
+            
             // <vyraz>
             get_tkn();
             if(value && current_tkn->type == token_identifier) {
