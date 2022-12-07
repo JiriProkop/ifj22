@@ -5,6 +5,7 @@
  * @brief Header file of stack
  *
  * @author Štěpán Czajkowski xczajk01 <xczajk01@stud.fit.vutbr.cz>
+ * @author Jiří Prokop xproko47 <xproko47@stud.fit.vutbr.cz>
  */
 
 #ifndef _STACK_H
@@ -107,4 +108,62 @@ void stack_insert_shift(stack *stack);
  * @return unsigned number of tokens to nearest shift (<)
  */
 unsigned tokens_to_shift(stack *stack);
+
+/**
+ * @struct linked list structure for expression code generation
+ */
+typedef struct expr_linked_list{
+    int rule;
+    token_t *ptok;
+    struct expr_linked_list *next;
+} exprll;
+
+/**
+ * @brief Initialises linked list.
+ * 
+ * @param ll pointer to linked list
+ */
+void exprll_init(exprll **ll);
+
+/**
+ * @brief Adds new element on start of given linked list
+ * 
+ * @param ll pointer to linked list
+ * @param data integer, will be put in new ll element
+ * @param ptok pointer to allocated token if data == 0, is NULL otherwise.
+ * @return false in case of malloc error, true otherwise
+ */
+bool exprll_add(exprll **ll, int data, token_t* ptok);
+
+/**
+ * @brief Deletes given linked list
+ * 
+ * @param ll pointer to linked list, will be set to NULL
+ */
+void expll_dispose(exprll *ll);
+
+/**
+ * @brief Finds leftmost node with not erule_val rule in given linked list.
+ * 
+ * @param ll pointer to linked list with rules.
+ * @return Returns pointer to leftmost node with not 0 rule
+ */
+exprll *exprll_leftmost_rule(exprll *ll);
+
+/**
+ * @brief Finds, whether in previous node is erule_val or not.
+ * 
+ * @param node pointer to node of linked list
+ * @param ll pointer to linked list
+ * @return Returns true, if in previous node is erule_val, false othewise.
+ */
+bool exprll_prev_value(exprll *node, exprll *ll);
+
+/**
+ * @brief Deletes next node of given node.
+ * 
+ * @param node pointer to node of linked list
+ */
+void exprll_del_next(exprll *node);
+
 #endif
