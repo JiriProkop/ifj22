@@ -9,6 +9,8 @@
  * @author Marek Chalupka <xchalu18@stud.fit.vut.cz>
  */
 
+#define SIZE 150
+
 #include <stdio.h>
 #include "generator.h"
 #include "dynstr.h"
@@ -18,11 +20,11 @@
 #include "error.h"
 #include "scanner.h"
 
-unsigned gen_number_while_start = 0;
-unsigned gen_number_while_open = 0;
+unsigned gen_while_i = 1;
+unsigned gen_if_i = 1;
 
-unsigned gen_number_if = 0;
-unsigned gen_number_open_if = 0;
+unsigned *while_array;
+unsigned *if_array;
 
 // type_casting
 void gen_type_casting() {
@@ -396,6 +398,24 @@ void gen_header() {
     gen_substring();
     gen_ord();
     gen_chr();
+
+    // malloc tmp arrays
+    while_array = malloc(sizeof(unsigned) * SIZE);
+    if(while_array == NULL){
+        error_handle(0, compiler_error);
+        abort();
+    }
+    if_array = malloc(sizeof(unsigned) * SIZE);
+    if(if_array == NULL){
+        free(while_array);
+        error_handle(0, compiler_error);
+        abort();
+    }
+    // init arrays
+    for(int i = 0; i < SIZE; i++){
+        while_array[i] = 0;
+        if_array[i] = 0;
+    }
 }
 
 void gen_function_def(dynstr_t *id, list_t* parameters){
@@ -593,9 +613,11 @@ void gen_assign_value(dynstr_t *variable) {
 }
 
 void gen_while_start(){
-    printf("LABEL %%while%u_start\n", gen_number_while_start);
-    gen_number_while_start++;
-    gen_number_while_open++;
+    printf("LABEL %%while%u_start\n", gen_while_i);
+    int i = 0;
+    while(i < SIZE){
+
+    }
 }
 
 void gen_while_check_condition(){
@@ -605,11 +627,14 @@ void gen_while_check_condition(){
     printf("POPS GF@%%%u\n", temp_var_counter);
     // start if 
     printf("JUMPIFEQ %%while%u_end GF@%%%u bool@true\n", gen_number_while_start - gen_number_while_open, temp_var_counter);
+    gen_number_current_while = gen_number_while_start;
+    gen_number_while_index++;
+    gen_number_while_open++;
 }
 
 void gen_while_end(){
-    printf("JUMP %%while%u_start\n", gen_number_while_start - gen_number_while_open);
-    printf("LABEL %%while%u_end\n", gen_number_while_start - gen_number_while_open);
+    printf("JUMP %%while%u_start\n", gen_number_current_while);
+    printf("LABEL %%while%u_end\n", gen_number_current_while);
     gen_number_while_open--;
 }
 
