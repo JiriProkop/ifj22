@@ -540,11 +540,20 @@ void gen_function_call(dynstr_t *id, list_t* parameters, sym_table *tree){
             } else if(expected_parameters_i->type == keyword_string) {
                 printf("PUSHS string@string\n");
             }
-            printf("PUSHS LF@%s\n", recieve_parameters_i->id->array);
+            if(recieve_parameters_i->id->array[0] == '%') {
+                printf("PUSHS GF@%s\n", recieve_parameters_i->id->array);
+            } else {
+                printf("PUSHS LF@%s\n", recieve_parameters_i->id->array);
+            }
             printf("CALL %%check_type\n"); // calling the check type function
         }
 
-        printf("MOVE GF@%%%s_%s LF@%s\n", id->array, expected_parameters_i->id->array, recieve_parameters_i->id->array);
+        if(recieve_parameters_i->id->array[0] == '%') {
+            printf("MOVE GF@%%%s_%s GF@%s\n", id->array, expected_parameters_i->id->array, recieve_parameters_i->id->array);
+        } else {
+            printf("MOVE GF@%%%s_%s LF@%s\n", id->array, expected_parameters_i->id->array, recieve_parameters_i->id->array);
+        }
+        
         recieve_parameters_i = recieve_parameters_i->next;
         expected_parameters_i = expected_parameters_i->next;
     }
