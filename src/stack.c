@@ -5,6 +5,7 @@
  * @brief Header file of stack
  *
  * @author Štěpán Czajkowski xczajk01 <xczajk01@stud.fit.vutbr.cz>
+ * @author Jiří Prokop xproko47 <xproko47@stud.fit.vutbr.cz>
  */
 
 #include <stdio.h>
@@ -171,4 +172,79 @@ unsigned tokens_to_shift(stack *stack){
 		return NO_SHIFT;
 	}
 	return sum;
+}
+
+// -----------------------------------------------------------------
+// linked list created by Jiří Prokop
+
+void exprll_init(exprll **ll) {
+    *ll = NULL;
+}
+
+bool exprll_add(exprll **ll, int data, token_t *ptok) {
+    if (!*ll) {
+        *ll = malloc(sizeof(exprll));
+        if (!*ll) {
+            error_handle(0, compiler_error);
+            return false;
+        }
+        (*ll)->next = NULL;
+        (*ll)->ptok = ptok;
+        (*ll)->rule = data;
+        return true;
+    } else {
+        exprll *tmp = *ll;
+        *ll = malloc(sizeof(exprll));
+        if (!*ll) {
+            error_handle(0, compiler_error);
+            return false;
+        }
+        (*ll)->next = tmp;
+        (*ll)->ptok = ptok;
+        (*ll)->rule = data;
+        return true;
+    }
+}
+
+void expll_dispose(exprll *ll) {
+    while (ll != NULL) {
+        exprll *tmp = ll;
+        ll = ll->next;
+        free(tmp->ptok);
+        free(tmp);
+    }
+}
+
+exprll *exprll_leftmost_rule(exprll *ll) {
+    exprll *tmp = ll;
+    exprll *result = NULL;
+    while (tmp != NULL) {
+        if (tmp->rule != erule_val) {
+            result = tmp;
+        }
+        tmp = tmp->next;
+    }
+    return result;
+}
+
+bool exprll_prev_value(exprll *node, exprll *ll) {
+    exprll *tmp = ll;
+    while (tmp != NULL) {
+        if (tmp->next == node) {
+            if (tmp->rule == erule_val) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        tmp = tmp->next;
+    }
+    return false;
+}
+
+void exprll_del_next(exprll *node) {
+    exprll *tmp = node->next->next;
+    free(node->next->ptok);
+    free(node->next);
+    node->next = tmp;
 }
