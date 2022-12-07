@@ -17,19 +17,6 @@
 #include "symtable.h"
 #include "generator.h"
 
-void print_tree(sym_table *treee) {
-    if(treee == NULL) {
-        printf("[...] - [...]\n");
-        return;
-    } else {
-        printf("[%s] - [%d]\n", treee->id->array, treee->data->is_function);
-        print_tree(treee->left);
-        print_tree(treee->right);
-    }
-}
-
-
-
 /**
  * A global variable used for the current token.
 */
