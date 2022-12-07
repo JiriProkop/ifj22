@@ -69,6 +69,8 @@ bool get_colrow(unsigned *colrow, token_t *tok) {
         *colrow = pos_val;
     } else if (tok->type == token_expr_dollar || tok->type == token_semicol || tok->type == token_comma) {
         *colrow = pos_dollar;
+    } else if (tok->type == token_keyword && tok->attr.keyword == keyword_null) {
+        *colrow = pos_val;
     } else {
         error_handle(tok->line, syntax_error);
         return false;
@@ -88,7 +90,7 @@ bool reduction(stack *pstk, exprll **ll) {
     int rule;
     if (op_cnt == 1) {
         token_t *tmp = stack_top_terminal(pstk);
-        if (tmp->type == token_integer || tmp->type == token_float || tmp->type == token_string || tmp->type == token_varieble) {
+        if (tmp->type == token_integer || tmp->type == token_float || tmp->type == token_string || tmp->type == token_varieble || (tmp->type == token_keyword && tmp->attr.keyword == keyword_null)) {
             rule = erule_val;
         } else {
             error_handle(tmp->line, syntax_error);
