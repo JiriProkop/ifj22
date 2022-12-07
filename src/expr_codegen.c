@@ -36,11 +36,11 @@ bool gen_expr_different_place(exprll *rule_node, exprll *ll) {
  *
  */
 void check_existance(token_t *tok, unsigned *num) {
-    if (st_search(current_frame, tok->attr.str->array) == NULL) {
+    if (st_search(current_frame, tok->attr.str) == NULL) {
         error_handle(tok->line, undefied_identifier_error);
         abort();
     } else {
-        printf("TYPE GF@$type LF@%s\n");
+        printf("TYPE GF@$type LF@%s\n", tok->attr.str->array);
         printf("JUMPIFNEQ IS_DEF_%u GF@$type string@\n", *num);
         printf("EXIT int@5\n");
         printf("LABEL IS_DEF_%u\n", *num);

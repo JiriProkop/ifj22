@@ -16,6 +16,7 @@
 #include "dynstr.h"
 #include "stack.h"
 #include "ll.h"
+#include "expr_codegen.h"
 
 int main() {
     start(); // call the parser
