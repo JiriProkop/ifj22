@@ -75,14 +75,6 @@ void gen_if_start_else();
 void gen_if_end();
 
 /**
- * @brief Function for printing definition of variable
- * 
- * @param variable Variable to be printed
- * @param tree_gen Tree to search if variable was already printed 
- */
-void gen_def_variable(dynstr_t *variable, sym_table *tree_gen);
-
-/**
  * @brief Function for printing for moving value into variable. It takes value from stack 
  * 
  * @param variable Variable to move the value into 
@@ -135,5 +127,12 @@ void gen_return(dynstr_t *id_function, sym_table *gen_tree, bool exit);
  * @param variable A variable identifier.
 */
 void gen_assign_value(dynstr_t *variable);
+
+/**
+ * @brief Define all the used variables in the tree.
+ * 
+ * @param tree The tree to look for variables in.
+*/
+void gen_define_used_vars(sym_table *tree);
 
 #endif
