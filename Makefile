@@ -43,7 +43,7 @@ $(TESTDIR)tests_dynstr: $(SOURCES)dynstr.o $(SOURCES)error.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@
 $(TESTDIR)tests_scanner: $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
-$(TESTDIR)tests_parser: $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)expr.o $(SOURCES)stack.o $(SOURCES)symtable.o $(SOURCES)ll.o $(SOURCES)generator.o
+$(TESTDIR)tests_parser: $(SOURCES)parser.o $(SOURCES)scanner.o $(SOURCES)error.o $(SOURCES)dynstr.o $(SOURCES)expr.o $(SOURCES)stack.o $(SOURCES)symtable.o $(SOURCES)ll.o $(SOURCES)generator.o $(SOURCES)expr_codegen.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@ $(LDLIBS)
 $(TESTDIR)tests_stack: $(SOURCES)stack.o $(SOURCES)error.o $(SOURCES)dynstr.o
 	$(CC) $(CFLAGS) $^ $@.c -o $@

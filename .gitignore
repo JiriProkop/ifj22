@@ -65,3 +65,5 @@ tests/tests_ll
 tests/tests_generator
 tests/*.output
 src/compiler
+IFJ22_Tester-master
+IFJ22_Tester
