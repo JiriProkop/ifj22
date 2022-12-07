@@ -635,13 +635,13 @@ void gen_while_check_condition(){
     printf("CALL %%cast_bool\n");
     printf("POPS GF@%%%u\n", temp_var_counter);
     // start if 
-    printf("JUMPIFEQ %%while%u_end GF@%%%u bool@true\n", gen_while_i, temp_var_counter);
+    printf("JUMPIFEQ %%while%u_end GF@%%%u bool@false\n", gen_while_i, temp_var_counter);
     gen_while_i++;
 }
 
 void gen_while_end(){
     int i = SIZE - 1;
-    while(while_array[i] == 0 && i == 0){
+    while(while_array[i] == 0 && i != 0){
         i--;
     }
     printf("JUMP %%while%u_start\n", while_array[i]);
