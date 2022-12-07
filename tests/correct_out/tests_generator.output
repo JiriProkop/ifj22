@@ -4,8 +4,8 @@
 .IFJcode22
 CREATEFRAME
 DEFVAR GF@%condition
-CALL %temp_var_definitions
 PUSHFRAME
+CALL %temp_var_definitions
 DEFVAR GF@%cast_var%
 DEFVAR GF@%cast_type%
 DEFVAR GF@%cast_null%
@@ -89,6 +89,10 @@ LABEL %cast_bool_continue3_1
 PUSHS bool@true
 RETURN
 LABEL %cast_bool_continue3
+JUMPIFNEQ %cast_bool_continue4 GF@%cast_bool_type% string@bool
+PUSHS GF@%cast_bool_var%
+RETURN
+LABEL %cast_bool_continue4
 PUSHS bool@false
 RETURN
 LABEL %cast_bool_end
@@ -285,12 +289,16 @@ MOVE TF@testint GF@%testfunc_testint
 DEFVAR TF@testfloat
 MOVE TF@testfloat GF@%testfunc_testfloat
 PUSHFRAME
+JUMP testfunc_definitions
+LABEL testfunc_definitions_back
 
 [function def gen test - void function without parameters]
 JUMP voidfunc_end
 LABEL voidfunc_start
 CREATEFRAME
 PUSHFRAME
+JUMP voidfunc_definitions
+LABEL voidfunc_definitions_back
 
 [info: current tree]
 
@@ -304,11 +312,19 @@ POPFRAME
 DPRINT string@Wrong\032function\032argument\032type\032and\032or\032count\032or\032wrong\032return\032type\010
 EXIT int@4
 RETURN
+JUMP testfunc_definitions_skip
+LABEL testfunc_definitions
+JUMP testfunc_definitions_back
+LABEL testfunc_definitions_skip
 LABEL testfunc_end
 
 [function def end gen test - void function without parameters]
 POPFRAME
 RETURN
+JUMP voidfunc_definitions_skip
+LABEL voidfunc_definitions
+JUMP voidfunc_definitions_back
+LABEL voidfunc_definitions_skip
 LABEL voidfunc_end
 
 [function def call test - non-void function with 3 parameters]
@@ -367,10 +383,10 @@ EXIT int@0
 
 testfunc
 
-[variable def gen test - variable not defined]
+[used variable def gen test - variable not defined]
 DEFVAR LF@testvar
 
-[variable def gen test - variable defined]
+[used variable def gen test - variable defined]
 
 [fill variable gen test]
 MOVE LF@testvar GF@%4

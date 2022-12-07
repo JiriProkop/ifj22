@@ -198,10 +198,10 @@ int main() {
     add_tree_node(&tree, testvar->array, keyword_string, NULL, false, false);
     printf("\n[info: current tree]\n");
     print_tree(tree);
-    printf("\n[variable def gen test - variable not defined]\n");
-    gen_def_variable(testvar, tree);
-    printf("\n[variable def gen test - variable defined]\n");
-    gen_def_variable(testvar, tree);
+    printf("\n[used variable def gen test - variable not defined]\n");
+    gen_define_used_vars(tree);
+    printf("\n[used variable def gen test - variable defined]\n");
+    gen_define_used_vars(tree);
 
     // test gen fill variable
     printf("\n[fill variable gen test]\n");
