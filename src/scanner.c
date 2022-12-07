@@ -58,10 +58,10 @@ typedef enum {
  */
 void convert_to_escape(token_t *tok, char c) {
     dynstr_add_char(tok->attr.str, '\\');
-
-    dynstr_add_char(tok->attr.str, (c / 100) % 10);
-    dynstr_add_char(tok->attr.str, (c / 10) % 10);
-    dynstr_add_char(tok->attr.str, c % 10);
+	
+    dynstr_add_char(tok->attr.str, '0' + (c / 100) % 10);
+    dynstr_add_char(tok->attr.str, '0' + (c / 10) % 10);
+    dynstr_add_char(tok->attr.str, '0' + c % 10);
 }
 
 /**
@@ -340,13 +340,13 @@ bool get_token(token_t *tok) {
                     tmp += 8 * 8 * (c - '0');
                     state = string_oct1_s;
                 } else if (c == 'n') {
-                    convert_to_escape(tok, c);
+                    convert_to_escape(tok, '\n');
                     state = string_start_s;
                 } else if (c == '"') {
                     dynstr_add_char(tok->attr.str, '"');
                     state = string_start_s;
                 } else if (c == 't') {
-                    convert_to_escape(tok, c);
+                    convert_to_escape(tok, '\t');
                     state = string_start_s;
                 } else if (c == '\\') {
                     convert_to_escape(tok, c);
@@ -556,7 +556,7 @@ bool get_token(token_t *tok) {
                     state = expo_start_s;
                 } else {
                     if (isalpha(c) || c == '$' || c == '"' || c == '?' || c == '\\') {
-						error_handle(line_c, lex_analysis_err);
+                        error_handle(line_c, lex_analysis_err);
                         return false;
                     }
                     ungetc(c, input);
