@@ -1,3 +1,12 @@
+/**
+ * Project: compiler of IFJ22 programming language
+ *
+ * @file expr_codegen.c
+ * @brief The implementation of a expression code generator.
+ *
+ * @author Jiří Prokop xproko47 <xproko47@stud.fit.vutbr.cz>
+ */
+
 #include "expr_codegen.h"
 #include "dynstr.h"
 #include "error.h"
@@ -11,7 +20,7 @@
 #include <string.h>
 
 /**
- * @brief Tells where to save result of expression.
+ * Tells where to save result of expression.
  *
  * @return Returns true, if result should be stored in right_result. False otherwise.
  */
@@ -21,22 +30,31 @@ bool gen_expr_different_place(exprll *rule_node, exprll *ll) {
     }
     return false;
 }
-// TODO
+
+/**
+ * Checks if varieble is defined, if not calls abort().
+ *
+ */
 void check_existance(token_t *tok, unsigned *num) {
+    // TODO
     /*
         je promenna ve stromu? (current_frame)
         if(st_search(current_frame, tok.attr.str.array) == NULL) {
-			error_handle(tok2.line, undefined_id)
-			abort();
+                        error_handle(tok2.line, undefined_id)
+                        abort();
         } else {
-			printf("TYPE GF@$type LF@%s\n");
-			printf("JUMPIFNEQ IS_DEF_%u GF@$type string@\n", *num);
-			printf("EXIT int@5\n");
-			printf("LABEL IS_DEF_%u\n", *num);
+                        printf("TYPE GF@$type LF@%s\n");
+                        printf("JUMPIFNEQ IS_DEF_%u GF@$type string@\n", *num);
+                        printf("EXIT int@5\n");
+                        printf("LABEL IS_DEF_%u\n", *num);
         }
     */
 }
 
+/**
+ * Does given operation with operands left_result and (value or varieble).
+ *
+ */
 void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *operation) {
     // tok1 represents result of smaller expression
     if (tok2->type == token_varieble) {
@@ -166,9 +184,13 @@ void arith_varval(token_t *tok2, bool save_to_right, unsigned *num, const char *
     }
 }
 
-void cat_varval(token_t *tok2, bool save_to_right, unsigned* num) {
+/**
+ * Concatenate with operands left_result and (value or varieble).
+ *
+ */
+void cat_varval(token_t *tok2, bool save_to_right, unsigned *num) {
     if (tok2->type == token_varieble) {
-		check_existance(tok2, num);
+        check_existance(tok2, num);
         printf("MOVE GF@$tmp LF@%s\n", tok2->attr.str->array);
         printf("PUSHS bool@false\n");
         printf("PUSHS string@string\n");
@@ -214,9 +236,13 @@ void cat_varval(token_t *tok2, bool save_to_right, unsigned* num) {
     }
 }
 
+/**
+ * Compares operands left_result and (value or varieble).
+ *
+ */
 void cmp_varval(token_t *tok2, bool save_to_right, unsigned *num) {
     if (tok2->type == token_varieble) {
-		check_existance(tok2, num);
+        check_existance(tok2, num);
         printf("TYPE GF@$type1 GF@$left_result\n");
         printf("TYPE GF@$type2 LF@%s\n", tok2->attr.str->array);
         // neither operand can be bool
@@ -294,9 +320,13 @@ void cmp_varval(token_t *tok2, bool save_to_right, unsigned *num) {
     }
 }
 
+/**
+ * Operation < with operands left_result and (value or varieble).
+ *
+ */
 void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
     if (tok2->type == token_varieble) {
-		check_existance(tok2, num);
+        check_existance(tok2, num);
         printf("MOVE GF@$tmp LF@%s\n", tok2->attr.str->array);
         printf("TYPE GF@$type1 GF@$left_result\n");
         printf("TYPE GF@$type2 LF@%s\n", tok2->attr.str->array);
@@ -480,9 +510,13 @@ void less_varval(token_t *tok2, bool save_to_right, unsigned *num) {
     }
 }
 
+/**
+ * Operation <= with operands left_result and (value or varieble).
+ *
+ */
 void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
     if (tok2->type == token_varieble) {
-		check_existance(tok2, num);
+        check_existance(tok2, num);
         printf("MOVE GF@$tmp LF@%s\n", tok2->attr.str->array);
         printf("TYPE GF@$type1 GF@$left_result\n");
         printf("TYPE GF@$type2 LF@%s\n", tok2->attr.str->array);
@@ -702,6 +736,10 @@ void lesseq_varval(token_t *tok2, bool save_to_right, unsigned *num) {
     }
 }
 
+/**
+ * Generates code for operations +, -, *, /.
+ *
+ */
 void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned *num, const char *operation) {
     if (tok1 == NULL && tok2 == NULL) {
         // both represent results of smaller expressions
@@ -771,7 +809,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
         } else if (tok1->type == token_float) {
             printf("MOVE GF@$val1 float@%a\n", (double)tok1->attr.doub);
         } else if (tok1->type == token_varieble) {
-			check_existance(tok1, num);
+            check_existance(tok1, num);
             printf("TYPE GF@$type LF@%s\n", tok1->attr.str->array);
             printf("JUMPIFEQ %s_TOVAR1_%u GF@$type STRING@int\n", operation, *num);
             printf("JUMPIFEQ %s_TOVAR1_%u GF@$type STRING@float\n", operation, *num);
@@ -794,7 +832,7 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
         } else if (tok2->type == token_float) {
             printf("MOVE GF@$val2 float@%a\n", (double)tok2->attr.doub);
         } else if (tok2->type == token_varieble) {
-			check_existance(tok2, num);
+            check_existance(tok2, num);
             printf("TYPE GF@$type LF@%s\n", tok2->attr.str->array);
             printf("JUMPIFEQ %s_TOVAR2_%u GF@$type STRING@int\n", operation, *num);
             printf("JUMPIFEQ %s_TOVAR2_%u GF@$type STRING@float\n", operation, *num);
@@ -863,10 +901,10 @@ void arithmetic_check(token_t *tok1, token_t *tok2, bool save_to_right, unsigned
 // TODO DEFVAR GF@$val1 a GF@$val2
 // TODO DEFVAR GF@$type GF@$type1 GF@$type2, GF@$tmp, GF@$cond1, GF@$cond2
 /**
- * @brief Generates code for operation plus.
+ * Generates code for operation plus.
  *
  * @param tok1 pointer to token - 2 places after operation rule.
- * @param tok2 pointer to token - place after operation rule.
+ * @param tok2 pointer to token - 1 place after operation rule.
  * @param save_to_right Bool - is true, if the result is to be stored in right_result(otherwise in left_result).
  */
 void gen_plus(token_t *tok1, token_t *tok2, bool save_to_right) {
@@ -874,21 +912,49 @@ void gen_plus(token_t *tok1, token_t *tok2, bool save_to_right) {
     arithmetic_check(tok1, tok2, save_to_right, &unique_num_plus, "ADD");
 }
 
+/**
+ * Generates code for operation minus.
+ *
+ * @param tok1 pointer to token - 2 places after operation rule.
+ * @param tok2 pointer to token - 1 place after operation rule.
+ * @param save_to_right Bool - is true, if the result is to be stored in right_result(otherwise in left_result).
+ */
 void gen_minus(token_t *tok1, token_t *tok2, bool save_to_right) {
     static unsigned unique_num_minus = 0;
     arithmetic_check(tok1, tok2, save_to_right, &unique_num_minus, "SUB");
 }
 
+/**
+ * Generates code for operation multiply.
+ *
+ * @param tok1 pointer to token - 2 places after operation rule.
+ * @param tok2 pointer to token - 1 place after operation rule.
+ * @param save_to_right Bool - is true, if the result is to be stored in right_result(otherwise in left_result).
+ */
 void gen_mul(token_t *tok1, token_t *tok2, bool save_to_right) {
     static unsigned unique_num_mul = 0;
     arithmetic_check(tok1, tok2, save_to_right, &unique_num_mul, "MUL");
 }
 
+/**
+ * Generates code for operation divide.
+ *
+ * @param tok1 pointer to token - 2 places after operation rule.
+ * @param tok2 pointer to token - 1 place after operation rule.
+ * @param save_to_right Bool - is true, if the result is to be stored in right_result(otherwise in left_result).
+ */
 void gen_div(token_t *tok1, token_t *tok2, bool save_to_right) {
     static unsigned unique_num_div = 0;
     arithmetic_check(tok1, tok2, save_to_right, &unique_num_div, "DIV");
 }
 
+/**
+ * Generates code for operation concatenate.
+ *
+ * @param tok1 pointer to token - 2 places after operation rule.
+ * @param tok2 pointer to token - 1 place after operation rule.
+ * @param save_to_right Bool - is true, if the result is to be stored in right_result(otherwise in left_result).
+ */
 void gen_cat(token_t *tok1, token_t *tok2, bool save_to_right) {
     static unsigned unique_num_cat = 0;
     if (tok1 == NULL && tok2 == NULL) {
@@ -916,7 +982,7 @@ void gen_cat(token_t *tok1, token_t *tok2, bool save_to_right) {
         if (tok1->type == token_string) {
             printf("MOVE GF@$val1 string@%s\n", tok1->attr.str->array);
         } else if (tok1->type == token_varieble) {
-			check_existance(tok1, &unique_num_cat);
+            check_existance(tok1, &unique_num_cat);
             printf("PUSHS bool@false\n");
             printf("PUSHS string@string\n");
             printf("PUSHS LF@%s\n", tok1->attr.str->array);
@@ -937,7 +1003,7 @@ void gen_cat(token_t *tok1, token_t *tok2, bool save_to_right) {
         if (tok2->type == token_string) {
             printf("MOVE GF@$val2 string@%s\n", tok2->attr.str->array);
         } else if (tok2->type == token_varieble) {
-			check_existance(tok2, &unique_num_cat);
+            check_existance(tok2, &unique_num_cat);
             printf("PUSHS bool@false\n");
             printf("PUSHS string@string\n");
             printf("PUSHS LF@%s\n", tok2->attr.str->array);
@@ -964,6 +1030,13 @@ void gen_cat(token_t *tok1, token_t *tok2, bool save_to_right) {
     unique_num_cat++;
 }
 
+/**
+ * Generates code for operation compare(===).
+ *
+ * @param tok1 pointer to token - 2 places after operation rule.
+ * @param tok2 pointer to token - 1 place after operation rule.
+ * @param save_to_right Bool - is true, if the result is to be stored in right_result(otherwise in left_result).
+ */
 void gen_cmp(token_t *tok1, token_t *tok2, bool save_to_right) {
     static unsigned unique_num_cmp = 0;
     if (tok1 == NULL && tok2 == NULL) {
@@ -1005,7 +1078,7 @@ void gen_cmp(token_t *tok1, token_t *tok2, bool save_to_right) {
         if (tok1->type == token_string) {
             printf("MOVE GF@$val1 string@%s\n", tok1->attr.str->array);
         } else if (tok1->type == token_varieble) {
-			check_existance(tok1, &unique_num_cmp);
+            check_existance(tok1, &unique_num_cmp);
             printf("MOVE GF@$val1 LF@%s\n", tok1->attr.str->array);
         } else if (tok1->type == token_integer) {
             printf("MOVE GF@$val1 int@%d\n", tok1->attr.integer);
@@ -1021,7 +1094,7 @@ void gen_cmp(token_t *tok1, token_t *tok2, bool save_to_right) {
         if (tok2->type == token_string) {
             printf("MOVE GF@$val2 string@%s\n", tok2->attr.str->array);
         } else if (tok2->type == token_varieble) {
-			check_existance(tok2, &unique_num_cmp);
+            check_existance(tok2, &unique_num_cmp);
             printf("MOVE GF@$val2 LF@%s\n", tok2->attr.str->array);
         } else if (tok2->type == token_integer) {
             printf("MOVE GF@$val2 int@%d\n", tok2->attr.integer);
@@ -1068,6 +1141,13 @@ void gen_cmp(token_t *tok1, token_t *tok2, bool save_to_right) {
     unique_num_cmp++;
 }
 
+/**
+ * Generates code for operation lower <.
+ *
+ * @param tok1 pointer to token - 2 places after operation rule.
+ * @param tok2 pointer to token - 1 place after operation rule.
+ * @param save_to_right Bool - is true, if the result is to be stored in right_result(otherwise in left_result).
+ */
 void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
     static unsigned unique_num_less = 0;
     if (tok1 == NULL && tok2 == NULL) {
@@ -1156,12 +1236,23 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
     } else if (tok1 == NULL) {
         less_varval(tok2, save_to_right, &unique_num_less);
     } else if (tok2 == NULL) {
+        if (save_to_right) {
+			printf("NOT GF@$right_result GF@$right_result\n");
+            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+            printf("NOT GF@$cond1 GF@$cond1\n");
+			printf("AND GF@$right_result GF@$right_result GF@$cond1\n");
+        } else {
+			printf("NOT GF@$left_result GF@$left_result\n");
+			printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+            printf("NOT GF@$cond1 GF@$cond1\n");
+			printf("AND GF@$left_result GF@$left_result GF@$cond1\n");
+        }
         less_varval(tok1, save_to_right, &unique_num_less);
     } else {
         if (tok1->type == token_string) {
             printf("MOVE GF@$val1 string@%s\n", tok1->attr.str->array);
         } else if (tok1->type == token_varieble) {
-			check_existance(tok1, &unique_num_less);
+            check_existance(tok1, &unique_num_less);
             printf("MOVE GF@$val1 LF@%s\n", tok1->attr.str->array);
         } else if (tok1->type == token_integer) {
             printf("MOVE GF@$val1 int@%d\n", tok1->attr.integer);
@@ -1177,7 +1268,7 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
         if (tok2->type == token_string) {
             printf("MOVE GF@$val2 string@%s\n", tok2->attr.str->array);
         } else if (tok2->type == token_varieble) {
-			check_existance(tok2, &unique_num_less);
+            check_existance(tok2, &unique_num_less);
             printf("MOVE GF@$val2 LF@%s\n", tok2->attr.str->array);
         } else if (tok2->type == token_integer) {
             printf("MOVE GF@$val2 int@%d\n", tok2->attr.integer);
@@ -1276,6 +1367,13 @@ void gen_less(token_t *tok1, token_t *tok2, bool save_to_right) {
     unique_num_less++;
 }
 
+/**
+ * Generates code for operation lower-equal <=.
+ *
+ * @param tok1 pointer to token - 2 places after operation rule.
+ * @param tok2 pointer to token - 1 place after operation rule.
+ * @param save_to_right Bool - is true, if the result is to be stored in right_result(otherwise in left_result).
+ */
 void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
     static unsigned unique_num_lesseq = 0;
     if (tok1 == NULL && tok2 == NULL) {
@@ -1383,11 +1481,20 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
         lesseq_varval(tok2, save_to_right, &unique_num_lesseq);
     } else if (tok2 == NULL) {
         lesseq_varval(tok1, save_to_right, &unique_num_lesseq);
+        if (save_to_right) {
+			printf("NOT GF@$right_result GF@$right_result\n");
+            printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+			printf("OR GF@$right_result GF@$right_result GF@$cond1\n");
+        } else {
+			printf("NOT GF@$left_result GF@$left_result\n");
+			printf("EQ GF@$cond1 GF@$left_result LF@%s\n", tok2->attr.str->array);
+			printf("OR GF@$left_result GF@$left_result GF@$cond1\n");
+        }
     } else {
         if (tok1->type == token_string) {
             printf("MOVE GF@$val1 string@%s\n", tok1->attr.str->array);
         } else if (tok1->type == token_varieble) {
-			check_existance(tok1, &unique_num_lesseq);
+            check_existance(tok1, &unique_num_lesseq);
             printf("MOVE GF@$val1 LF@%s\n", tok1->attr.str->array);
         } else if (tok1->type == token_integer) {
             printf("MOVE GF@$val1 int@%d\n", tok1->attr.integer);
@@ -1403,7 +1510,7 @@ void gen_lesseq(token_t *tok1, token_t *tok2, bool save_to_right) {
         if (tok2->type == token_string) {
             printf("MOVE GF@$val2 string@%s\n", tok2->attr.str->array);
         } else if (tok2->type == token_varieble) {
-			check_existance(tok2, &unique_num_lesseq);
+            check_existance(tok2, &unique_num_lesseq);
             printf("MOVE GF@$val2 LF@%s\n", tok2->attr.str->array);
         } else if (tok2->type == token_integer) {
             printf("MOVE GF@$val2 int@%d\n", tok2->attr.integer);
