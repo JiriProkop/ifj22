@@ -4,7 +4,7 @@
  * @file parser.h
  * @brief The implementation of a parser.
  *
- * @author Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
+ * @author Patrik Čerbák xcerba00 <xcerba00@stud.fit.vutbr.cz>
  */
 
 #include <stdbool.h>

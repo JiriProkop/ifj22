@@ -4,7 +4,7 @@
  * @file stack.c
  * @brief Header file of stack
  *
- * @author Štěpán Czajkowski <xczajk01@stud.fit.vutbr.cz>
+ * @author Štěpán Czajkowski xczajk01 <xczajk01@stud.fit.vutbr.cz>
  */
 
 #include <stdio.h>

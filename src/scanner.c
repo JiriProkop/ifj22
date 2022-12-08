@@ -1,6 +1,3 @@
-#include <ctype.h>
-#include <limits.h>
-#include <math.h>
 /**
  * Project: compiler of IFJ22 programming language
  *
@@ -9,7 +6,9 @@
  *
  * @author Jiří Prokop xproko47 <xproko47@stud.fit.vutbr.cz>
  */
-
+#include <ctype.h>
+#include <limits.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>

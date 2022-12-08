@@ -4,7 +4,7 @@
  * @file main.c
  * @brief The main file, that calls the parser
  * 
- * @author Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
+ * @author Patrik Čerbák xcerba00 <xcerba00@stud.fit.vutbr.cz>
  */
 
 #include "scanner.h"

@@ -4,8 +4,8 @@
  * @file symtable.c
  * @brief Symbol table implementation using binary search tree.
  *
- * @author Marek Chalupka <xchalu18@stud.fit.vut.cz>
- * @author Štěpán Czajkowski <xczajk01@stud.fit.vutbr.cz>
+ * @author Marek Chalupka xchalu18 <xchalu18@stud.fit.vut.cz>
+ * @author Štěpán Czajkowski xczajk01 <xczajk01@stud.fit.vutbr.cz>
  */
 
 #include <stdlib.h>

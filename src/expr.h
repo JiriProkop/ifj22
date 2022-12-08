@@ -1,6 +1,7 @@
 /**
  * Project: compiler of IFJ22 programming language
  *
+ * @file expr.h
  * @brief Bottom up expression parser.
  *
  * @author Jiří Prokop xproko47 <xproko47@stud.fit.vutbr.cz>
