@@ -4,7 +4,7 @@
 # File: Makefile
 # Brief: The implementation of Makefile.
 #
-# Author: Patrik Čerbák <xcerba00@stud.fit.vutbr.cz>
+# Author: Patrik Čerbák xcerba00 <xcerba00@stud.fit.vutbr.cz>
 #
 
 CC = gcc
